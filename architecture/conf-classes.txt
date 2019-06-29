@@ -28,13 +28,13 @@ WorkshopInstance "*" -- "1" ConferenceInstance
 WorkshopInstance : url
 WorkshopInstance "1" -- "*" CallForPapers
 
-CallForPapers "1" -- "1" Dates
 CallForPapers : format
-CallForPapers "1" -- "*" CFPAlternative
+CallForPapers "1" -- "1..*" CFPAlternative
 CallForPapers "1" -- "1" Committee
 CallForPapers : acceptance_rate
 CallForPapers "*" -- "*" Topic
 
+CFPAlternative "1" *-- "1" Dates
 CFPAlternative : type_name
 CFPAlternative : page_count
 CFPAlternative : flags
