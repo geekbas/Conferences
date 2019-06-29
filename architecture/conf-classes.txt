@@ -50,7 +50,7 @@ User "1" -- "*" Submission
 Submission "*" -- "1" CFPAlternative
 
 Submission : status
-Submission : url
+Submission : overleaf-url
 
 User "*" -- "*" Conference : tracks >
 User "*" -- "*" Workshop : tracks >

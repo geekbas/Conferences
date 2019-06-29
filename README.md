@@ -2,13 +2,14 @@
 
 System for keeping track of academic conferences and workshops.
 Even within a limited research field, there are often several conferences to select from.
-Sometimes the periods between submission and notification overlaps, making it non-obvious where and when to submit a paper.
+Sometimes the periods between submission and notification overlap, making it non-obvious where and when to submit a paper.
 It is of course also not possible to attend more than one conference at a time, which could affect where to submit and where to attend.
 
 ## Use cases
 
 * Track a conference or workshop.
 * Find a fitting venue for new papers, and see where they could be resubmitted if rejected.
+  * Also show the conferences that would be blocked as a paper can not be under submission to multiple venues in parallel.
 * Track conference or workshop topics.
 * Track committee members.
 * Register a paper as submitted to a CFP.
@@ -28,10 +29,11 @@ Maybe the topics should be possible to relate in a hierarchy or in some other wa
 
 ## Architecture
 
+* Backend in node.js.
 * Probably a React frontend.
-* Backend in node.js?
 
 ## Open questions
 
 * What type of SQL, NoSQL or other storage system is suitable?
 * How should tracking notification be done? Some sort of event queue?
+* What is the semantics for conferences with multiple submission dates?
