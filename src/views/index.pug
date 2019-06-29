@@ -1,0 +1,9 @@
+extends layout
+
+block content
+  h1=title
+
+  p Conference list:
+  ul
+    each conf in confs
+      li=conf.name

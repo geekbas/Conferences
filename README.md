@@ -22,6 +22,7 @@ This is intended to avoid duplicates.
 * Each conference instance is optionally connected to workshop instances. The connection is on instance level and not on the top level, as the same workshop may be connected to different conferences over the years (e.g. DEBS).
 * For each instance there is a Call For Papers (CFP), with one or more alternatives (typically research and industry), with different deadlines, page limits and other requirements.
 * Each CFP has a list of topic and a committee with a list of members.
+* Just about everything should have a user specific freeform note field.
 
 Maybe the topics should be possible to relate in a hierarchy or in some other way.
 
