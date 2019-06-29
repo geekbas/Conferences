@@ -33,11 +33,14 @@ CallForPapers : format
 CallForPapers "1" -- "*" CFPAlternative
 CallForPapers "1" -- "1" Committee
 CallForPapers : acceptance_rate
+CallForPapers "*" -- "*" Topic
 
 CFPAlternative : type_name
 CFPAlternative : page_count
 CFPAlternative : flags
 ' double blind, page count including references, etc
+
+Topic : description
 
 Committee "*" -- "*" CommitteeMember
 
@@ -52,5 +55,6 @@ Submission : url
 User "*" -- "*" Conference : tracks >
 User "*" -- "*" Workshop : tracks >
 User "*" -- "*" CommitteeMember : tracks >
+User "*" -- "*" Topic : tracks >
 
 @enduml
