@@ -1,0 +1,51 @@
+@startuml
+
+Conference "1" -- "*" ConferenceInstance
+
+Conference : name
+Conference : acronym
+
+ConferenceInstance : year
+ConferenceInstance : location
+ConferenceInstance : url
+ConferenceInstance "1" -- "*" CallForPapers
+
+Dates : abstract1
+Dates : paper1
+Dates : notification1
+Dates : abstract2
+Dates : paper2
+Dates : notification2
+Dates : camera_ready
+
+Workshop "1" -- "*" WorkshopInstance
+
+Workshop : name
+Workshop : acronym
+
+WorkshopInstance "*" -- "1" ConferenceInstance
+
+WorkshopInstance : url
+WorkshopInstance "1" -- "*" CallForPapers
+
+CallForPapers "1" -- "1" Dates
+CallForPapers : format
+CallForPapers "1" -- "*" CFPAlternative
+CallForPapers "1" -- "1" Committee
+
+CFPAlternative : type_name
+CFPAlternative : page_count
+CFPAlternative : flags
+' double blind, page count including references, etc
+
+Committee "*" -- "*" CommitteeMember
+
+User "0..1" -- "0..1" CommitteeMember
+
+Submission "*" -- "1" CFPAlternative
+
+Submission "*" -- "1" User
+Submission : status
+Submission : url
+
+@enduml
