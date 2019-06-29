@@ -32,6 +32,7 @@ CallForPapers "1" -- "1" Dates
 CallForPapers : format
 CallForPapers "1" -- "*" CFPAlternative
 CallForPapers "1" -- "1" Committee
+CallForPapers : acceptance_rate
 
 CFPAlternative : type_name
 CFPAlternative : page_count
@@ -41,11 +42,15 @@ CFPAlternative : flags
 Committee "*" -- "*" CommitteeMember
 
 User "0..1" -- "0..1" CommitteeMember
+User "1" -- "*" Submission
 
 Submission "*" -- "1" CFPAlternative
 
-Submission "*" -- "1" User
 Submission : status
 Submission : url
+
+User "*" -- "*" Conference : tracks >
+User "*" -- "*" Workshop : tracks >
+User "*" -- "*" CommitteeMember : tracks >
 
 @enduml
