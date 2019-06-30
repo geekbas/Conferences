@@ -20,7 +20,7 @@ This is intended to avoid duplicates.
 ## Model
 
 * The main concept is a conference, which has instances one or more years.
-* Each conference instance is optionally connected to workshop instances. The connection is on instance level and not on the top level, as the same workshop may be connected to different conferences over the years (e.g. DEBS).
+* Each conference instance is optionally connected to workshop instances. The connection is on instance level and not on the top level, as the same workshop may be connected to different conferences over the years (e.g. [DEBS](https://debs.org/debs-conferences)).
 * For each instance there is a Call For Papers (CFP), with one or more alternatives (typically research and industry), with different deadlines, page limits and other requirements.
 * Each CFP has a list of topic and a committee with a list of members.
 * Just about everything should have a user specific freeform note field.
@@ -29,11 +29,12 @@ Maybe the topics should be possible to relate in a hierarchy or in some other wa
 
 ## Architecture
 
-* Backend in node.js.
-* Probably a React frontend.
+* Backend in [node.js](https://nodejs.org).
+* Probably a [React](https://reactjs.org) frontend.
 
 ## Open questions
 
 * What type of SQL, NoSQL or other storage system is suitable?
+  * Maybe [Firebase](https://firebase.google.com)?
 * How should tracking notification be done? Some sort of event queue?
 * What is the semantics for conferences with multiple submission dates?
