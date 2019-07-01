@@ -1,6 +1,6 @@
 # Conferences
 
-System for keeping track of academic conferences and workshops.
+This is a system for keeping track of academic conferences and workshops.
 Even within a limited research field, there are often several conferences to select from.
 Sometimes the periods between submission and notification overlap, making it non-obvious where and when to submit a paper.
 It is of course also not possible to attend more than one conference at a time, which could affect where to submit and where to attend.

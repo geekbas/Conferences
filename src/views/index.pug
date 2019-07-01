@@ -6,4 +6,4 @@ block content
   p
     ul
       each conf, id in confs
-        li: a(href='conf/'+id) #{conf.name}
+        li: a(href='conf/'+conf.id) #{conf.acronym}: #{conf.name}
