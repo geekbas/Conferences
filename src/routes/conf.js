@@ -4,7 +4,7 @@ var confs = require('../modules/conf');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-    confs.get({}, (confs) => {
+    confs.get((confs) => {
         res.render('index', {title: 'Conferences', confs });
     });
 });
