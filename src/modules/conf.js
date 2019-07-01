@@ -22,6 +22,7 @@ let get = function(f) {
 };
 
 let get_by_id = function(id, f) {
+    // TODO: this should be doable without fetching all records, but using query.where('id', '==', id) does not work
     get((confs) => {
         confs.forEach((c) => {
            if (c.id == id) {
