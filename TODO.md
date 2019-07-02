@@ -8,9 +8,6 @@ Items further down on the list may depend on items higher up.
 
 ### Minimum Viable Product
 
-* Firestore usage
-  * Figure out how to search with [search conditions](https://firebase.google.com/docs/reference/js/firebase.firestore.CollectionReference.html?authuser=0#where)
-  * Ordering
 * Conference attributes
   * URL
 * Conference instances
