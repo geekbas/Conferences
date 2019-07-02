@@ -9,12 +9,16 @@ Items further down on the list may depend on items higher up.
 ### Minimum Viable Product
 
 * Conference attributes
+  * CRUD
   * URL
 * Conference instances
+  * CRUD
   * URL
   * Link to parent instance (mainly for workshops)
 * Call For Papers
+  * CRUD
 * CFP Alternatives
+  * CRUD
   * Format
   * Dates
   * Timeline
