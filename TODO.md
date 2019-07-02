@@ -1,0 +1,66 @@
+# TODO
+
+Things to do.
+
+## Ordered
+
+Items further down on the list may depend on items higher up.
+
+### Minimum Viable Product
+
+* Firestore usage
+  * Figure out how to search with [search conditions](https://firebase.google.com/docs/reference/js/firebase.firestore.CollectionReference.html?authuser=0#where)
+  * Ordering
+* Conference attributes
+  * URL
+* Conference instances
+  * URL
+  * Link to parent instance (mainly for workshops)
+* Call For Papers
+* CFP Alternatives
+  * Format
+  * Dates
+  * Timeline
+* Find a better product name?
+
+### Next
+
+* Users
+  * Select conferences and instances to follow
+* Submissions
+  * Links
+    * Overleaf
+    * EasyChair
+  * If submitted to a particular CFPA:
+    * Which ones get blocked out?
+    * Which are the fallbacks?
+
+### Good To Have
+
+* Notes
+  * list of key + freetext
+* Cities
+  * Public notes (restaurants, sights, etc)
+  * Private notes
+* Topics
+  * On conferences
+  * On instances
+  * On CFP alternatives
+
+### Later
+
+* Co-authors
+  * Require ack
+* Following
+  * Friends
+    * When their papers are accepted
+    * (When added as committee members)
+* Committees
+
+## Without particular order
+
+* Moderation
+* Tests
+* React frontend?
+* Offline usage?
+* Docker container?
