@@ -1,9 +1,21 @@
 extends layout
 
 block content
-    h1 #{conf.name + ' (' + conf.acronym + ')'}
+    if conf.acronym
+        h1 #{conf.name + ' (' + conf.acronym + ')'}
+    else
+        h1 #{conf.name}
 
     p Details
+    | ...
+
+    p
+        form(method='POST', action='/conf/' + conf.id + '?_method=DELETE')
+            div
+                input(type='hidden', name='id', value=conf.id)
+                input(type='hidden' name='_method' value='DELETE')
+            div(class='button')
+                button(type='submit') Delete
 
     hr
 

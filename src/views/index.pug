@@ -7,3 +7,10 @@ block content
     ul
       each conf, id in confs
         li: a(href='conf/'+conf.id) #{conf.acronym}: #{conf.name}
+
+  p
+    form(method='post', action='/conf')
+      div
+        input(type='text', name='name')
+      div(class='button')
+        button(type='submit') Add

@@ -31,11 +31,30 @@ let get_by_id = function(id, f) {
         .get()
         .then((doc) => {
 //            console.log(doc.id, doc.data());
-            f(doc.data());
+            f(Object.assign({id: id}, doc.data()));
         });
 };
 
+let add = function(name, f) {
+    db.collection('confs')
+        .add({name: name})
+        .then((doc) => {
+            f(doc);
+        })
+};
+
+let del = function(id, f) {
+    db.collection('confs')
+        .doc(id)
+        .delete()
+        .then((doc) => {
+            f(doc);
+        })
+};
+
 module.exports = {
+    add: add,
+    delete: del,
     get: get,
     get_by_id: get_by_id,
 };
