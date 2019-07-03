@@ -6,7 +6,7 @@ Things to do.
 
 Items further down on the list may depend on items higher up.
 
-### Minimum Viable Product
+### Minimum Viable Product: Single user
 
 * Conference attributes
   * CRUD
@@ -24,8 +24,9 @@ Items further down on the list may depend on items higher up.
   * Timeline
 * Find a better product name?
 
-### Next
+### Next: Usable for others
 
+* [Bootstrap](http://getbootstrap.com)
 * Users
   * Select conferences and instances to follow
 * Submissions
