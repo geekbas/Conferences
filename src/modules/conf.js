@@ -52,9 +52,28 @@ let del = function(id, f) {
         })
 };
 
+
+let update = function(params, f) {
+    let updates = {};
+    if (params.name) {
+        updates = Object.assign(updates, { name: params.name });
+    }
+    if (params.acronym) {
+        updates = Object.assign(updates, { acronym: params.acronym });
+    }
+    console.log('update confs with', updates);
+    db.collection('confs')
+        .doc(params.id)
+        .update(updates)
+        .then((doc) => {
+            f(Object.assign({id: params.id}));
+        });
+};
+
 module.exports = {
     add: add,
     delete: del,
     get: get,
     get_by_id: get_by_id,
+    update: update
 };

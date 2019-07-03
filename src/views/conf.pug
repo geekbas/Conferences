@@ -10,6 +10,10 @@ block content
     | ...
 
     p
+        a(href='/conf/edit/' + conf.id)
+            div(class='button')
+            button(type='submit') Edit
+    p
         form(method='POST', action='/conf/' + conf.id + '?_method=DELETE')
             div
                 input(type='hidden', name='id', value=conf.id)

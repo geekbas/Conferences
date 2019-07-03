@@ -17,6 +17,13 @@ router.get('/:id', (req, res) => {
     });
 });
 
+router.get('/edit/:id', (req, res) => {
+    confs.get_by_id(req.params.id,(c) => {
+        console.log('show', c);
+        res.render('conf-edit', {title: 'Conference', conf: {id: c.id, name: c.name, acronym: c.acronym}})
+    });
+});
+
 router.delete('/:id', (req, res) => {
     console.log('delete conf', req.params.id);
     confs.delete(req.params.id, () => {
@@ -33,6 +40,14 @@ router.post('/', (req, res) => {
             res.redirect('/conf');
         })
     }
+});
+
+router.put('/', (req, res) => {
+    console.log('put conf / with params', req.body);
+    confs.update(req.body, (c) => {
+        console.log('show', c);
+        res.redirect('/conf/' + c.id);
+    });
 });
 
 module.exports = router;

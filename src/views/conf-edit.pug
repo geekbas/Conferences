@@ -1,0 +1,17 @@
+extends layout
+
+block content
+    h1=title
+
+    p
+        form(method='post', action='/conf/?_method=PUT')
+            input(type='hidden', name='id', value=conf.id)
+            p
+                label Name
+                input(type='text', name='name', value=conf.name)
+            p
+                label Acronym
+                input(type='text', name='acronym', value=conf.acronym)
+            p
+                div(class='button')
+                    button(type='submit') Update
