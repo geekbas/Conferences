@@ -1,11 +1,6 @@
-// TODO: to db.js
-var admin = require('firebase-admin');
-var serviceAccount = require("./conferences-77da0-firebase-adminsdk-eht10-e246d33a60.json");
-admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount),
-    databaseURL: "https://conferences-77da0.firebaseio.com"
-});
-var db = admin.firestore();
+
+var db = require('./firestore');
+var instances = require('./instance');
 
 let get = function(f) {
     db.collection('confs')
@@ -31,7 +26,10 @@ let get_by_id = function(id, f) {
         .get()
         .then((doc) => {
 //            console.log(doc.id, doc.data());
-            f(Object.assign({id: id}, doc.data()));
+            instances.get_for_conf(id, (list) => {
+                console.log('got conf list', list);
+                f(Object.assign({id: id}, doc.data()), list);
+            });
         });
 };
 
@@ -51,7 +49,6 @@ let del = function(id, f) {
             f(doc);
         })
 };
-
 
 let update = function(params, f) {
     let updates = {};

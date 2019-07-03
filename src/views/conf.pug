@@ -6,7 +6,26 @@ block content
     else
         h1 #{conf.name}
 
-    p URL: #{conf.url}
+    p Main site:
+        | &nbsp;
+        a(href=conf.url)
+            | #{conf.url}
+
+    p Instances
+        ul
+            li
+                form(method='POST', action='/instance')
+                    input(type='hidden', name='conf_id', value=conf.id)
+                    input(type='number', min="2000", max="2020", name='year')
+                    button(type='submit') New
+            each val in instances
+                li
+                    a(href='/instance/' + val.id)
+                        | #{val.year}
+                    if val.url
+                        | &nbsp;Site:&nbsp;
+                        a(href=val.url, target="_blank")
+                            | #{val.url}
 
     p
         a(href='/conf/edit/' + conf.id)

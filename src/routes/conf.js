@@ -11,9 +11,9 @@ router.get('/', (req, res) => {
 });
 
 router.get('/:id', (req, res) => {
-    confs.get_by_id(req.params.id,(c) => {
-        console.log('show', c);
-        res.render('conf', {title: 'Conference', conf: c})
+    confs.get_by_id(req.params.id,(c, ci) => {
+        console.log('show', c, ci);
+        res.render('conf', {title: 'Conference', conf: c, instances: ci})
     });
 });
 

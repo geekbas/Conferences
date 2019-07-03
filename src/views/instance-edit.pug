@@ -1,0 +1,20 @@
+extends layout
+
+block content
+    h1=title
+
+    p
+        | Conference #{conf.name}
+
+    p
+        form(method='post', action='/instance/?_method=PUT')
+            input(type='hidden', name='id', value=instance.id)
+            p
+                label Year
+                input(type='number', min="2000", max="2020", name='year', value=instance.year)
+            p
+                label URL
+                input(type='url', name='url', value=instance.url)
+            p
+                div(class='button')
+                    button(type='submit') Update
