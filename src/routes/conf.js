@@ -13,14 +13,14 @@ router.get('/', (req, res) => {
 router.get('/:id', (req, res) => {
     confs.get_by_id(req.params.id,(c) => {
         console.log('show', c);
-        res.render('conf', {title: 'Conference', conf: {id: c.id, name: c.name, acronym: c.acronym}})
+        res.render('conf', {title: 'Conference', conf: c})
     });
 });
 
 router.get('/edit/:id', (req, res) => {
     confs.get_by_id(req.params.id,(c) => {
         console.log('show', c);
-        res.render('conf-edit', {title: 'Conference', conf: {id: c.id, name: c.name, acronym: c.acronym}})
+        res.render('conf-edit', {title: 'Conference', conf: c})
     });
 });
 

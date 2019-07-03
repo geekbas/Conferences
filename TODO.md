@@ -8,9 +8,6 @@ Items further down on the list may depend on items higher up.
 
 ### Minimum Viable Product: Single user
 
-* Conference attributes
-  * CRUD
-  * URL
 * Conference instances
   * CRUD
   * URL

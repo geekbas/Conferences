@@ -6,8 +6,7 @@ block content
     else
         h1 #{conf.name}
 
-    p Details
-    | ...
+    p URL: #{conf.url}
 
     p
         a(href='/conf/edit/' + conf.id)
@@ -19,4 +18,3 @@ block content
                 input(type='hidden' name='_method' value='DELETE')
             div(class='button')
                 button(type='submit') Delete
-

@@ -61,6 +61,9 @@ let update = function(params, f) {
     if (params.acronym) {
         updates = Object.assign(updates, { acronym: params.acronym });
     }
+    if (params.url) {
+        updates = Object.assign(updates, { url: params.url });
+    }
     console.log('update confs with', updates);
     db.collection('confs')
         .doc(params.id)
