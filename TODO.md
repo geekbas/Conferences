@@ -9,8 +9,6 @@ Items further down on the list may depend on items higher up.
 ### Minimum Viable Product: Single user
 
 * Conference instances
-  * CRUD
-  * URL
   * Link to parent instance (mainly for workshops)
 * Call For Papers
   * CRUD
