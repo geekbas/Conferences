@@ -8,15 +8,15 @@ Items further down on the list may depend on items higher up.
 
 ### Minimum Viable Product: Single user
 
-* Conference instances
-  * Link to parent instance (mainly for workshops)
 * Call For Papers
   * CRUD
 * CFP Alternatives
   * CRUD
-  * Format
+  * Format: ACM, IEEE, LNCS, ... (text)
+  * Page limit
+    * Plus "including references" flag
   * Dates
-  * Timeline
+* Timeline
 * Find a better product name?
 
 ### Next: Usable for others
@@ -34,6 +34,8 @@ Items further down on the list may depend on items higher up.
 
 ### Good To Have
 
+* Conference instances
+  * Link to parent instance (mainly for workshops)
 * Notes
   * list of key + freetext
 * Cities
