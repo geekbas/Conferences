@@ -17,7 +17,6 @@ Items further down on the list may depend on items higher up.
     * Plus "including references" flag
   * Dates
 * Timeline
-* Find a better product name?
 
 ### Next: Usable for others
 
@@ -31,6 +30,7 @@ Items further down on the list may depend on items higher up.
   * If submitted to a particular CFPA:
     * Which ones get blocked out?
     * Which are the fallbacks?
+* Find a better product name?
 
 ### Good To Have
 
