@@ -1,4 +1,4 @@
-extends layout
+extends ../layout
 
 block content
     if conf.acronym
@@ -16,7 +16,7 @@ block content
             li
                 form(method='POST', action='/instance')
                     input(type='hidden', name='conf_id', value=conf.id)
-                    input(type='number', min="2000", max="2020", name='year')
+                    input(type='number', min="2015", max="2020", name='year')
                     button(type='submit') New
             each val in instances
                 li
@@ -34,6 +34,5 @@ block content
         form(method='POST', action='/conf/' + conf.id + '?_method=DELETE')
             div
                 input(type='hidden', name='id', value=conf.id)
-                input(type='hidden' name='_method' value='DELETE')
             div(class='button')
                 button(type='submit') Delete

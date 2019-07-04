@@ -51,8 +51,18 @@ let update = function(params, f) {
         });
 };
 
+let del = function(id, f) {
+    db.collection('instances')
+        .doc(id)
+        .delete()
+        .then((doc) => {
+            f(doc);
+        })
+};
+
 module.exports = {
     add: add,
+    delete: del,
     get_for_conf: get_for_conf,
     get_by_id: get_by_id,
     update: update

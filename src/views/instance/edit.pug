@@ -1,10 +1,7 @@
-extends layout
+extends ../layout
 
 block content
-    h1=title
-
-    p
-        | Conference #{conf.name}
+    h1 #{conf.name}
 
     p
         form(method='post', action='/instance/?_method=PUT')

@@ -1,4 +1,4 @@
-extends layout
+extends ../layout
 
 block content
     h1
@@ -6,7 +6,8 @@ block content
             | #{conf.name}
         | &nbsp;#{instance.year}
 
-    p URL: #{instance.url}
+    p URL:&nbsp;
+        a(href=instance.url) #{instance.url}
 
     p
         a(href='/instance/edit/' + instance.id)
@@ -15,6 +16,6 @@ block content
         form(method='POST', action='/instance/' + instance.id + '?_method=DELETE')
             div
                 input(type='hidden', name='id', value=instance.id)
-                input(type='hidden' name='_method' value='DELETE')
+                input(type='hidden', name='conf_id', value=instance.conf_id)
             div(class='button')
                 button(type='submit') Delete
