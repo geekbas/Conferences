@@ -16,5 +16,11 @@ block content
                 label URL
                 input(type='url', name='url', value=conf.url)
             p
+                label Submission format
+                input(type='text', name='format', value=conf.format)
+            p
+                label Acceptance rate
+                input(type='number', name='acceptance_rate', value=conf.acceptance_rate)
+            p
                 div(class='button')
                     button(type='submit') Update

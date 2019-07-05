@@ -3,13 +3,17 @@ const router = express.Router();
 const path = require('path');
 const dbi = require(path.join('..', 'modules', 'instance'));
 const confs = require(path.join('..', 'modules', 'conf'));
+const db_t = require(path.join('..', 'modules', 'track'));
 
 // noinspection JSUnresolvedFunction
 router.get('/:id', (req, res) => {
     dbi.get_by_id(req.params.id,(ci) => {
         console.log('show', ci);
         confs.get_by_id(ci.conf_id, (c, list) => {
-            res.render('instance/show', {instance: ci, conf: c})
+            db_t.get_for_instance(ci.id, (list) => {
+                console.log('tracks', list);
+                res.render('instance/show', {instance: ci, conf: c, tracks: list})
+            });
         });
     });
 });
@@ -19,7 +23,11 @@ router.get('/edit/:id', (req, res) => {
     dbi.get_by_id(req.params.id,(ci) => {
         console.log('show', ci);
         confs.get_by_id(ci.conf_id, (c, list) => {
-            res.render('instance/edit', {title: 'Conference Instance', instance: ci, conf: c})
+            console.log('conference', c);
+            db_t.get_for_instance(ci.id, (list) => {
+                console.log('tracks', list);
+                res.render('instance/edit', {instance: ci, conf: c, tracks: list})
+            });
         });
     });
 });

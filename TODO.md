@@ -8,15 +8,16 @@ Items further down on the list may depend on items higher up.
 
 ### Minimum Viable Product: Single user
 
+* params stuff in modules => routes
 * Call For Papers
-  * CRUD
-* CFP Alternatives
-  * CRUD
   * Format: ACM, IEEE, LNCS, ... (text)
+* CFP Tracks
+  * CRUD
   * Page limit
-    * Plus "including references" flag
+    * Plus flags: "including references", "double blind", etc
   * Dates
 * Timeline
+* Personal dates
 
 ### Next: Usable for others
 
@@ -30,10 +31,12 @@ Items further down on the list may depend on items higher up.
   * If submitted to a particular CFPA:
     * Which ones get blocked out?
     * Which are the fallbacks?
+* Breadcrumbs
 * Find a better product name?
 
 ### Good To Have
 
+* Let's Encrypt
 * Conference instances
   * Link to parent instance (mainly for workshops)
 * Notes

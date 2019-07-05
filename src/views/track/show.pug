@@ -1,0 +1,37 @@
+extends ../layout
+
+block content
+    h1 CFP Track for&nbsp;
+        a(href='/conf/' + conf.id)
+            | #{conf.name}
+        | &nbsp;
+        a(href='/instance/' + instance.id)
+            | #{instance.year}
+
+    p Name: #{track.name}
+
+    p URL: #{track.url}
+
+    if track.page_limit
+        p Page limit: #{track.page_limit},&nbsp;
+            if !track.including_references
+                | not&nbsp;
+            | including references.
+    else
+        p No page limit set.
+
+    p Reviews are&nbsp;
+        if !track.double_blind
+            | not&nbsp;
+        | double blind.
+
+    p
+        a(href='/track/edit/' + track.id)
+            div(class='button')
+            button(type='submit') Edit
+        form(method='POST', action='/track/' + track.id + '?_method=DELETE')
+            div
+                input(type='hidden', name='id', value=track.id)
+                input(type='hidden', name='instance_id', value=track.instance_id)
+            div(class='button')
+                button(type='submit') Delete

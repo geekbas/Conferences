@@ -11,7 +11,7 @@ let get = function(f) {
         snapshot.docs.map((entry) => {
 //            console.log(entry.id, entry.data());
             var d = entry.data();
-            confs.push({id: entry.id, name: d.name, acronym: d.acronym});
+            confs.push({id: entry.id, name: d.name, acronym: d.acronym, format: d.format, acceptance_rate: d.acceptance_rate});
         });
         if (confs.length > 0) {
             f(confs);
@@ -60,6 +60,12 @@ let update = function(params, f) {
     }
     if (params.url) {
         updates = Object.assign(updates, { url: params.url });
+    }
+    if (params.format) {
+        updates = Object.assign(updates, { format: params.format });
+    }
+    if (params.acceptance_rate) {
+        updates = Object.assign(updates, { acceptance_rate: params.acceptance_rate });
     }
     console.log('update confs with', updates);
     db.collection('confs')

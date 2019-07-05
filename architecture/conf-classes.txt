@@ -4,6 +4,8 @@ Conference "1" -- "*" ConferenceInstance
 
 Conference : name
 Conference : acronym
+Conference : format
+Conference : acceptance_rate
 
 ConferenceInstance : year
 ConferenceInstance : location
@@ -19,42 +21,39 @@ Dates : notification2
 Dates : camera_ready
 
 Workshop "1" -- "*" WorkshopInstance
-
 Workshop : name
 Workshop : acronym
+Workshop : format
 
 WorkshopInstance "*" -- "1" ConferenceInstance
-
 WorkshopInstance : url
 WorkshopInstance "1" -- "*" CallForPapers
 
-CallForPapers : format
-CallForPapers "1" -- "1..*" CFPAlternative
-CallForPapers "1" -- "1" Committee
-CallForPapers : acceptance_rate
+CallForPapers "1" -- "1..*" Track
 CallForPapers "*" -- "*" Topic
 
-CFPAlternative "1" *-- "1" Dates
-CFPAlternative : type_name
-CFPAlternative : page_count
-CFPAlternative : flags
+Track "1" *-left- "1" Dates
+Track "1" -up- "1" Committee
+Track : type_name
+Track : page_count
+Track : flags
 ' double blind, page count including references, etc
 
 Topic : description
 
-Committee "*" -- "*" CommitteeMember
+Committee "*" -up- "*" CommitteeMember
 
 User "0..1" -- "0..1" CommitteeMember
 User "1" -- "*" Submission
 
-Submission "*" -- "1" CFPAlternative
+Submission "*" -- "1" Track
 
 Submission : status
 Submission : overleaf-url
 
 User "*" -- "*" Conference : tracks >
 User "*" -- "*" Workshop : tracks >
-User "*" -- "*" CommitteeMember : tracks >
+'User "*" -- "*" CommitteeMember : tracks >
 User "*" -- "*" Topic : tracks >
 
 @enduml

@@ -7,11 +7,24 @@ block content
         form(method='post', action='/instance/?_method=PUT')
             input(type='hidden', name='id', value=instance.id)
             p
-                label Year
+                label Year:
                 input(type='number', min="2000", max="2020", name='year', value=instance.year)
             p
-                label URL
+                label URL:
                 input(type='url', name='url', value=instance.url)
             p
                 div(class='button')
                     button(type='submit') Update
+
+    p CFP Tracks
+        ul
+            li
+                form(method='POST', action='/track')
+                    input(type='hidden', name='instance_id', value=instance.id)
+                    label Name:
+                    input(type='text', name='name')
+                    button(type='submit') New
+            each val in tracks
+                li
+                    a(href='/track/' + val.id)
+                        | #{val.name}

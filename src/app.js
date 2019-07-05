@@ -25,6 +25,7 @@ app.use(methodOverride('_method'));
 app.use('/', indexRouter);
 app.use('/conf', confRouter);
 app.use('/instance', require(path.join(__dirname, 'routes', 'instances')));
+app.use('/track', require(path.join(__dirname, 'routes', 'tracks')));
 //app.use('/users', usersRouter);
 
 // catch 404 and forward to error handler
