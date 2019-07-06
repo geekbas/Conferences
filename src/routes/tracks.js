@@ -1,72 +1,74 @@
 const express = require('express');
 const router = express.Router();
 const path = require('path');
-const db_t = require(path.join('..', 'modules', 'track'));
-const db_i = require(path.join('..', 'modules', 'instance'));
-const db_c = require(path.join('..', 'modules', 'conf'));
+
+const Storage = require(path.join('..', 'modules', 'storage'))
+const conf_storage = new Storage('confs')
+const instance_storage = new Storage('instances')
+const tracks_storage = new Storage('tracks')
 
 // noinspection JSUnresolvedFunction
 router.post('/', (req, res) => {
-    console.log('tracks.post with params', req.body);
+    console.log('tracks.post with params', req.body)
     if (!req.body.empty) {
-        db_t.add({
+        tracks_storage.add({
             instance_id: req.body.instance_id,
             name: req.body.name
-        }, (track) => {
-            res.redirect('/track/edit/' + track.id);
+        }, (id) => {
+            res.redirect('/track/edit/' + id)
         })
     }
-});
+})
 
 // noinspection JSUnresolvedFunction
 router.get('/:id', (req, res) => {
-    db_t.get_by_id(req.params.id, (track) => {
-        console.log('show', track);
-        db_i.get_by_id(track.instance_id, (ci, list) => {
-            db_c.get_by_id(ci.conf_id, (c, list) => {
-                console.log('conference', c);
-                res.render('track/show', {track: track, instance: ci, conf: c});
-            });
-        });
-    });
-});
+    tracks_storage.get_by_id(req.params.id, (track) => {
+        console.log('show', track)
+        instance_storage.get_by_id(track.instance_id, (ci) => {
+            console.log('instance', ci)
+            conf_storage.get_by_id(ci.conf_id, (c) => {
+                console.log('conference', c)
+                res.render('track/show', {track: track, instance: ci, conf: c})
+            })
+        })
+    })
+})
 
 // noinspection JSUnresolvedFunction
 router.get('/edit/:id', (req, res) => {
-    db_t.get_by_id(req.params.id, (track) => {
-        console.log('show', track);
-        db_i.get_by_id(track.instance_id, (ci, list) => {
-            console.log('instance', ci);
-            db_c.get_by_id(ci.conf_id, (c, list) => {
-                console.log('conference', c);
-                res.render('track/edit', {track: track, instance: ci, conf: c});
-            });
-        });
-    });
-});
+    tracks_storage.get_by_id(req.params.id, (track) => {
+        console.log('show', track)
+        instance_storage.get_by_id(track.instance_id, (ci) => {
+            console.log('instance', ci)
+            conf_storage.get_by_id(ci.conf_id, (c) => {
+                console.log('conference', c)
+                res.render('track/edit', {track: track, instance: ci, conf: c})
+            })
+        })
+    })
+})
 
 // noinspection JSUnresolvedFunction
 router.put('/', (req, res) => {
-    console.log('put with params', req.body);
+    console.log('put with params', req.body)
     const updates = {
         name: req.body.name,
         url: req.body.url,
         page_limit: req.body.page_limit,
         including_references: !!req.body.including_references,
         double_blind: !!req.body.double_blind
-    };
-    db_t.update(req.body.id, updates, (track) => {
-        console.log('show', track);
-        res.redirect('/track/' + track.id);
-    });
-});
+    }
+    tracks_storage.update(req.body.id, updates, (id) => {
+        res.redirect('/track/' + id)
+    })
+})
 
 // noinspection JSUnresolvedFunction
 router.delete('/:id', (req, res) => {
-    console.log('delete track', req.body.id);
-    db_t.delete(req.body.id, () => {
-        res.redirect('/instance/' + req.body.instance_id);
+    console.log('delete track', req.body.id)
+    tracks_storage.del(req.body.id, (track) => {
+        res.redirect('/instance/' + track.instance_id)
     })
-});
+})
 
-module.exports = router;
+module.exports = router
