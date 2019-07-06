@@ -48,8 +48,16 @@ router.post('/', (req, res) => {
 
 // noinspection JSUnresolvedFunction
 router.put('/', (req, res) => {
-    console.log('put conf / with params', req.body);
-    confs.update(req.body, (c) => {
+    const params = req.body;
+    console.log('put conf / with params', params);
+    const updates = {
+        name: params.name,
+        acronym: params.acronym,
+        url: params.url,
+        format: params.format,
+        acceptance_rate: params.acceptance_rate
+    };
+    confs.update(req.body.id, updates, (c) => {
         console.log('show', c);
         res.redirect('/conf/' + c.id);
     });

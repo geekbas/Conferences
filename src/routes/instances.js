@@ -36,17 +36,24 @@ router.get('/edit/:id', (req, res) => {
 router.post('/', (req, res) => {
     console.log('post with params', req.body);
     if (!req.body.empty) {
-        dbi.add(req.body.conf_id, req.body.year, (ci) => {
+        dbi.add({
+            conf_id: req.body.conf_id,
+            year: req.body.year
+        }, (ci) => {
             console.log('created:', ci);
             res.redirect('/instance/edit/' + ci.id);
-        })
-    }
+        });
+    };
 });
 
 // noinspection JSUnresolvedFunction
 router.put('/', (req, res) => {
     console.log('put with params', req.body);
-    dbi.update(req.body, (ci) => {
+    const updates = {
+        year: req.body.year,
+        url: req.body.url
+    };
+    dbi.update(req.body.id, updates, (ci) => {
         console.log('show', ci);
         res.redirect('/instance/' + ci.id);
     });

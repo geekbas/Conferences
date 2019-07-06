@@ -9,7 +9,10 @@ const db_c = require(path.join('..', 'modules', 'conf'));
 router.post('/', (req, res) => {
     console.log('tracks.post with params', req.body);
     if (!req.body.empty) {
-        db_t.add(req.body.instance_id, req.body.name, (track) => {
+        db_t.add({
+            instance_id: req.body.instance_id,
+            name: req.body.name
+        }, (track) => {
             res.redirect('/track/edit/' + track.id);
         })
     }
@@ -45,18 +48,13 @@ router.get('/edit/:id', (req, res) => {
 // noinspection JSUnresolvedFunction
 router.put('/', (req, res) => {
     console.log('put with params', req.body);
-    let updates = {};
-    if (req.body.name) {
-        updates = Object.assign(updates, { name: req.body.name });
-    }
-    if (req.body.url) {
-        updates = Object.assign(updates, { url: req.body.url });
-    }
-    if (req.body.page_limit) {
-        updates = Object.assign(updates, { page_limit: req.body.page_limit });
-    }
-    updates = Object.assign(updates, { including_references: !!req.body.including_references});
-    updates = Object.assign(updates, { double_blind: !!req.body.double_blind});
+    const updates = {
+        name: req.body.name,
+        url: req.body.url,
+        page_limit: req.body.page_limit,
+        including_references: !!req.body.including_references,
+        double_blind: !!req.body.double_blind
+    };
     db_t.update(req.body.id, updates, (track) => {
         console.log('show', track);
         res.redirect('/track/' + track.id);

@@ -1,19 +1,14 @@
 const db = require('./firestore');
+const coll = db.collection('tracks');
 
 const get_for_instance = function(instance_id, f) {
-    db.collection('tracks')
+    coll
         .where('instance_id', '==', instance_id)
         .get()
         .then((snapshot) => {
             var docs = [];
             snapshot.docs.map((entry) => {
-                var d = entry.data();
-                docs.push({
-                    id: entry.id,
-                    name: d.name,
-                    url: d.url,
-                    page_limit: d.page_limit,
-                });
+                docs.push(Object.assign({ id: entry.id }, entry.data()));
             });
             f(docs);
         });
@@ -21,7 +16,7 @@ const get_for_instance = function(instance_id, f) {
 };
 
 let get_by_id = function(id, f) {
-    db.collection('tracks')
+    coll
         .doc(id)
         .get()
         .then((doc) => {
@@ -30,9 +25,9 @@ let get_by_id = function(id, f) {
         });
 };
 
-let add = function(instance_id, name, f) {
-    db.collection('tracks')
-        .add({instance_id: instance_id, name: name})
+let add = function(entry, f) {
+    coll
+        .add(entry)
         .then((doc) => {
             f(doc);
         })
@@ -40,7 +35,7 @@ let add = function(instance_id, name, f) {
 
 let update = function(id, updates, f) {
     console.log('update with', updates);
-    db.collection('tracks')
+    coll
         .doc(id)
         .update(updates)
         .then((doc) => {
@@ -49,7 +44,7 @@ let update = function(id, updates, f) {
 };
 
 let del = function(id, f) {
-    db.collection('tracks')
+    coll
         .doc(id)
         .delete()
         .then((doc) => {

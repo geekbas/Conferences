@@ -1,17 +1,17 @@
 
-var db = require('./firestore');
-var instances = require('./instance');
+const db = require('./firestore');
+const instances = require('./instance');
+const coll = db.collection('confs');
 
 let get = function(f) {
-    db.collection('confs')
+    coll
         .orderBy('name', 'asc')
         .get()
         .then((snapshot) => {
         var confs = [];
         snapshot.docs.map((entry) => {
 //            console.log(entry.id, entry.data());
-            var d = entry.data();
-            confs.push({id: entry.id, name: d.name, acronym: d.acronym, format: d.format, acceptance_rate: d.acceptance_rate});
+            confs.push(Object.assign({id: entry.id }, entry.data()));
         });
         if (confs.length > 0) {
             f(confs);
@@ -21,7 +21,7 @@ let get = function(f) {
 
 let get_by_id = function(id, f) {
 //    console.log(`look for id \`${id}'`);
-    db.collection('confs')
+    coll
         .doc(id)
         .get()
         .then((doc) => {
@@ -34,7 +34,7 @@ let get_by_id = function(id, f) {
 };
 
 let add = function(name, f) {
-    db.collection('confs')
+    coll
         .add({name: name})
         .then((doc) => {
             f(doc);
@@ -42,7 +42,7 @@ let add = function(name, f) {
 };
 
 let del = function(id, f) {
-    db.collection('confs')
+    coll
         .doc(id)
         .delete()
         .then((doc) => {
@@ -50,29 +50,13 @@ let del = function(id, f) {
         })
 };
 
-let update = function(params, f) {
-    let updates = {};
-    if (params.name) {
-        updates = Object.assign(updates, { name: params.name });
-    }
-    if (params.acronym) {
-        updates = Object.assign(updates, { acronym: params.acronym });
-    }
-    if (params.url) {
-        updates = Object.assign(updates, { url: params.url });
-    }
-    if (params.format) {
-        updates = Object.assign(updates, { format: params.format });
-    }
-    if (params.acceptance_rate) {
-        updates = Object.assign(updates, { acceptance_rate: params.acceptance_rate });
-    }
+let update = function(id, updates, f) {
     console.log('update confs with', updates);
-    db.collection('confs')
-        .doc(params.id)
+    coll
+        .doc(id)
         .update(updates)
         .then((doc) => {
-            f(Object.assign({id: params.id}));
+            f({id: id});
         });
 };
 

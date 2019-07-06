@@ -1,15 +1,15 @@
-var db = require('./firestore');
+const db = require('./firestore');
+const coll = db.collection('instances');
 
 let get_for_conf = function(id, f) {
-    db.collection('instances')
+    coll
         .where('conf_id', '==', id)
         .orderBy('year', 'desc')
         .get()
         .then((snapshot) => {
             var docs = [];
             snapshot.docs.map((entry) => {
-                var d = entry.data();
-                docs.push({id: entry.id, year: d.year, url: d.url});
+                docs.push(Object.assign({ id: entry.id }, entry.data()));
             });
             f(docs);
         });
@@ -17,7 +17,7 @@ let get_for_conf = function(id, f) {
 
 let get_by_id = function(id, f) {
 //    console.log(`look for id \`${id}'`);
-    db.collection('instances')
+    coll
         .doc(id)
         .get()
         .then((doc) => {
@@ -26,33 +26,26 @@ let get_by_id = function(id, f) {
         });
 };
 
-let add = function(conf_id, year, f) {
-    db.collection('instances')
-        .add({conf_id: conf_id, year: year})
+let add = function(entry, f) {
+    coll
+        .add(entry)
         .then((doc) => {
             f(doc);
         })
 };
 
-let update = function(params, f) {
-    let updates = {};
-    if (params.year) {
-        updates = Object.assign(updates, { year: params.year });
-    }
-    if (params.url) {
-        updates = Object.assign(updates, { url: params.url });
-    }
+let update = function(id, updates, f) {
     console.log('update with', updates);
-    db.collection('instances')
-        .doc(params.id)
+    coll
+        .doc(id)
         .update(updates)
         .then((doc) => {
-            f(Object.assign({id: params.id}));
+            f({id: id});
         });
 };
 
 let del = function(id, f) {
-    db.collection('instances')
+    coll
         .doc(id)
         .delete()
         .then((doc) => {
