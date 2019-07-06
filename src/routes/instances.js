@@ -7,30 +7,27 @@ const conf_storage = new Storage('confs')
 const instance_storage = new Storage('instances')
 const tracks_storage = new Storage('tracks')
 
-// noinspection JSUnresolvedFunction
-router.get('/:id', (req, res) => {
-    instance_storage.get_by_id(req.params.id,(ci) => {
+function get_one(id, view, res) {
+    instance_storage.get_by_id(id,(ci) => {
         console.log('show', ci)
         conf_storage.get_by_id(ci.conf_id,(c) => {
             tracks_storage.get_all_by_key('instance_id', ci.id, null, (list) => {
                 console.log('tracks', list)
-                res.render('instance/show', {instance: ci, conf: c, tracks: list})
+                res.render('instance/' + view, {instance: ci, conf: c, tracks: list})
             })
         })
     })
+
+}
+
+// noinspection JSUnresolvedFunction
+router.get('/:id', (req, res) => {
+    get_one(req.params.id, 'show', res)
 })
 
 // noinspection JSUnresolvedFunction
 router.get('/edit/:id', (req, res) => {
-    instance_storage.get_by_id(req.params.id,(ci) => {
-        console.log('show', ci)
-        conf_storage.get_by_id(ci.conf_id,(c) => {
-            tracks_storage.get_all_by_key('instance_id', ci.id, null, (list) => {
-                console.log('tracks', list)
-                res.render('instance/edit', {instance: ci, conf: c, tracks: list})
-            })
-        })
-    })
+    get_one(req.params.id, 'edit', res)
 })
 
 // noinspection JSUnresolvedFunction

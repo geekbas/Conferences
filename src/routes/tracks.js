@@ -20,32 +20,27 @@ router.post('/', (req, res) => {
     }
 })
 
-// noinspection JSUnresolvedFunction
-router.get('/:id', (req, res) => {
-    tracks_storage.get_by_id(req.params.id, (track) => {
+function get_one(id, view, res) {
+    tracks_storage.get_by_id(id, (track) => {
         console.log('show', track)
         instance_storage.get_by_id(track.instance_id, (ci) => {
             console.log('instance', ci)
             conf_storage.get_by_id(ci.conf_id, (c) => {
                 console.log('conference', c)
-                res.render('track/show', {track: track, instance: ci, conf: c})
+                res.render('track/' + view, {track: track, instance: ci, conf: c})
             })
         })
     })
+}
+
+// noinspection JSUnresolvedFunction
+router.get('/:id', (req, res) => {
+    get_one(req.params.id, 'show', res)
 })
 
 // noinspection JSUnresolvedFunction
 router.get('/edit/:id', (req, res) => {
-    tracks_storage.get_by_id(req.params.id, (track) => {
-        console.log('show', track)
-        instance_storage.get_by_id(track.instance_id, (ci) => {
-            console.log('instance', ci)
-            conf_storage.get_by_id(ci.conf_id, (c) => {
-                console.log('conference', c)
-                res.render('track/edit', {track: track, instance: ci, conf: c})
-            })
-        })
-    })
+    get_one(req.params.id, 'edit', res)
 })
 
 // noinspection JSUnresolvedFunction
