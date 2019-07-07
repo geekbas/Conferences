@@ -9,18 +9,39 @@ block content
     p URL:&nbsp;
         a(href=instance.url) #{instance.url}
 
-    p CFP Tracks
-        ul
+    h2 CFP Tracks
+    ul
+        li
+            form(method='POST', action='/track')
+                input(type='hidden', name='instance_id', value=instance.id)
+                div
+                    label(for='instance_name') Name:
+                    input(type='text', id='instance_name', name='name')
+                button(type='submit') New
+        each val in tracks
             li
-                form(method='POST', action='/track')
-                    input(type='hidden', name='instance_id', value=instance.id)
-                    label Name:
-                    input(type='text', name='name')
-                    button(type='submit') New
-            each val in tracks
-                li
-                    a(href='/track/' + val.id)
-                        | #{val.name}
+                a(href='/track/' + val.id)
+                    | #{val.name}
+
+    h2 Dates
+    div
+        form(method='POST', action='/date')
+            input(type='hidden', name='instance_id', value=instance.id)
+            div
+                label(for='date_what') What:
+                input(type='text', id='date_what', name='what')
+            div
+                label(for='date_when') When:
+                input(type='date', id='date_when', name='datevalue')
+            button(type='submit') New
+    ul
+        each val in instance.dates
+            li #{val.datevalue}: #{val.what}
+                form(method='POST', action='/date/' + val.id + '?_method=DELETE')
+                    div
+                        input(type='hidden', name='instance_id', value=instance.id)
+                    div(class='button')
+                        button(type='submit') Delete
 
     p
         a(href='/instance/edit/' + instance.id)
@@ -28,7 +49,6 @@ block content
             button(type='submit') Edit
         form(method='POST', action='/instance/' + instance.id + '?_method=DELETE')
             div
-                input(type='hidden', name='id', value=instance.id)
                 input(type='hidden', name='conf_id', value=instance.conf_id)
             div(class='button')
                 button(type='submit') Delete

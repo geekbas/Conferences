@@ -6,6 +6,7 @@ const Storage = require(path.join('..', 'modules', 'storage'))
 const conf_storage = new Storage('confs')
 const instance_storage = new Storage('instances')
 const tracks_storage = new Storage('tracks')
+const date_storage = new Storage('dates')
 
 // noinspection JSUnresolvedFunction
 router.post('/', (req, res) => {
@@ -23,11 +24,17 @@ router.post('/', (req, res) => {
 function get_one(id, view, res) {
     tracks_storage.get_by_id(id, (track) => {
         console.log('show', track)
-        instance_storage.get_by_id(track.instance_id, (ci) => {
-            console.log('instance', ci)
-            conf_storage.get_by_id(ci.conf_id, (c) => {
-                console.log('conference', c)
-                res.render('track/' + view, {track: track, instance: ci, conf: c})
+        date_storage.get_all_by_key('track_id', id, { asc: 'datevalue' }, (dates) => {
+            instance_storage.get_by_id(track.instance_id, (ci) => {
+                console.log('instance', ci)
+                conf_storage.get_by_id(ci.conf_id, (c) => {
+                    console.log('conference', c)
+                    res.render('track/' + view, {
+                        track: Object.assign(track, { dates }),
+                        instance: ci,
+                        conf: c
+                    })
+                })
             })
         })
     })

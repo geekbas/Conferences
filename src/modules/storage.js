@@ -22,7 +22,7 @@ class Storage {
         q.get()
             .then((snapshot) => {
                 var list = []
-                snapshot.docs.map((entry) => {
+                snapshot.docs.forEach((entry) => {
 //                console.log(entry.id, entry.data());
                     list.push(Object.assign({id: entry.id }, entry.data()))
                 })
@@ -42,16 +42,21 @@ class Storage {
             })
     }
 
-    get_all_by_key(key_name, value, desc_order, f) {
+    get_all_by_key(key_name, value, params, f) {
         let q = this.coll
             .where(key_name, '==', value)
-        if (desc_order) {
-            q = q.orderBy(desc_order, 'desc')
+        if (params) {
+            if (params.asc) {
+                q = q.orderBy(params.asc, 'asc')
+            }
+            if (params.desc) {
+                q = q.orderBy(params.desc, 'desc')
+            }
         }
         q.get()
             .then((snapshot) => {
                 var docs = []
-                snapshot.docs.map((entry) => {
+                snapshot.docs.forEach((entry) => {
                     docs.push(Object.assign({id: entry.id}, entry.data()))
                 })
                 f(docs)

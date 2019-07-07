@@ -25,6 +25,27 @@ block content
             | not&nbsp;
         | double blind.
 
+    h2 Track Specific Dates
+    div
+        form(method='POST', action='/date')
+            input(type='hidden', name='track_id', value=track.id)
+            div
+                label(for='date_what') What:
+                input(type='text', id='date_what', name='what')
+            div
+                label(for='date_when') When:
+                input(type='date', id='date_when', name='datevalue')
+            button(type='submit') New
+    if (track.dates)
+        ul
+            each val in track.dates
+                li #{val.datevalue}: #{val.what}
+                    form(method='POST', action='/date/' + val.id + '?_method=DELETE')
+                        div
+                            input(type='hidden', name='track_id', value=track.id)
+                        div(class='button')
+                            button(type='submit') Delete
+
     p
         a(href='/track/edit/' + track.id)
             div(class='button')

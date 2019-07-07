@@ -1,0 +1,17 @@
+extends layout
+
+block content
+    h1=title
+
+    ul
+        each date in dates
+            li #{date.datevalue}:
+                | &nbsp;
+                a(href='/conf/' + date.conf.id) #{date.conf.name}
+                | &nbsp;
+                a(href='/instance/' + date.instance.id) #{date.instance.year}
+                |, #{date.what}
+                if (date.track)
+                    | &nbsp;- Track `
+                    a(href='/track/' + date.track.id) #{date.track.name}
+                    | '

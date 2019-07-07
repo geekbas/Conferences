@@ -8,15 +8,6 @@ Items further down on the list may depend on items higher up.
 
 ### Minimum Viable Product: Single user
 
-* params stuff in modules => routes
-* Call For Papers
-  * Format: ACM, IEEE, LNCS, ... (text)
-* CFP Tracks
-  * CRUD
-  * Page limit
-    * Plus flags: "including references", "double blind", etc
-  * Dates
-* Timeline
 * Personal dates
 
 ### Next: Usable for others
@@ -61,6 +52,7 @@ Items further down on the list may depend on items higher up.
 
 ## Without particular order
 
+* Field names as enum constants
 * Moderation
 * Tests
 * React frontend?

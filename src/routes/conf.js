@@ -18,7 +18,7 @@ router.get('/', (req, res) => {
 router.get('/:id', (req, res) => {
     conf_storage.get_by_id(req.params.id,(c) => {
         console.log('show', c)
-        instance_storage.get_all_by_key('conf_id', c.id, 'year', (list) => {
+        instance_storage.get_all_by_key('conf_id', c.id, { desc: 'year' }, (list) => {
             res.render('conf/show', {title: 'Conference', conf: c, instances: list})
         })
     })
