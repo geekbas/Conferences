@@ -6,13 +6,13 @@ block content
     p
         form(method='post', action='/instance/?_method=PUT')
             input(type='hidden', name='id', value=instance.id)
-            p
-                label Year:
-                input(type='number', min="2000", max="2020", name='year', value=instance.year)
-            p
-                label URL:
-                input(type='url', name='url', value=instance.url)
-            p
+            div
+                label(for='year') Year:
+                input#year(type='number', min="2000", max="2020", name='year', value=instance.year)
+            div
+                label(for='url') URL:
+                input#url(type='url', name='url', value=instance.url)
+            div
                 div(class='button')
                     button(type='submit') Update
 
@@ -21,8 +21,9 @@ block content
             li
                 form(method='POST', action='/track')
                     input(type='hidden', name='instance_id', value=instance.id)
-                    label Name:
-                    input(type='text', name='name')
+                    div
+                        label(for='name') Name:
+                        input#name(type='text', name='name')
                     button(type='submit') New
             each val in tracks
                 li

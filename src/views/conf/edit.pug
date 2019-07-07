@@ -7,20 +7,20 @@ block content
         form(method='post', action='/conf/?_method=PUT')
             input(type='hidden', name='id', value=conf.id)
             p
-                label Name
-                input(type='text', name='name', value=conf.name)
+                label(for='name') Name
+                input#name(type='text', name='name', value=conf.name)
             p
-                label Acronym
-                input(type='text', name='acronym', value=conf.acronym)
+                label(for='acronym') Acronym
+                input#acronym(type='text', name='acronym', value=conf.acronym)
             p
-                label URL
-                input(type='url', name='url', value=conf.url)
+                label(for='url') URL
+                input#url(type='url', name='url', value=conf.url)
             p
-                label Submission format
-                input(type='text', name='format', value=conf.format)
+                label(for='format') Submission format
+                input#format(type='text', name='format', value=conf.format)
             p
-                label Acceptance rate
-                input(type='number', name='acceptance_rate', value=conf.acceptance_rate)
+                label(for='acceptance_rate') Acceptance rate
+                input#acceptance_rate(type='number', name='acceptance_rate', value=conf.acceptance_rate)
             p
                 div(class='button')
                     button(type='submit') Update

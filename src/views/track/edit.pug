@@ -12,28 +12,24 @@ block content
     p
         form(method='post', action='/track/?_method=PUT')
             input(type='hidden', name='id', value=track.id)
-            p
-                label(for='name') Name:
-                input(type='text', id='name', name='name', value=track.name)
-            p
-                label(for='url') URL:
-                input(type='url', id='url', name='url', value=track.url)
-            p
-                label(for='page_limit') Page limit:
-                input(type='number', id='page_limit', name='page_limit', min='2', value=track.page_limit)
             div
-                if track.including_references
-                    input(type='checkbox', id='increfs', name='including_references', checked)
-                else
-                    input(type='checkbox', id='increfs', name='including_references')
+                label(for='name') Name:
+                input#name(type='text', name='name', value=track.name)
+            div
+                label(for='url') URL:
+                input#url(type='url', name='url', value=track.url)
+            div
+                label(for='page_limit') Page limit:
+                input#page_limit(type='number', name='page_limit', min='2', value=track.page_limit)
+            div
+                input#increfs(type='checkbox', name='including_references',
+                    checked=track.including_references)
                 label(for='increfs',) ... including references?
             div
-                if track.double_blind
-                    input(type='checkbox', id='double_blind', name='double_blind', checked)
-                else
-                    input(type='checkbox', id='double_blind', name='double_blind')
+                input#double_blind(type='checkbox', name='double_blind',
+                    checked=track.double_blind)
                 label(for='double_blind',) Double blind?
-            p
+            div
                 div(class='button')
                     button(type='submit') Update
 

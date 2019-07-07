@@ -16,7 +16,7 @@ block content
                 input(type='hidden', name='instance_id', value=instance.id)
                 div
                     label(for='instance_name') Name:
-                    input(type='text', id='instance_name', name='name')
+                    input#instance_name(type='text', name='name')
                 button(type='submit') New
         each val in tracks
             li
@@ -29,10 +29,10 @@ block content
             input(type='hidden', name='instance_id', value=instance.id)
             div
                 label(for='date_what') What:
-                input(type='text', id='date_what', name='what')
+                input#date_what(type='text', name='what')
             div
                 label(for='date_when') When:
-                input(type='date', id='date_when', name='datevalue')
+                input#date_when(type='date', name='datevalue')
             button(type='submit') New
     ul
         each val in instance.dates

@@ -14,14 +14,14 @@ block content
 
     if track.page_limit
         p Page limit: #{track.page_limit},&nbsp;
-            if !track.including_references
+            unless track.including_references
                 | not&nbsp;
             | including references.
     else
         p No page limit set.
 
     p Reviews are&nbsp;
-        if !track.double_blind
+        unless track.double_blind
             | not&nbsp;
         | double blind.
 
@@ -31,28 +31,26 @@ block content
             input(type='hidden', name='track_id', value=track.id)
             div
                 label(for='date_what') What:
-                input(type='text', id='date_what', name='what')
+                input#date_what(type='text', name='what')
             div
                 label(for='date_when') When:
-                input(type='date', id='date_when', name='datevalue')
+                input#date_when(type='date', name='datevalue')
             button(type='submit') New
     if (track.dates)
         ul
             each val in track.dates
                 li #{val.datevalue}: #{val.what}
                     form(method='POST', action='/date/' + val.id + '?_method=DELETE')
-                        div
-                            input(type='hidden', name='track_id', value=track.id)
+                        input(type='hidden', name='track_id', value=track.id)
                         div(class='button')
                             button(type='submit') Delete
 
     p
         a(href='/track/edit/' + track.id)
             div(class='button')
-            button(type='submit') Edit
+                button(type='submit') Edit
         form(method='POST', action='/track/' + track.id + '?_method=DELETE')
-            div
-                input(type='hidden', name='id', value=track.id)
-                input(type='hidden', name='instance_id', value=track.instance_id)
+            input(type='hidden', name='id', value=track.id)
+            input(type='hidden', name='instance_id', value=track.instance_id)
             div(class='button')
                 button(type='submit') Delete
