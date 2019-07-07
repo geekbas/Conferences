@@ -8,13 +8,12 @@ Items further down on the list may depend on items higher up.
 
 ### Minimum Viable Product: Single user
 
-* Personal dates
-
 ### Next: Usable for others
 
 * [Bootstrap](http://getbootstrap.com)
 * Users
   * Select conferences and instances to follow
+* Personal dates
 * Submissions
   * Links
     * Overleaf
@@ -24,6 +23,9 @@ Items further down on the list may depend on items higher up.
     * Which are the fallbacks?
 * Breadcrumbs
 * Find a better product name?
+* Dates
+  * gruppera på år och månad
+  * visa bara från "nu minus 1 månad"
 
 ### Good To Have
 

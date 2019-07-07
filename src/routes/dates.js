@@ -22,6 +22,7 @@ router.get('/', (req, res) => {
                 tracks_storage.get_all(null, (tlist) => {
                     tlist.forEach((entry) => tracks[entry.id] = entry)
                     list.forEach((entry) => {
+                        console.log('elaborate on entry', entry)
                         if (entry.track_id) {
                             const t = tracks[entry.track_id]
                             Object.assign(entry, {
@@ -50,7 +51,7 @@ router.post('/', (req, res) => {
     if (!req.body.empty) {
         let entry = {
             what: req.body.what,
-            datevalue: req.body.datevalue
+            datevalue: Date.parse(req.body.datevalue)
         }
         if (req.body.instance_id) {
             entry = Object.assign(entry,

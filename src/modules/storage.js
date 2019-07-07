@@ -1,5 +1,6 @@
 
 const db = require('./firestore')
+const moment = require('moment')
 
 class Storage {
     constructor(coll_name) {
@@ -14,6 +15,17 @@ class Storage {
             })
     }
 
+    fix_types(d) {
+        if (d.datevalue) {
+            // TODO: "YYYY-MM-DD TZ"
+//            console.log('dv', d.datevalue)
+            const m = moment(d.datevalue.toDate())
+//            console.log('m', m)
+            d.datevalue = m.format("YYYY-MM-DD")
+        }
+        return d
+    }
+
     get_all(asc_order, f) {
         let q = this.coll
         if (asc_order) {
@@ -24,7 +36,8 @@ class Storage {
                 var list = []
                 snapshot.docs.forEach((entry) => {
 //                console.log(entry.id, entry.data());
-                    list.push(Object.assign({id: entry.id }, entry.data()))
+                    const d = this.fix_types(entry.data())
+                    list.push(Object.assign({id: entry.id }, d))
                 })
                 if (list.length > 0) {
                     f(list)
@@ -57,7 +70,8 @@ class Storage {
             .then((snapshot) => {
                 var docs = []
                 snapshot.docs.forEach((entry) => {
-                    docs.push(Object.assign({id: entry.id}, entry.data()))
+                    const d = this.fix_types(entry.data())
+                    docs.push(Object.assign({id: entry.id}, d))
                 })
                 f(docs)
             })
