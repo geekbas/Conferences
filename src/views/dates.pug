@@ -1,17 +1,25 @@
 extends layout
 
 block content
-    h1=title
+    h2 Upcoming events
 
-    ul
+    table(class='table table-sm table-striped')
+        thead
+            tr
+                th(scope='col') Date
+                th(scope='col') Conference
+                th(scope='col') Year/Instance
+                th(scope='col') What
+                th(scope='col') Track
+        tbody
         each date in dates
-            li #{date.datevalue}:
-                | &nbsp;
-                a(href='/conf/' + date.conf.id) #{date.conf.name}
-                | &nbsp;
-                a(href='/instance/' + date.instance.id) #{date.instance.year}
-                |, #{date.what}
-                if (date.track)
-                    | &nbsp;- Track `
-                    a(href='/track/' + date.track.id) #{date.track.name}
-                    | '
+            tr
+                th(scope='row') #{date.datevalue}
+                td
+                    a(href='/conf/' + date.conf.id) #{date.conf.name}
+                td
+                    a(href='/instance/' + date.instance.id) #{date.instance.year}
+                td #{date.what}
+                td
+                    if (date.track)
+                        a(href='/track/' + date.track.id) #{date.track.name}

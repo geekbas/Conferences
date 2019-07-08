@@ -6,26 +6,14 @@ block content
     p
         form(method='post', action='/instance/?_method=PUT')
             input(type='hidden', name='id', value=instance.id)
-            div
-                label(for='year') Year:
-                input#year(type='number', min="2000", max="2020", name='year', value=instance.year)
-            div
-                label(for='url') URL:
-                input#url(type='url', name='url', value=instance.url)
-            div
-                div(class='button')
-                    button(type='submit') Update
-
-    p CFP Tracks
-        ul
-            li
-                form(method='POST', action='/track')
-                    input(type='hidden', name='instance_id', value=instance.id)
-                    div
-                        label(for='name') Name:
-                        input#name(type='text', name='name')
-                    button(type='submit') New
-            each val in tracks
-                li
-                    a(href='/track/' + val.id)
-                        | #{val.name}
+            div(class='form-group row')
+                label(for='year', class="col-sm-2 col-form-label") Year:
+                input#year(class='form-control col-sm-10', type='number', min="2000", max="2020", name='year',
+                    value=instance.year)
+            div(class='form-group row')
+                label(for='url', class="col-sm-2 col-form-label") URL:
+                input#url(class='form-control col-sm-10', type='url', name='url',
+                    value=instance.url)
+            div(class='form-group row')
+                button(class='btn btn-sm btn-primary mr-3', type='submit') Update
+                a(href='/instance/' + instance.id, class='btn btn-sm btn-primary') Cancel

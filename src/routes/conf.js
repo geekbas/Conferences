@@ -10,7 +10,7 @@ const instance_storage = new Storage('instances')
 // noinspection JSUnresolvedFunction
 router.get('/', (req, res) => {
     conf_storage.get_all('name', (confs) => {
-        res.render('index', {title: 'Conferences', confs })
+        res.render('index', {title: 'Conferences', confs, navconf: true })
     })
 })
 
@@ -19,7 +19,7 @@ router.get('/:id', (req, res) => {
     conf_storage.get_by_id(req.params.id,(c) => {
         console.log('show', c)
         instance_storage.get_all_by_key('conf_id', c.id, { desc: 'year' }, (list) => {
-            res.render('conf/show', {title: 'Conference', conf: c, instances: list})
+            res.render('conf/show', {title: 'Conference', conf: c, instances: list, navconf: true})
         })
     })
 })
@@ -28,7 +28,7 @@ router.get('/:id', (req, res) => {
 router.get('/edit/:id', (req, res) => {
     conf_storage.get_by_id(req.params.id,(c) => {
         console.log('edit', c)
-        res.render('conf/edit', {title: 'Conference', conf: c})
+        res.render('conf/edit', {title: 'Conference', conf: c, navconf: true})
     })
 })
 

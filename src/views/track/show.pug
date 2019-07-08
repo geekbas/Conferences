@@ -1,56 +1,71 @@
 extends ../layout
 
 block content
-    h1 CFP Track for&nbsp;
+    h2 Call For Papers, Track for&nbsp;
         a(href='/conf/' + conf.id)
-            | #{conf.name}
+            | #{conf.name},
         | &nbsp;
         a(href='/instance/' + instance.id)
             | #{instance.year}
 
-    p Name: #{track.name}
+    table(class='table table-sm')
+        tbody
+            tr
+                th(scope='row') Name
+                td #{track.name}
+            tr
+                th(scope='row') URL
+                td
+                    a(href=track.url) #{track.url}
+            tr
+                th(scope='row') Page limit
+                td
+                    if track.page_limit
+                        span #{track.page_limit},&nbsp;
+                            unless track.including_references
+                                | not&nbsp;
+                            | including references
+                    else
+                        span No page limit set
+            tr
+                th(scope='row') Double blind reviews?
+                td
+                    if track.double_blind
+                        | Yes
+                    else
+                        | No
 
-    p URL: #{track.url}
-
-    if track.page_limit
-        p Page limit: #{track.page_limit},&nbsp;
-            unless track.including_references
-                | not&nbsp;
-            | including references.
-    else
-        p No page limit set.
-
-    p Reviews are&nbsp;
-        unless track.double_blind
-            | not&nbsp;
-        | double blind.
-
-    h2 Track Specific Dates
-    div
-        form(method='POST', action='/date')
-            input(type='hidden', name='track_id', value=track.id)
-            div
-                label(for='date_what') What:
-                input#date_what(type='text', name='what')
-            div
-                label(for='date_when') When:
-                input#date_when(type='date', name='datevalue')
-            button(type='submit') New
-    if (track.dates)
-        ul
-            each val in track.dates
-                li #{val.datevalue}: #{val.what}
-                    form(method='POST', action='/date/' + val.id + '?_method=DELETE')
-                        input(type='hidden', name='track_id', value=track.id)
-                        div(class='button')
-                            button(type='submit') Delete
-
-    p
+    div(class="input-group mb-3")
         a(href='/track/edit/' + track.id)
-            div(class='button')
-                button(type='submit') Edit
+            button(class='btn btn-sm btn-info', type='submit') Edit
         form(method='POST', action='/track/' + track.id + '?_method=DELETE')
-            input(type='hidden', name='id', value=track.id)
             input(type='hidden', name='instance_id', value=track.instance_id)
-            div(class='button')
-                button(type='submit') Delete
+            button(class='btn btn-sm btn-danger', type='submit') Delete
+
+    h3 Track Specific Dates
+    table(class='table table-sm')
+        thead
+            tr
+                th(scope='col') When
+                th(scope='col') What
+                th(scope='col') &nbsp;
+        tbody
+            tr
+                form(method='POST', action='/date')
+                    input(type='hidden', name='track_id', value=track.id)
+                    td
+                        input#date_when(type='date', name='datevalue')
+                    td(scope='row')
+                        input#date_what(type='text', name='what')
+                    td
+                        button(class='btn btn-sm', type='submit') New
+
+            if (track.dates)
+                each val in track.dates
+                    tr
+                        td #{val.datevalue}
+                        td #{val.what}
+                        td
+                            form(method='POST', action='/date/' + val.id + '?_method=DELETE')
+                                input(type='hidden', name='track_id', value=track.id)
+                                button(class='btn btn-sm btn-danger', type='submit') Delete

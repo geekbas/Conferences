@@ -1,26 +1,30 @@
 extends ../layout
 
 block content
-    h1=title
+    h1 Basic information
 
     p
         form(method='post', action='/conf/?_method=PUT')
             input(type='hidden', name='id', value=conf.id)
-            p
-                label(for='name') Name
-                input#name(type='text', name='name', value=conf.name)
-            p
-                label(for='acronym') Acronym
-                input#acronym(type='text', name='acronym', value=conf.acronym)
-            p
-                label(for='url') URL
-                input#url(type='url', name='url', value=conf.url)
-            p
-                label(for='format') Submission format
-                input#format(type='text', name='format', value=conf.format)
-            p
-                label(for='acceptance_rate') Acceptance rate
-                input#acceptance_rate(type='number', name='acceptance_rate', value=conf.acceptance_rate)
-            p
-                div(class='button')
-                    button(type='submit') Update
+            div(class='form-group row')
+                label(for='name' class="col-sm-2 col-form-label") Name
+                div(class='col-sm-10')
+                    input#name(class='form-control', type='text', name='name', value=conf.name)
+            div(class='form-group row')
+                label(for='acronym' class="col-sm-2 col-form-label") Acronym
+                div(class='col-sm-10')
+                    input#acronym(class='form-control', type='text', name='acronym', value=conf.acronym)
+            div(class='form-group row')
+                label(for='url' class="col-sm-2 col-form-label") Main site
+                div(class='col-sm-10')
+                    input#url(class='form-control', type='url', name='url', value=conf.url placeholder='https://example.org')
+            div(class='form-group row')
+                label(for='format', class="col-sm-2 col-form-label") Submission format
+                div(class='col-sm-10')
+                    input#format(class='form-control', type='text', name='format', value=conf.format)
+            div(class='form-group row')
+                label(for='acceptance_rate', class="col-sm-2 col-form-label") Acceptance rate
+                div(class='col-sm-10')
+                    input#acceptance_rate(class='form-control', type='number', name='acceptance_rate', value=conf.acceptance_rate)
+            div(class='form-group row')
+                button(class='btn btn-primary', type='submit') Update

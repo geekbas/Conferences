@@ -18,10 +18,17 @@ class Storage {
     fix_types(d) {
         if (d.datevalue) {
             // TODO: "YYYY-MM-DD TZ"
-//            console.log('dv', d.datevalue)
-            const m = moment(d.datevalue.toDate())
-//            console.log('m', m)
-            d.datevalue = m.format("YYYY-MM-DD")
+            console.log('dv', d.datevalue)
+            console.log('dv-s', d.datevalue.toString())
+            if (d.datevalue.toString().match(/Object/)) {
+                const m = moment.unix(d.datevalue._seconds)
+                console.log('m-timestamp', m)
+                d.datevalue = m.format("YYYY-MM-DD")
+            } else {
+                const m = moment.unix(d.datevalue / 1000)
+                console.log('m-unix', m)
+                d.datevalue = m.format("YYYY-MM-DD")
+            }
         }
         return d
     }

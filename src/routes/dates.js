@@ -38,7 +38,11 @@ router.get('/', (req, res) => {
                         }
                     })
                     console.log('dates', list)
-                    res.render('dates', {title: 'Dates', dates: list })
+                    res.render('dates', {
+                        title: 'Dates',
+                        dates: list,
+                        navdate: true
+                    })
                 })
             })
         })
@@ -51,7 +55,7 @@ router.post('/', (req, res) => {
     if (!req.body.empty) {
         let entry = {
             what: req.body.what,
-            datevalue: Date.parse(req.body.datevalue)
+            datevalue: new Date(req.body.datevalue)
         }
         if (req.body.instance_id) {
             entry = Object.assign(entry,

@@ -67,8 +67,8 @@ router.put('/', (req, res) => {
 
 // noinspection JSUnresolvedFunction
 router.delete('/:id', (req, res) => {
-    console.log('delete track', req.body.id)
-    tracks_storage.del(req.body.id, (track) => {
+    console.log('delete track', req.params.id)
+    tracks_storage.del(req.params.id, (track) => {
         res.redirect('/instance/' + track.instance_id)
     })
 })

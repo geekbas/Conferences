@@ -6,35 +6,46 @@ block content
     else
         h1 #{conf.name}
 
-    p Main site:
-        | &nbsp;
-        a(href=conf.url)
-            | #{conf.url}
+    h3 Basic information
+    table(class='table table-sm')
+        tbody
+            tr
+                th(scope='row') Main site
+                td
+                    a(href=conf.url) #{conf.url}
 
-    p Submission format: #{conf.format}
+            tr
+                th(scope='row') Submission format
+                td #{conf.format}
 
-    p Instances
-        ul
-            li
-                form(method='POST', action='/instance')
-                    input(type='hidden', name='conf_id', value=conf.id)
-                    input(type='number', min="2015", max="2020", name='year')
-                    button(type='submit') New
+    h3 Instances
+    table(class='table table-sm table-striped')
+        thead
+            tr
+                th(scope='col') Year
+                th(scope='col') Site
+        tbody
+            tr
+                td(scope='row' colspan="2")
+                    form(method='POST', action='/instance')
+                        input(type='hidden', name='conf_id', value=conf.id)
+                        div(class='input-group input-group-sm mb-3')
+                            span(class="input-group-text") Year:
+                            input(type='number', min="2015", max="2020", name='year')
+                            button(class='btn btn-sm', type='submit') New
             each val in instances
-                li
-                    a(href='/instance/' + val.id)
-                        | #{val.year}
-                    if val.url
-                        | &nbsp;Site:&nbsp;
-                        a(href=val.url, target="_blank")
-                            | #{val.url}
+                tr
+                    td(scope='row')
+                        a(href='/instance/' + val.id)
+                            | #{val.year}
+                    td
+                        if val.url
+                            a(href=val.url, target="_blank")
+                                | #{val.url}
 
     p
         a(href='/conf/edit/' + conf.id)
-            div(class='button')
-            button(type='submit') Edit
+            button(class='btn btn-sm btn-info', type='submit') Edit
         form(method='POST', action='/conf/' + conf.id + '?_method=DELETE')
-            div
-                input(type='hidden', name='id', value=conf.id)
-            div(class='button')
-                button(type='submit') Delete
+            input(type='hidden', name='id', value=conf.id)
+            button(class='btn btn-sm btn-danger', type='submit') Delete

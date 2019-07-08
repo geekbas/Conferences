@@ -1,16 +1,23 @@
 extends layout
 
 block content
-  h1=title
+  h2 Conferences and Workshops
 
-  p
-    ul
+  table(class='table table-sm table-striped')
+    thead
+      tr
+        th(scope='col') Acronym
+        th(scope='col') Conference
+    tbody
       each conf, id in confs
-        li: a(href='conf/'+conf.id) #{conf.acronym}: #{conf.name}
+        tr
+          td(scope'row')
+            a(href='conf/'+conf.id) #{conf.acronym}
+          td #{conf.name}
 
-  p
+  div
     form(method='post', action='/conf')
-      div
-        input(type='text', name='name')
-      div(class='button')
-        button(type='submit') Add
+      div(class='input-group input-group-sm mb-3')
+        span(class="input-group-text") Name:
+        input#name(type='text', name='name')
+        button(type='submit' class='btn btn-outline-secondary') Add

@@ -1,54 +1,66 @@
 extends ../layout
 
 block content
-    h1
+    h2
         a(href='/conf/'+conf.id)
             | #{conf.name}
         | &nbsp;#{instance.year}
 
-    p URL:&nbsp;
-        a(href=instance.url) #{instance.url}
+    h3 Basic information
+    table(class='table table-sm')
+        tbody
+            tr
+                th(scope='row') URL
+                td
+                    a(href=instance.url) #{instance.url}
 
-    h2 CFP Tracks
-    ul
-        li
-            form(method='POST', action='/track')
-                input(type='hidden', name='instance_id', value=instance.id)
-                div
-                    label(for='instance_name') Name:
-                    input#instance_name(type='text', name='name')
-                button(type='submit') New
-        each val in tracks
-            li
-                a(href='/track/' + val.id)
-                    | #{val.name}
-
-    h2 Dates
-    div
-        form(method='POST', action='/date')
-            input(type='hidden', name='instance_id', value=instance.id)
-            div
-                label(for='date_what') What:
-                input#date_what(type='text', name='what')
-            div
-                label(for='date_when') When:
-                input#date_when(type='date', name='datevalue')
-            button(type='submit') New
-    ul
-        each val in instance.dates
-            li #{val.datevalue}: #{val.what}
-                form(method='POST', action='/date/' + val.id + '?_method=DELETE')
-                    div
-                        input(type='hidden', name='instance_id', value=instance.id)
-                    div(class='button')
-                        button(type='submit') Delete
-
-    p
+    div(class="input-group mb-3")
         a(href='/instance/edit/' + instance.id)
-            div(class='button')
-            button(type='submit') Edit
+            button(class='btn btn-sm btn-info', type='submit') Edit
         form(method='POST', action='/instance/' + instance.id + '?_method=DELETE')
-            div
-                input(type='hidden', name='conf_id', value=instance.conf_id)
-            div(class='button')
-                button(type='submit') Delete
+            input(type='hidden', name='conf_id', value=instance.conf_id)
+            button(class='btn btn-sm btn-danger', type='submit') Delete
+
+    h3 Call For Papers
+    table(class='table table-sm')
+        tbody
+            tr
+                td(scope='row')
+                    form(method='POST', action='/track')
+                        input(type='hidden', name='instance_id', value=instance.id)
+                        div(class='input-group input-group-sm')
+                            label(class="input-group-text", for='instance_name') Name:
+                            input#instance_name(type='text', name='name')
+                            button(class='btn btn-sm', type='submit') New
+            each val in tracks
+                tr
+                    td
+                        a(href='/track/' + val.id) #{val.name}
+
+    h3 Dates
+    table(class='table table-sm')
+        thead
+            tr
+                th(scope='col') When
+                th(scope='col') What
+                th(scope='col') &nbsp;
+        tbody
+            tr
+                form(method='POST', action='/date')
+                    input(type='hidden', name='instance_id', value=instance.id)
+                    td(scope='row')
+                        input#date_when(type='date', name='datevalue')
+                    td
+                        input#date_what(type='text', name='what')
+                    td
+                        button(class='btn btn-sm', type='submit') New
+
+            each val in instance.dates
+                tr
+                    td #{val.datevalue}
+                    td #{val.what}
+                    td
+                        form(method='POST', action='/date/' + val.id + '?_method=DELETE')
+                            span(class="input-group")
+                                input(type='hidden', name='instance_id', value=instance.id)
+                                button(class='btn btn-sm btn-danger', type='submit') Delete
