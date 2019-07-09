@@ -1,9 +1,10 @@
 
-var fs = require('fs')
-var session = require('express-session')
-var passport = require('passport')
+const session = require('express-session')
+const passport = require('passport')
 //    , TwitterStrategy = require('passport-twitter').Strategy
     , GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
+const path = require('path')
+const User = require(path.join(__dirname, 'modules', 'user'))
 
 // TODO: twitter, et al
 
@@ -22,8 +23,14 @@ const do_auth = function(app) {
     passport.use(new GoogleStrategy(require('./google-credentials.json'),
         (token, tokenSecret, profile, done) => {
             console.log(profile)
-            return done(null, {id: 42, user: 'user'})
-    //        User.findOrCreate({ googleId: profile.id }, (err, user) => { return done(err, user); });
+            User.findOrCreate(
+                { googleId: profile.id },
+                {
+                    given_name: profile.name.givenName,
+                    family_name: profile.name.familyName,
+                    email: profile.emails.length > 0 ? profile.emails[0].value : null
+                },
+                (err, user) => { return done(err, user); });
         }
     ))
 
@@ -51,8 +58,7 @@ const do_auth = function(app) {
 
     passport.deserializeUser((id, done) => {
         console.log('restore user id', id)
-        return done(null, {id: id, user: 'user'})
-    //    User.findById(id, (err, user) => { done(err, user); });
+        User.findById(id, (err, user) => { done(err, user); });
     })
 }
 

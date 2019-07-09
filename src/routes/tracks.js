@@ -21,7 +21,8 @@ router.post('/', (req, res) => {
     }
 })
 
-function get_one(id, view, res) {
+function get_one(req, view, res) {
+    const id = req.params.id
     tracks_storage.get_by_id(id, (track) => {
         console.log('show', track)
         date_storage.get_all_by_key('track_id', id, { asc: 'datevalue' }, (dates) => {
@@ -32,7 +33,8 @@ function get_one(id, view, res) {
                     res.render('track/' + view, {
                         track: Object.assign(track, { dates }),
                         instance: ci,
-                        conf: c
+                        conf: c,
+                        user: req.user
                     })
                 })
             })
@@ -42,12 +44,12 @@ function get_one(id, view, res) {
 
 // noinspection JSUnresolvedFunction
 router.get('/:id', (req, res) => {
-    get_one(req.params.id, 'show', res)
+    get_one(req, 'show', res)
 })
 
 // noinspection JSUnresolvedFunction
 router.get('/edit/:id', (req, res) => {
-    get_one(req.params.id, 'edit', res)
+    get_one(req, 'edit', res)
 })
 
 // noinspection JSUnresolvedFunction

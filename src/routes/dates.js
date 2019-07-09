@@ -41,7 +41,8 @@ router.get('/', (req, res) => {
                     res.render('dates', {
                         title: 'Dates',
                         dates: list,
-                        navdate: true
+                        navdate: true,
+                        user: req.user
                     })
                 })
             })

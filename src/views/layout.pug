@@ -13,7 +13,7 @@ html(lang='en')
           a(href='/conf', class={'nav-item':true, 'nav-link':true, active: navconf}) Conferences
           a(href='/date', class={'nav-item':true, 'nav-link':true, active: navdate}) Dates
         if user
-          span(class='nav-item navbar-text') Hi #{user.user}!
+          span(class='nav-item navbar-text') Hi #{user.given_name} #{user.family_name}!
           a(href='/auth/logout', class={'nav-item':true, 'nav-link':true}) Logout
         else
           a(href='/auth/google', class={'nav-item':true, 'nav-link':true}) GoogleAuth
