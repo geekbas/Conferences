@@ -22,6 +22,9 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(methodOverride('_method'));
 
+var auth = require('./auth')
+auth(app)
+
 app.use('/', indexRouter);
 app.use('/conf', confRouter);
 app.use('/instance', require(path.join(__dirname, 'routes', 'instances')));

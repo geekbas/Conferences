@@ -9,9 +9,14 @@ html(lang='en')
     div(class='container')
 
       nav(class='navbar navbar-expand-lg bg-light navbar-light')
-        div(class='navbar-nav')
-          a(href='/conf' class={'nav-item':true, 'nav-link':true, active: navconf}) Conferences
-          a(href='/date' class={'nav-item':true, 'nav-link':true, active: navdate}) Dates
+        div(class='navbar-nav mr-auto')
+          a(href='/conf', class={'nav-item':true, 'nav-link':true, active: navconf}) Conferences
+          a(href='/date', class={'nav-item':true, 'nav-link':true, active: navdate}) Dates
+        if user
+          span(class='nav-item navbar-text') Hi #{user.user}!
+          a(href='/auth/logout', class={'nav-item':true, 'nav-link':true}) Logout
+        else
+          a(href='/auth/google', class={'nav-item':true, 'nav-link':true}) GoogleAuth
       hr
 
       block content

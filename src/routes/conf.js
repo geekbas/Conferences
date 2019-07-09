@@ -9,8 +9,9 @@ const instance_storage = new Storage('instances')
 /* GET home page. */
 // noinspection JSUnresolvedFunction
 router.get('/', (req, res) => {
+    console.log('user', req.user)
     conf_storage.get_all('name', (confs) => {
-        res.render('index', {title: 'Conferences', confs, navconf: true })
+        res.render('index', {title: 'Conferences', confs, navconf: true, user: req.user })
     })
 })
 
