@@ -19,9 +19,6 @@ const do_auth = function(app) {
     app.use(passport.initialize());
     app.use(passport.session());
 
-    // google key: AIzaSyBmowvXx3QSJe0CXVbtcfmlmaOVk8hmlvw
-    // google client id: 194594327354-heel4rudkj15iuhtroeopkbc5nri0nsu.apps.googleusercontent.com
-    // google client secret: U7iHaTzTo5qUJdMPbvRoxZsc
     passport.use(new GoogleStrategy(require('./google-credentials.json'),
         (token, tokenSecret, profile, done) => {
             console.log(profile)
