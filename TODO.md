@@ -10,8 +10,7 @@ Items further down on the list may depend on items higher up.
 
 ### Next: Usable for others
 
-* [Bootstrap](http://getbootstrap.com)
-* Users
+* Users - Using [Passport](passportjs.org)
   * Select conferences and instances to follow
 * Personal dates
 * Submissions
@@ -21,7 +20,6 @@ Items further down on the list may depend on items higher up.
   * If submitted to a particular CFPA:
     * Which ones get blocked out?
     * Which are the fallbacks?
-* Breadcrumbs
 * Find a better product name?
 * Dates
   * gruppera på år och månad
@@ -29,6 +27,7 @@ Items further down on the list may depend on items higher up.
 
 ### Good To Have
 
+* Breadcrumbs
 * Let's Encrypt
 * Conference instances
   * Link to parent instance (mainly for workshops)
