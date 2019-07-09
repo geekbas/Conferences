@@ -31,6 +31,7 @@ Maybe the topics should be possible to relate in a hierarchy or in some other wa
 
 * Backend in [node.js](https://nodejs.org).
 * Probably a [React](https://reactjs.org) frontend.
+* Nicer HTML using [Bootstrap](http://getbootstrap.com).
 
 ## Open questions
 
