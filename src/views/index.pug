@@ -3,10 +3,11 @@ extends layout
 block content
   h2 Conferences and Workshops
 
-  form(method='POST', action='/conf/filter')
-    label(for='show_all', class="col-sm-2 col-form-label") Show all:
-    input#show_all(type='checkbox', name='show_all' class='mr-3' checked=show_all)
-    button(class='btn btn-sm btn-secondary', type='submit') Filter
+  if (user)
+    form(method='POST', action='/conf/filter')
+      label(for='show_all', class="col-sm-2 col-form-label") Show all:
+      input#show_all(type='checkbox', name='show_all' class='mr-3' checked=show_all)
+      button(class='btn btn-sm btn-secondary', type='submit') Filter
 
   table(class='table table-sm table-striped')
     thead

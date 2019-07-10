@@ -6,39 +6,19 @@ const Storage = require(path.join('..', 'modules', 'storage'))
 const conf_storage = new Storage('confs')
 const instance_storage = new Storage('instances')
 const follow_storage = new Storage('follows')
-
-function select_followed(list, user, filtered_list, done) {
-    if (!user) {
-        console.log('no filter')
-        return done(list)
-    }
-    if (list.length < 1) {
-        return done(filtered_list)
-    }
-    const c = list[0]
-//    console.log('check', c)
-    follow_storage.get_all_by_key(
-        [
-            { key_name: 'conf_id', value: c.id },
-            { key_name: 'user_id', value: user.id }
-        ],
-        { limit: 1 },
-        (follows) => {
-//            console.log('follows = ', follows)
-            if (follows.length > 0) {
-                return select_followed(list.slice(1), user, filtered_list.concat([ c ]), done)
-            } else {
-                return select_followed(list.slice(1), user, filtered_list, done)
-            }
-        })
-}
+const Following = require(path.join('..', 'modules', 'follow'))
 
 /* GET home page. */
 // noinspection JSUnresolvedFunction
 router.get('/', (req, res) => {
     console.log('conf list, show_all =', req.session.show_all)
     conf_storage.get_all('name', (confs) => {
-        select_followed(confs, req.session.show_all ? null : req.user, [], (list) => {
+        Following.select_followed(
+            confs,
+            req.session.show_all ? null : req.user,
+            'conf_id',
+            [],
+            (list) => {
             res.render('index', {
                 title: 'Conferences',
                 confs: list,
