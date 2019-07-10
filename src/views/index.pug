@@ -3,21 +3,31 @@ extends layout
 block content
   h2 Conferences and Workshops
 
+  form(method='POST', action='/conf/filter')
+    label(for='show_all', class="col-sm-2 col-form-label") Show all:
+    input#show_all(type='checkbox', name='show_all' class='mr-3' checked=show_all)
+    button(class='btn btn-sm btn-secondary', type='submit') Filter
+
   table(class='table table-sm table-striped')
     thead
       tr
         th(scope='col') Acronym
-        th(scope='col') Conference
+        th(scope='col') Name
+        th(scope='col') &nbsp;
     tbody
       each conf, id in confs
         tr
-          td(scope'row')
-            a(href='conf/'+conf.id) #{conf.acronym}
+          td
+            a(href='/conf/'+conf.id) #{conf.acronym}
           td #{conf.name}
-
-  div
-    form(method='post', action='/conf')
-      div(class='input-group input-group-sm mb-3')
-        span(class="input-group-text") Name:
-        input#name(type='text', name='name')
-        button(type='submit' class='btn btn-outline-secondary') Add
+          td
+            a(href='/conf/edit/'+conf.id) Edit
+      tr
+        form(method='post', action='/conf')
+          div(class='input-group input-group-sm')
+            td
+              input#acronym(type='text', name='acronym')
+            td
+              input#name(type='text', name='name')
+            td
+              button(type='submit' class='btn btn-sm btn-outline-secondary') Add

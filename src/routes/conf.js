@@ -5,12 +5,48 @@ const path = require('path');
 const Storage = require(path.join('..', 'modules', 'storage'))
 const conf_storage = new Storage('confs')
 const instance_storage = new Storage('instances')
+const follow_storage = new Storage('follows')
+
+function select_followed(list, user, filtered_list, done) {
+    if (!user) {
+        console.log('no filter')
+        return done(list)
+    }
+    if (list.length < 1) {
+        return done(filtered_list)
+    }
+    const c = list[0]
+//    console.log('check', c)
+    follow_storage.get_all_by_key(
+        [
+            { key_name: 'conf_id', value: c.id },
+            { key_name: 'user_id', value: user.id }
+        ],
+        { limit: 1 },
+        (follows) => {
+//            console.log('follows = ', follows)
+            if (follows.length > 0) {
+                return select_followed(list.slice(1), user, filtered_list.concat([ c ]), done)
+            } else {
+                return select_followed(list.slice(1), user, filtered_list, done)
+            }
+        })
+}
 
 /* GET home page. */
 // noinspection JSUnresolvedFunction
 router.get('/', (req, res) => {
+    console.log('conf list, show_all =', req.session.show_all)
     conf_storage.get_all('name', (confs) => {
-        res.render('index', {title: 'Conferences', confs, navconf: true, user: req.user })
+        select_followed(confs, req.session.show_all ? null : req.user, [], (list) => {
+            res.render('index', {
+                title: 'Conferences',
+                confs: list,
+                navconf: true,
+                show_all: !!req.session.show_all,
+                user: req.user
+            })
+        })
     })
 })
 
@@ -18,10 +54,29 @@ router.get('/', (req, res) => {
 router.get('/:id', (req, res) => {
     conf_storage.get_by_id(req.params.id,(c) => {
         console.log('show', c)
-        instance_storage.get_all_by_key('conf_id', c.id, { desc: 'year' }, (list) => {
-            res.render('conf/show', {title: 'Conference', conf: c, instances: list, navconf: true, user: req.user})
+        instance_storage.get_all_by_key(
+            [ { key_name: 'conf_id', value: c.id } ],
+            { desc: 'year' },
+            (list) => {
+            follow_storage.get_all_by_key(
+                [
+                    { key_name: 'conf_id', value: c.id },
+                    { key_name: 'user_id', value: req.user ? req.user.id : null }
+                ],
+                { limit: 1 },
+                (follows) => {
+                    console.log('follow list', follows)
+                    res.render('conf/show', {
+                        title: 'Conference',
+                        conf: c,
+                        instances: list,
+                        following: (follows.length > 0) ? follows[0] : null,
+                        navconf: true,
+                        user: req.user
+                    })
+                })
+            })
         })
-    })
 })
 
 // noinspection JSUnresolvedFunction
@@ -44,7 +99,10 @@ router.delete('/:id', (req, res) => {
 router.post('/', (req, res) => {
     console.log('new conf with params', req.body)
     if (!req.body.empty) {
-        conf_storage.add({ name: req.body.name },(id) => {
+        conf_storage.add({
+            acronym: req.body.acronym,
+            name: req.body.name
+        },(id) => {
             res.redirect('/conf/edit/' + id)
         })
     }
@@ -64,6 +122,12 @@ router.put('/', (req, res) => {
     conf_storage.update(req.body.id, updates,(id) => {
         res.redirect('/conf/' + id)
     })
+})
+
+router.post('/filter', (req, res) => {
+    console.log('filter', req.body)
+    req.session.show_all = !!req.body.show_all
+    res.redirect('/')
 })
 
 module.exports = router

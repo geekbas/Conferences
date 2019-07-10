@@ -25,7 +25,10 @@ function get_one(req, view, res) {
     const id = req.params.id
     tracks_storage.get_by_id(id, (track) => {
         console.log('show', track)
-        date_storage.get_all_by_key('track_id', id, { asc: 'datevalue' }, (dates) => {
+        date_storage.get_all_by_key(
+            [ { key_name: 'track_id', value: id } ],
+            { asc: 'datevalue' },
+            (dates) => {
             instance_storage.get_by_id(track.instance_id, (ci) => {
                 console.log('instance', ci)
                 conf_storage.get_by_id(ci.conf_id, (c) => {

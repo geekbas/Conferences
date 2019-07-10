@@ -10,8 +10,12 @@ Items further down on the list may depend on items higher up.
 
 ### Next: Usable for others
 
-* Users - Using [Passport](passportjs.org)
-  * Select conferences and instances to follow
+* Following:
+  * Conferences
+  * Instances
+  * Tracks
+* Conference list
+  * Show next date
 * Personal dates
 * Submissions
   * Links

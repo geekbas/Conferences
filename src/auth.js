@@ -30,7 +30,7 @@ const do_auth = function(app) {
                     family_name: profile.name.familyName,
                     email: profile.emails.length > 0 ? profile.emails[0].value : null
                 },
-                (err, user) => { return done(err, user); });
+                (err, user) => { return done(err, user) })
         }
     ))
 
@@ -42,7 +42,8 @@ const do_auth = function(app) {
     )
 
     app.get('/auth/google/callback',
-        passport.authenticate('google', { failureRedirect: '/login' }),
+        passport.authenticate('google',
+            { failureRedirect: '/login' }),
         (req, res) => { res.redirect('/') }
     )
 
@@ -52,13 +53,11 @@ const do_auth = function(app) {
     })
 
     passport.serializeUser((user, done) => {
-        console.log('save user', user)
         done(null, user.id) // first parameter is the error
     })
 
     passport.deserializeUser((id, done) => {
-        console.log('restore user id', id)
-        User.findById(id, (err, user) => { done(err, user); });
+        User.findById(id, (err, user) => { done(err, user) })
     })
 }
 

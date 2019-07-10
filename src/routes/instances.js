@@ -12,10 +12,16 @@ function get_one(req, view, res) {
     const id = req.params.id
     instance_storage.get_by_id(id, (ci) => {
         console.log('show', ci)
-        date_storage.get_all_by_key('instance_id', ci.id, { asc: 'datevalue' }, (c_dates) => {
+        date_storage.get_all_by_key(
+            [ { key_name: 'instance_id', value: ci.id } ],
+            { asc: 'datevalue' },
+            (c_dates) => {
             console.log('ci_dates', c_dates)
             conf_storage.get_by_id(ci.conf_id, (c) => {
-                tracks_storage.get_all_by_key('instance_id', ci.id, null, (list) => {
+                tracks_storage.get_all_by_key(
+                    [ { key_name: 'instance_id', value: ci.id } ],
+                    null,
+                    (list) => {
                     console.log('tracks', list)
                     res.render('instance/' + view, {
                         conf: c,

@@ -62,15 +62,20 @@ class Storage {
             })
     }
 
-    get_all_by_key(key_name, value, params, f) {
+    get_all_by_key(conditions, params, f) {
         let q = this.coll
-            .where(key_name, '==', value)
+        conditions.forEach((c) => {
+            q = q.where(c.key_name, '==', c.value)
+        })
         if (params) {
             if (params.asc) {
                 q = q.orderBy(params.asc, 'asc')
             }
             if (params.desc) {
                 q = q.orderBy(params.desc, 'desc')
+            }
+            if (params.limit) {
+                q = q.limit(params.limit)
             }
         }
         q.get()
