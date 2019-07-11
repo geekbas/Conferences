@@ -23,21 +23,6 @@ router.post('/', (req, res) => {
         } else {
             res.redirect('/conf/' + conf_id)
         }
-        return
-    }
-    if (req.body.instance_id) {
-        const instance_id = req.body.instance_id
-        if (req.user) {
-            follow_storage.add({
-                instance_id: instance_id,
-                user_id: req.user.id
-            },(id) => {
-                res.redirect('/instance/' + instance_id)
-            })
-        } else {
-            res.redirect('/instance/' + instance_id)
-        }
-        return
     }
 })
 
@@ -48,10 +33,13 @@ router.delete('/:id', (req, res) => {
         if (req.body.conf_id) {
             return res.redirect('/conf/' + req.body.conf_id)
         }
-        if (req.body.instance_id) {
-            return res.redirect('/instance/' + req.body.instance_id)
-        }
     })
+})
+
+router.post('/filter', (req, res) => {
+    console.log('filter from', req.headers.referer)
+    req.session.show_all = !!req.body.show_all
+    res.redirect(req.headers.referer)
 })
 
 module.exports = router

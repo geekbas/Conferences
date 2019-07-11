@@ -7,42 +7,67 @@ const date_storage = new Storage('dates')
 const instance_storage = new Storage('instances')
 const conf_storage = new Storage('confs')
 const tracks_storage = new Storage('tracks')
+const Following = require(path.join('..', 'modules', 'follow'))
+const moment = require('moment')
 
 // noinspection JSUnresolvedFunction
 router.get('/', (req, res) => {
-    date_storage.get_all('datevalue', (list) => {
-        let cis = []
-        instance_storage.get_all(null, (cilist) => {
-            cilist.forEach((entry) => cis[entry.id] = entry)
-            console.log('cis', cis)
-            let confs = []
-            conf_storage.get_all(null, (clist) => {
-                clist.forEach((entry) => confs[entry.id] = entry)
-                let tracks = []
-                tracks_storage.get_all(null, (tlist) => {
-                    tlist.forEach((entry) => tracks[entry.id] = entry)
-                    list.forEach((entry) => {
-                        console.log('elaborate on entry', entry)
-                        if (entry.track_id) {
-                            const t = tracks[entry.track_id]
-                            Object.assign(entry, {
-                                track: t,
-                                instance_id: t.instance_id
-                            })
-                        }
-                        if (entry.instance_id) {
-                            const instance = cis[entry.instance_id]
-                            Object.assign(entry, { instance })
-                            const conf = confs[instance.conf_id]
-                            Object.assign(entry, { conf })
-                        }
+    let confs = []
+    conf_storage.get_all(null, (clist) => {
+        Following.select_followed(
+            clist,
+            req.session.show_all ? null : req.user,
+            'conf_id',
+            [],
+            (clist2) => {
+                clist2.forEach((entry) => confs[entry.id] = entry)
+
+                let cis = []
+                instance_storage.get_all(null, (cilist) => {
+                    cilist.forEach((entry) => {
+                        if (confs[entry.conf_id]) cis[entry.id] = entry
                     })
-                    console.log('dates', list)
-                    res.render('dates', {
-                        title: 'Dates',
-                        dates: list,
-                        navdate: true,
-                        user: req.user
+                    console.log('cis', cis)
+
+                    let tracks = []
+                    tracks_storage.get_all(null, (tlist) => {
+                        tlist.forEach((entry) => {
+                            if (cis[entry.instance_id]) tracks[entry.id] = entry
+                        })
+
+                        let datelist = []
+                        const today = moment().format("YYYY-MM-DD")
+                        date_storage.get_all('datevalue', (list) => {
+                            list.forEach((entry) => {
+                                console.log('elaborate on entry', entry)
+                                if (entry.datevalue >= today) {
+                                    if (entry.track_id) {
+                                        const t = tracks[entry.track_id]
+                                        if (t) {
+                                            Object.assign(entry, {
+                                                track: t,
+                                                instance_id: t.instance_id
+                                            })
+                                        }
+                                    }
+                                    if (entry.instance_id) {
+                                        const instance = cis[entry.instance_id]
+                                        if (instance) {
+                                            Object.assign(entry, {instance})
+                                            const conf = confs[instance.conf_id]
+                                            Object.assign(entry, {conf})
+                                            datelist.push(entry)
+                                        }
+                                    }
+                                }
+                            })
+                            res.render('dates', {
+                                title: 'Dates',
+                                dates: datelist,
+                                navdate: true,
+                                show_all: !!req.session.show_all,
+                                user: req.user
+                            })
                     })
                 })
             })

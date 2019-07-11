@@ -24,21 +24,12 @@ function get_one(req, done) {
                     null,
                     (list) => {
                         console.log('tracks', list)
-                        follow_storage.get_all_by_key(
-                            [
-                                { key_name: 'instance_id', value: ci.id },
-                                { key_name: 'user_id', value: req.user ? req.user.id : null }
-                            ],
-                            { limit: 1 },
-                            (follows) => {
-                                console.log('follow list', follows)
-                                done({
-                                    conf: c,
-                                    instance: Object.assign(ci, {dates: c_dates}),
-                                    tracks: list,
-                                    following: (follows.length > 0) ? follows[0] : null,
-                                    user: req.user
-                                })
+                            done({
+                                conf: c,
+                                instance: Object.assign(ci, {dates: c_dates}),
+                                tracks: list,
+                                following: (follows.length > 0) ? follows[0] : null,
+                                user: req.user
                             })
                     })
             })

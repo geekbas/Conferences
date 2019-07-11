@@ -104,10 +104,4 @@ router.put('/', (req, res) => {
     })
 })
 
-router.post('/filter', (req, res) => {
-    console.log('filter', req.body)
-    req.session.show_all = !!req.body.show_all
-    res.redirect('/')
-})
-
 module.exports = router
