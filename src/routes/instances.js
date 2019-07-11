@@ -7,8 +7,9 @@ const conf_storage = new Storage('confs')
 const instance_storage = new Storage('instances')
 const tracks_storage = new Storage('tracks')
 const date_storage = new Storage('dates')
+const follow_storage = new Storage('follows')
 
-function get_one(req, view, res) {
+function get_one(req, done) {
     const id = req.params.id
     instance_storage.get_by_id(id, (ci) => {
         console.log('show', ci)
@@ -22,28 +23,37 @@ function get_one(req, view, res) {
                     [ { key_name: 'instance_id', value: ci.id } ],
                     null,
                     (list) => {
-                    console.log('tracks', list)
-                    res.render('instance/' + view, {
-                        conf: c,
-                        instance: Object.assign(ci, { dates: c_dates }),
-                        tracks: list,
-                        user: req.user
+                        console.log('tracks', list)
+                        follow_storage.get_all_by_key(
+                            [
+                                { key_name: 'instance_id', value: ci.id },
+                                { key_name: 'user_id', value: req.user ? req.user.id : null }
+                            ],
+                            { limit: 1 },
+                            (follows) => {
+                                console.log('follow list', follows)
+                                done({
+                                    conf: c,
+                                    instance: Object.assign(ci, {dates: c_dates}),
+                                    tracks: list,
+                                    following: (follows.length > 0) ? follows[0] : null,
+                                    user: req.user
+                                })
+                            })
                     })
-                })
             })
         })
     })
-
 }
 
 // noinspection JSUnresolvedFunction
 router.get('/:id', (req, res) => {
-    get_one(req, 'show', res)
+    get_one(req, (items) => res.render('instance/show', items))
 })
 
 // noinspection JSUnresolvedFunction
 router.get('/edit/:id', (req, res) => {
-    get_one(req, 'edit', res)
+    get_one(req, (items) => res.render('instance/edit', items))
 })
 
 // noinspection JSUnresolvedFunction

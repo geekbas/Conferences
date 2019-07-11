@@ -15,8 +15,19 @@ block content
                     a(href=instance.url) #{instance.url}
 
     div(class="input-group mb-3")
+        if (user)
+            if following
+                form(method='POST', action='/follow/' + following.id + '?_method=DELETE')
+                    input(type='hidden', name='instance_id', value=instance.id)
+                    button(class='btn btn-sm btn-primary', type='submit') Unfollow
+            else
+                form(method='POST', action='/follow')
+                    input(type='hidden', name='instance_id', value=instance.id)
+                    button(class='btn btn-sm btn-primary', type='submit') Follow
+
         a(href='/instance/edit/' + instance.id)
             button(class='btn btn-sm btn-info', type='submit') Edit
+
         form(method='POST', action='/instance/' + instance.id + '?_method=DELETE')
             input(type='hidden', name='conf_id', value=instance.conf_id)
             button(class='btn btn-sm btn-danger', type='submit') Delete

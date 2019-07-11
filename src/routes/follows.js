@@ -23,6 +23,21 @@ router.post('/', (req, res) => {
         } else {
             res.redirect('/conf/' + conf_id)
         }
+        return
+    }
+    if (req.body.instance_id) {
+        const instance_id = req.body.instance_id
+        if (req.user) {
+            follow_storage.add({
+                instance_id: instance_id,
+                user_id: req.user.id
+            },(id) => {
+                res.redirect('/instance/' + instance_id)
+            })
+        } else {
+            res.redirect('/instance/' + instance_id)
+        }
+        return
     }
 })
 
@@ -30,7 +45,12 @@ router.post('/', (req, res) => {
 router.delete('/:id', (req, res) => {
     console.log('delete', req.params.id)
     follow_storage.del(req.params.id, () => {
-        res.redirect('/conf/' + req.body.conf_id);
+        if (req.body.conf_id) {
+            return res.redirect('/conf/' + req.body.conf_id)
+        }
+        if (req.body.instance_id) {
+            return res.redirect('/instance/' + req.body.instance_id)
+        }
     })
 })
 
