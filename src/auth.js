@@ -1,5 +1,6 @@
 
 const session = require('express-session')
+const FirestoreStore = require('firestore-store')(session);
 const passport = require('passport')
 //    , TwitterStrategy = require('passport-twitter').Strategy
     , GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
@@ -13,6 +14,9 @@ const do_auth = function(app) {
         secret: 'very secret',
         resave: false,
         saveUninitialized: true,
+        store:  new FirestoreStore({
+            database: require(path.join(__dirname, 'modules', 'firestore'))
+        }),
         cookie: {
             //secure: true -- only if https
         }
