@@ -1,6 +1,8 @@
 
 const session = require('express-session')
 const FirestoreStore = require('firestore-store')(session);
+const FileStore = require('session-file-store')(session);
+
 const passport = require('passport')
 //    , TwitterStrategy = require('passport-twitter').Strategy
     , GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
@@ -12,14 +14,12 @@ const User = require(path.join(__dirname, 'modules', 'user'))
 const do_auth = function(app) {
     app.use(session({
         secret: 'very secret',
-        resave: false,
-        saveUninitialized: true,
-        store:  new FirestoreStore({
-            database: require(path.join(__dirname, 'modules', 'firestore'))
-        }),
-        cookie: {
-            //secure: true -- only if https
-        }
+        resave: true,
+        rolling: true,
+        saveUninitialized: true
+//        ,store: new FirestoreStore({ database: require(path.join(__dirname, 'modules', 'firestore'))})
+        ,store: new FileStore({})
+//        ,cookie: {//secure: true -- only if https}
     }))
     app.use(passport.initialize());
     app.use(passport.session());
