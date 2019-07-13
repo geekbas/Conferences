@@ -13,6 +13,7 @@ Items further down on the list may depend on items higher up.
   * Admins can
     * List/search users
     * Promote to Admin
+    * Update/Delete public stuff
 * Personal stuff: conference, instances, tracks, dates
   * new field: added_by_user_id
   * new field: private_for_user_id
@@ -35,6 +36,7 @@ Items further down on the list may depend on items higher up.
 
 ### Good To Have
 
+* Audit Log
 * Conference list
   * Show next date
 * Breadcrumbs
@@ -50,7 +52,6 @@ Items further down on the list may depend on items higher up.
   * On conferences
   * On instances
   * On CFP alternatives
-* Return to previous page after Google-login
 
 ### Later
 

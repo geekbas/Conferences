@@ -18,7 +18,11 @@ block content
                 th(scope='row') Submission format
                 td #{conf.format}
 
-            if (user)
+            tr
+                th(scope='row') Acceptance rate
+                td #{conf.acceptance_rate}
+
+        if (user)
                 tr
                     th(scope='row') Private?
                     td
@@ -38,7 +42,7 @@ block content
                 form(method='POST', action='/follow')
                     input(type='hidden', name='conf_id', value=conf.id)
                     button(class='btn btn-sm btn-primary', type='submit') Follow
-            a(href='/conf/edit/' + conf.id)
+            a(href='/conf/' + conf.id + '/edit')
                 button(class='btn btn-sm btn-info', type='submit') Edit
             form(method='POST', action='/conf/' + conf.id + '?_method=DELETE')
                 input(type='hidden', name='id', value=conf.id)
