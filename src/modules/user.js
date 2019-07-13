@@ -25,7 +25,7 @@ class User {
     }
 
     static findById(id, f) {
-        console.log('look for user', id)
+//        console.log('look for user', id)
         user_storage.get_by_id(id, (obj) => {
             console.log('found user', obj)
             f(null, obj)

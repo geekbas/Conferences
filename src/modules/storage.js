@@ -57,7 +57,7 @@ class Storage {
             .doc(id)
             .get()
             .then((doc) => {
-                console.log(doc.id, doc.data())
+//                console.log(doc.id, doc.data())
                 f(Object.assign({id: id}, doc.data()))
             })
     }

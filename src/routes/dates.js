@@ -39,7 +39,7 @@ router.get('/', (req, res) => {
                         const today = moment().format("YYYY-MM-DD")
                         date_storage.get_all('datevalue', (list) => {
                             list.forEach((entry) => {
-                                console.log('elaborate on entry', entry)
+//                                console.log('elaborate on entry', entry)
                                 if (entry.datevalue >= today) {
                                     if (entry.track_id) {
                                         const t = tracks[entry.track_id]
