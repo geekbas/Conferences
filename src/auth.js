@@ -39,6 +39,10 @@ const do_auth = function(app) {
     ))
 
     app.get('/auth/google',
+        (req, res, next) => {
+            req.session.referer = req.headers.referer
+            next()
+        },
         passport.authenticate('google', {
             scope: 'openid profile email',
             prompt: 'select_account'
@@ -48,11 +52,13 @@ const do_auth = function(app) {
     app.get('/auth/google/callback',
         passport.authenticate('google',
             { failureRedirect: '/login' }),
-        (req, res) => { res.redirect('/') } // TODO: this should be the referer, but how do we get that?
+        (req, res) => { res.redirect(req.session.referer) }
     )
 
     app.get('/auth/logout', (req, res) => {
-        req.logout()
+//        console.log('logging out')
+        req.logout();   // the semicolon is required here, for some yet unknown reason
+//        console.log('session after logout:', req.session)
         res.redirect('/')
     })
 
