@@ -1,3 +1,6 @@
 google-credentials.json
 modules/firebase-auth.json
 node_modules
+.idea
+sessions
+firebase.html
