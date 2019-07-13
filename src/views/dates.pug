@@ -24,7 +24,7 @@ block content
                 td
                     a(href='/conf/' + date.conf.id) #{date.conf.name}
                 td
-                    a(href='/instance/' + date.instance.id) #{date.instance.year}
+                    a(href='/conf/' + date.conf.id + '/instance/' + date.instance.id) #{date.instance.year}
                 td #{date.what}
                 td
                     if (date.track)

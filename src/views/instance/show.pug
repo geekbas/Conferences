@@ -14,24 +14,26 @@ block content
                 td
                     a(href=instance.url) #{instance.url}
 
-    div(class="input-group mb-3")
-        a(href='/conf/' + conf.id + '/instance/' + instance.id + '/edit')
-            button(class='btn btn-sm btn-info', type='submit') Edit
+    if (user)
+        div(class="input-group mb-3")
+            a(href='/conf/' + conf.id + '/instance/' + instance.id + '/edit')
+                button(class='btn btn-sm btn-info', type='submit') Edit
 
-        form(method='POST', action='/conf/' + conf.id + '/instance/' + instance.id + '?_method=DELETE')
-            button(class='btn btn-sm btn-danger', type='submit') Delete
+            form(method='POST', action='/conf/' + conf.id + '/instance/' + instance.id + '?_method=DELETE')
+                button(class='btn btn-sm btn-danger', type='submit') Delete
 
     h3 Call For Papers
     table(class='table table-sm')
         tbody
-            tr
-                td(scope='row')
-                    form(method='POST', action='/track')
-                        input(type='hidden', name='instance_id', value=instance.id)
-                        div(class='input-group input-group-sm')
-                            label(class="input-group-text", for='instance_name') Name:
-                            input#instance_name(type='text', name='name')
-                            button(class='btn btn-sm', type='submit') New
+            if (user)
+                tr
+                    td(scope='row')
+                        form(method='POST', action='/track')
+                            input(type='hidden', name='instance_id', value=instance.id)
+                            div(class='input-group input-group-sm')
+                                label(class="input-group-text", for='instance_name') Name:
+                                input#instance_name(type='text', name='name')
+                                button(class='btn btn-sm', type='submit') New
             each val in tracks
                 tr
                     td
@@ -45,22 +47,24 @@ block content
                 th(scope='col') What
                 th(scope='col') &nbsp;
         tbody
-            tr
-                form(method='POST', action='/date')
-                    input(type='hidden', name='instance_id', value=instance.id)
-                    td(scope='row')
-                        input#date_when(type='date', name='datevalue')
-                    td
-                        input#date_what(type='text', name='what')
-                    td
-                        button(class='btn btn-sm', type='submit') New
+            if (user)
+                tr
+                    form(method='POST', action='/date')
+                        input(type='hidden', name='instance_id', value=instance.id)
+                        td(scope='row')
+                            input#date_when(type='date', name='datevalue')
+                        td
+                            input#date_what(type='text', name='what')
+                        td
+                            button(class='btn btn-sm', type='submit') New
 
             each val in instance.dates
                 tr
                     td #{val.datevalue}
                     td #{val.what}
                     td
-                        form(method='POST', action='/date/' + val.id + '?_method=DELETE')
-                            span(class="input-group")
-                                input(type='hidden', name='instance_id', value=instance.id)
-                                button(class='btn btn-sm btn-danger', type='submit') Delete
+                        if (user)
+                            form(method='POST', action='/date/' + val.id + '?_method=DELETE')
+                                span(class="input-group")
+                                    input(type='hidden', name='instance_id', value=instance.id)
+                                    button(class='btn btn-sm btn-danger', type='submit') Delete

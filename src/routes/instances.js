@@ -9,6 +9,14 @@ const tracks_storage = new Storage('tracks')
 const date_storage = new Storage('dates')
 const User = require(path.join('..', 'modules', 'user'))
 
+function require_user(req, res, next, return_path) {
+    console.log('require_user, user is', req.user)
+    if (!req.user) {
+        return res.redirect(return_path)
+    }
+    next()
+}
+
 function get_one(req, done, on_reject) {
     console.log('instances/get_one, params =', req.params)
     const id = req.params.id
@@ -48,53 +56,59 @@ router.get('/:id', (req, res) => {
 })
 
 // noinspection JSUnresolvedFunction
-router.get('/:id/edit', (req, res) => {
-    if (!req.user) {
-        return res.redirect('/')
+router.get('/:id/edit',
+    (req, res, next) => { require_user(req, res, next, '/') },
+    (req, res) => {
+        get_one(req,
+            (items) => res.render('instance/edit', items),
+            () => res.redirect('/'))
     }
-    get_one(req,
-        (items) => res.render('instance/edit', items),
-        () => res.redirect('/'))
-})
+)
 
 // noinspection JSUnresolvedFunction
-router.post('/', (req, res) => {
-    console.log('post with params', req.body)
-    if (!req.user) {
-        return res.redirect(req.headers.referer)
+router.post('/',
+    (req, res, next) => { require_user(req, res, next, req.headers.referer) },
+    (req, res) => {
+        console.log('post with params', req.body)
+        if (!req.body.empty) {
+            const user_id = req.user.id
+            const conf_id = req.params.conf_id
+            instance_storage.add({
+                conf_id: conf_id,
+                year: req.body.year,
+                added_by_user_id: user_id,
+                private_for_user_id: user_id
+            }, (id) => {
+                res.redirect('/conf/' + conf_id + '/instance/' + id + '/edit');
+            })
+        }
     }
-    if (!req.body.empty) {
-        const user_id = req.user.id
-        const conf_id = req.params.conf_id
-        instance_storage.add({
-            conf_id: conf_id,
+)
+
+// noinspection JSUnresolvedFunction
+router.put('/',
+    (req, res, next) => { require_user(req, res, next, req.headers.referer) },
+    (req, res) => {
+        console.log('put with params', req.body)
+        const updates = {
             year: req.body.year,
-            added_by_user_id: user_id,
-            private_for_user_id: user_id
-        }, (id) => {
-            res.redirect('/conf/' + conf_id + '/instance/' + id + '/edit');
+            url: req.body.url
+        }
+        instance_storage.update(req.body.id, updates, (id) => {
+            res.redirect('/conf/' + req.params.conf_id + '/instance/' + id);
         })
     }
-})
+)
 
 // noinspection JSUnresolvedFunction
-router.put('/', (req, res) => {
-    console.log('put with params', req.body)
-    const updates = {
-        year: req.body.year,
-        url: req.body.url
+router.delete('/:id',
+    (req, res, next) => { require_user(req, res, next, req.headers.referer) },
+    (req, res) => {
+        console.log('delete instance', req.params.id)
+        instance_storage.del(req.params.id, () => {
+            res.redirect('/conf/' + req.params.conf_id)
+        })
     }
-    instance_storage.update(req.body.id, updates, (id) => {
-        res.redirect('/conf/' + req.params.conf_id + '/instance/' + id);
-    })
-})
-
-// noinspection JSUnresolvedFunction
-router.delete('/:id', (req, res) => {
-    console.log('delete instance', req.params.id)
-    instance_storage.del(req.params.id, () => {
-        res.redirect('/conf/' + req.params.conf_id)
-    })
-})
+)
 
 module.exports = router;
