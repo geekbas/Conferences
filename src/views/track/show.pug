@@ -63,9 +63,9 @@ block content
             if (track.dates)
                 each val in track.dates
                     tr
-                        td #{val.datevalue}
-                        td #{val.what}
+                        td #{instance.datevalue}
+                        td #{instance.what}
                         td
-                            form(method='POST', action='/date/' + val.id + '?_method=DELETE')
+                            form(method='POST', action='/date/' + instance.id + '?_method=DELETE')
                                 input(type='hidden', name='track_id', value=track.id)
                                 button(class='btn btn-sm btn-danger', type='submit') Delete

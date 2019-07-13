@@ -11,20 +11,27 @@ const date_storage = new Storage('dates')
 // noinspection JSUnresolvedFunction
 router.post('/', (req, res) => {
     console.log('tracks.post with params', req.body)
+    if (!req.user) {
+        res.redirect(req.headers.referer)
+    }
     if (!req.body.empty) {
+        const user_id = req.user.id
         tracks_storage.add({
             instance_id: req.body.instance_id,
-            name: req.body.name
+            name: req.body.name,
+            added_by_user_id: user_id,
+            private_for_user_id: user_id
         }, (id) => {
             res.redirect('/track/edit/' + id)
         })
     }
 })
 
-function get_one(req, done) {
+function get_one(req, done, on_reject) {
     const id = req.params.id
     tracks_storage.get_by_id(id, (track) => {
         console.log('show', track)
+        if (!User.public_or_my_obj(track, req.user)) { return on_reject() }
         date_storage.get_all_by_key(
             [ { key_name: 'track_id', value: id } ],
             { asc: 'datevalue' },

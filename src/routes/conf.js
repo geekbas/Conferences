@@ -7,12 +7,15 @@ const conf_storage = new Storage('confs')
 const instance_storage = new Storage('instances')
 const follow_storage = new Storage('follows')
 const Following = require(path.join('..', 'modules', 'follow'))
+const User = require(path.join('..', 'modules', 'user'))
 
 /* GET home page. */
 // noinspection JSUnresolvedFunction
 router.get('/', (req, res) => {
     console.log('conf list, show_all =', req.session.show_all)
+//    console.log('current session:', req.session)
     conf_storage.get_all('name', (confs) => {
+        confs = User.public_or_mine(confs, req.user)
         Following.select_followed(
             confs,
             req.session.show_all ? null : req.user,
@@ -38,7 +41,8 @@ router.get('/:id', (req, res) => {
             [ { key_name: 'conf_id', value: c.id } ],
             { desc: 'year' },
             (list) => {
-            follow_storage.get_all_by_key(
+                list = User.public_or_mine(list, req.user)
+                follow_storage.get_all_by_key(
                 [
                     { key_name: 'conf_id', value: c.id },
                     { key_name: 'user_id', value: req.user ? req.user.id : null }
@@ -78,10 +82,16 @@ router.delete('/:id', (req, res) => {
 // noinspection JSUnresolvedFunction
 router.post('/', (req, res) => {
     console.log('new conf with params', req.body)
+    if (!req.user) {
+        return res.redirect(req.headers.referer)
+    }
     if (!req.body.empty) {
+        const user_id = req.user.id
         conf_storage.add({
             acronym: req.body.acronym,
-            name: req.body.name
+            name: req.body.name,
+            added_by_user_id: user_id,
+            private_for_user_id: user_id
         },(id) => {
             res.redirect('/conf/edit/' + id)
         })

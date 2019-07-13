@@ -6,13 +6,20 @@ Things to do.
 
 Items further down on the list may depend on items higher up.
 
-### Minimum Viable Product: Single user
+### Usable for others
 
-### Next: Usable for others
-
-* Conference list
-  * Show next date
-* Personal dates
+* User profile page
+  * Admin flag
+  * Admins can
+    * List/search users
+    * Promote to Admin
+* Personal stuff: conference, instances, tracks, dates
+  * new field: added_by_user_id
+  * new field: private_for_user_id
+  * new field: public_request
+    * Can be switched on/off by the user
+    * Only shown for Admins, which can use it to clear private_for_user_id
+* Twitter-auth
 * Submissions
   * Links
     * Overleaf
@@ -21,12 +28,15 @@ Items further down on the list may depend on items higher up.
     * Which ones get blocked out?
     * Which are the fallbacks?
 * Find a better product name?
+  * "Submission planner"
 * Dates
   * gruppera på år och månad
   * visa bara från "nu minus 1 månad"
 
 ### Good To Have
 
+* Conference list
+  * Show next date
 * Breadcrumbs
 * Let's Encrypt
 * Conference instances
@@ -40,6 +50,7 @@ Items further down on the list may depend on items higher up.
   * On conferences
   * On instances
   * On CFP alternatives
+* Return to previous page after Google-login
 
 ### Later
 
@@ -59,3 +70,4 @@ Items further down on the list may depend on items higher up.
 * React frontend?
 * Offline usage?
 * Docker container?
+* http://docs.sequelizejs.com/?

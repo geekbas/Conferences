@@ -48,7 +48,7 @@ const do_auth = function(app) {
     app.get('/auth/google/callback',
         passport.authenticate('google',
             { failureRedirect: '/login' }),
-        (req, res) => { res.redirect('/') }
+        (req, res) => { res.redirect('/') } // TODO: this should be the referer, but how do we get that?
     )
 
     app.get('/auth/logout', (req, res) => {

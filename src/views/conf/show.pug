@@ -18,6 +18,16 @@ block content
                 th(scope='row') Submission format
                 td #{conf.format}
 
+            if (user)
+                tr
+                    th(scope='row') Private?
+                    td
+                        if conf.private_for_user_id
+                            | Yes
+                            | &nbsp;[Make public]
+                        else
+                            | No
+
     if (user)
         p
             if following
@@ -28,6 +38,11 @@ block content
                 form(method='POST', action='/follow')
                     input(type='hidden', name='conf_id', value=conf.id)
                     button(class='btn btn-sm btn-primary', type='submit') Follow
+            a(href='/conf/edit/' + conf.id)
+                button(class='btn btn-sm btn-info', type='submit') Edit
+            form(method='POST', action='/conf/' + conf.id + '?_method=DELETE')
+                input(type='hidden', name='id', value=conf.id)
+                button(class='btn btn-sm btn-danger', type='submit') Delete
 
     h3 Instances
     table(class='table table-sm table-striped')
@@ -35,27 +50,25 @@ block content
             tr
                 th(scope='col') Year
                 th(scope='col') Site
+                th(scope='col') &nbsp;
         tbody
             tr
-                td(colspan="2")
+                td(colspan="3")
                     form(method='POST', action='/instance')
                         input(type='hidden', name='conf_id', value=conf.id)
                         div(class='input-group input-group-sm')
                             input(type='number', min="2015", max="2020", name='year')
                             button(class='btn btn-sm', type='submit') New
-            each val in instances
+            each instance in instances
                 tr
                     th(scope='row')
-                        a(href='/instance/' + val.id)
-                            | #{val.year}
+                        a(href='/instance/' + instance.id)
+                            | #{instance.year}
                     td
-                        if val.url
-                            a(href=val.url, target="_blank")
-                                | #{val.url}
+                        if instance.url
+                            a(href=instance.url, target="_blank")
+                                | #{instance.url}
+                    td
+                        if instance.private_for_user_id
+                            | &nbsp; (Private)
 
-    p
-        a(href='/conf/edit/' + conf.id)
-            button(class='btn btn-sm btn-info', type='submit') Edit
-        form(method='POST', action='/conf/' + conf.id + '?_method=DELETE')
-            input(type='hidden', name='id', value=conf.id)
-            button(class='btn btn-sm btn-danger', type='submit') Delete

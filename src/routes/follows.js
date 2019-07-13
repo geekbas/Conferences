@@ -4,6 +4,7 @@ const path = require('path');
 
 const Storage = require(path.join('..', 'modules', 'storage'))
 const follow_storage = new Storage('follows')
+const Following = require(path.join('..', 'modules', 'follow'))
 
 // noinspection JSUnresolvedFunction
 router.post('/', (req, res) => {
@@ -13,23 +14,16 @@ router.post('/', (req, res) => {
     }
     if (req.body.conf_id) {
         const conf_id = req.body.conf_id
-        if (req.user) {
-            follow_storage.add({
-                conf_id: conf_id,
-                user_id: req.user.id
-            },(id) => {
-                res.redirect('/conf/' + conf_id)
-            })
-        } else {
-            res.redirect('/conf/' + conf_id)
-        }
+        Following.follow(
+            req.user,
+            { conf_id: conf_id },
+            (id) => { res.redirect('/conf/' + conf_id) })
     }
 })
 
 // noinspection JSUnresolvedFunction
 router.delete('/:id', (req, res) => {
-    console.log('delete', req.params.id)
-    follow_storage.del(req.params.id, () => {
+    Following.unfollow(req.params.id, () => {
         if (req.body.conf_id) {
             return res.redirect('/conf/' + req.body.conf_id)
         }
@@ -37,8 +31,9 @@ router.delete('/:id', (req, res) => {
 })
 
 router.post('/filter', (req, res) => {
-    console.log('filter from', req.headers.referer)
+    console.log('filter from', req.headers.referer, 'show_all =', req.body.show_all)
     req.session.show_all = !!req.body.show_all
+    console.log('current session:', req.session)
     res.redirect(req.headers.referer)
 })
 

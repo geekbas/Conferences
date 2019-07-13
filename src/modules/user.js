@@ -31,6 +31,16 @@ class User {
             f(null, obj)
         })
     }
+
+    static public_or_my_obj(obj, user) {
+        return !obj.private_for_user_id ||
+            (user && (user.id === obj.private_for_user_id))
+    }
+
+    static public_or_mine(list, user) {
+        return list.filter((obj) => User.public_or_my_obj(obj, user))
+    }
+
 }
 
 module.exports = User

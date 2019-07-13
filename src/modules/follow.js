@@ -5,6 +5,21 @@ const follow_storage = new Storage('follows')
 
 class Following {
 
+    static follow(user, entry, done) {
+        if (user) {
+            follow_storage.add(
+                Object.assign(entry, { user_id: user.id }),
+                (id) => done(id))
+        } else {
+            done(null)
+        }
+    }
+
+    static unfollow(id, done) {
+        console.log('delete', req.params.id)
+        follow_storage.del(req.params.id, (entry) => done)
+    }
+
     static select_followed(list, user, field, filtered_list, done) {
         if (!user) {
             console.log('no filter')
