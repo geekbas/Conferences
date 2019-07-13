@@ -9,6 +9,8 @@ const follow_storage = new Storage('follows')
 const Following = require(path.join('..', 'modules', 'follow'))
 const User = require(path.join('..', 'modules', 'user'))
 
+router.use('/:conf_id/instance', require('./instances'));
+
 /* GET home page. */
 // noinspection JSUnresolvedFunction
 router.get('/', (req, res) => {
@@ -64,7 +66,7 @@ router.get('/:id', (req, res) => {
 })
 
 // noinspection JSUnresolvedFunction
-router.get('/edit/:id', (req, res) => {
+router.get('/:id/edit', (req, res) => {
     conf_storage.get_by_id(req.params.id,(c) => {
         console.log('edit', c)
         res.render('conf/edit', {title: 'Conference', conf: c, navconf: true, user: req.user})

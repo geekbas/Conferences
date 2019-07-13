@@ -4,7 +4,7 @@ block content
     h1 #{conf.name}
 
     p
-        form(method='post', action='/instance/?_method=PUT')
+        form(method='post', action='/conf/' + conf.id + '/instance/?_method=PUT')
             input(type='hidden', name='id', value=instance.id)
             div(class='form-group row')
                 label(for='year', class="col-sm-2 col-form-label") Year:
@@ -16,4 +16,4 @@ block content
                     value=instance.url)
             div(class='form-group row')
                 button(class='btn btn-sm btn-primary mr-3', type='submit') Update
-                a(href='/instance/' + instance.id, class='btn btn-sm btn-primary') Cancel
+                a(href='/conf/' + conf.id + '/instance/' + instance.id, class='btn btn-sm btn-primary') Cancel

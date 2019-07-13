@@ -15,11 +15,10 @@ block content
                     a(href=instance.url) #{instance.url}
 
     div(class="input-group mb-3")
-        a(href='/instance/edit/' + instance.id)
+        a(href='/conf/' + conf.id + '/instance/' + instance.id + '/edit')
             button(class='btn btn-sm btn-info', type='submit') Edit
 
-        form(method='POST', action='/instance/' + instance.id + '?_method=DELETE')
-            input(type='hidden', name='conf_id', value=instance.conf_id)
+        form(method='POST', action='/conf/' + conf.id + '/instance/' + instance.id + '?_method=DELETE')
             button(class='btn btn-sm btn-danger', type='submit') Delete
 
     h3 Call For Papers

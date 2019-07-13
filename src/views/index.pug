@@ -19,10 +19,10 @@ block content
       each conf, id in confs
         tr
           td
-            a(href='/conf/'+conf.id) #{conf.acronym}
+            a(href='/conf/' + conf.id) #{conf.acronym}
           td #{conf.name}
           td
-            a(href='/conf/edit/'+conf.id) Edit
+            a(href='/conf/' + conf.id + '/edit') Edit
             if conf.private_for_user_id
               | &nbsp; (Private)
     if (user)

@@ -54,15 +54,14 @@ block content
         tbody
             tr
                 td(colspan="3")
-                    form(method='POST', action='/instance')
-                        input(type='hidden', name='conf_id', value=conf.id)
+                    form(method='POST', action='/conf/' + conf.id + '/instance')
                         div(class='input-group input-group-sm')
                             input(type='number', min="2015", max="2020", name='year')
                             button(class='btn btn-sm', type='submit') New
             each instance in instances
                 tr
                     th(scope='row')
-                        a(href='/instance/' + instance.id)
+                        a(href='/conf/' + conf.id + '/instance/' + instance.id)
                             | #{instance.year}
                     td
                         if instance.url

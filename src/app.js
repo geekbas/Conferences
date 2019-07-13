@@ -7,7 +7,6 @@ const methodOverride = require('method-override');
 
 var indexRouter = require(path.join(__dirname, 'routes', 'index'));
 var confRouter = require(path.join(__dirname, 'routes', 'conf'));
-var usersRouter = require(path.join(__dirname, 'routes', 'users'));
 
 var app = express();
 
@@ -27,11 +26,10 @@ auth(app)
 
 app.use('/', indexRouter);
 app.use('/conf', confRouter);
-app.use('/instance', require(path.join(__dirname, 'routes', 'instances')));
 app.use('/track', require(path.join(__dirname, 'routes', 'tracks')));
 app.use('/date', require(path.join(__dirname, 'routes', 'dates')));
 app.use('/follow', require(path.join(__dirname, 'routes', 'follows')));
-//app.use('/users', usersRouter);
+//app.use('/users', require(path.join(__dirname, 'routes', 'users'));
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

@@ -1,5 +1,5 @@
 const express = require('express');
-const router = express.Router();
+const router = express.Router({mergeParams: true});
 const path = require('path');
 
 const Storage = require(path.join('..', 'modules', 'storage'))
@@ -7,10 +7,10 @@ const conf_storage = new Storage('confs')
 const instance_storage = new Storage('instances')
 const tracks_storage = new Storage('tracks')
 const date_storage = new Storage('dates')
-const follow_storage = new Storage('follows')
 const User = require(path.join('..', 'modules', 'user'))
 
 function get_one(req, done, on_reject) {
+    console.log('instances/get_one, params =', req.params)
     const id = req.params.id
     instance_storage.get_by_id(id, (ci) => {
         console.log('show', ci)
@@ -20,7 +20,7 @@ function get_one(req, done, on_reject) {
             { asc: 'datevalue' },
             (c_dates) => {
             console.log('ci_dates', c_dates)
-            conf_storage.get_by_id(ci.conf_id, (c) => {
+            conf_storage.get_by_id(req.params.conf_id, (c) => {
                 tracks_storage.get_all_by_key(
                     [ { key_name: 'instance_id', value: ci.id } ],
                     null,
@@ -48,7 +48,7 @@ router.get('/:id', (req, res) => {
 })
 
 // noinspection JSUnresolvedFunction
-router.get('/edit/:id', (req, res) => {
+router.get('/:id/edit', (req, res) => {
     if (!req.user) {
         return res.redirect('/')
     }
@@ -65,13 +65,14 @@ router.post('/', (req, res) => {
     }
     if (!req.body.empty) {
         const user_id = req.user.id
+        const conf_id = req.params.conf_id
         instance_storage.add({
-            conf_id: req.body.conf_id,
+            conf_id: conf_id,
             year: req.body.year,
             added_by_user_id: user_id,
             private_for_user_id: user_id
         }, (id) => {
-            res.redirect('/instance/edit/' + id);
+            res.redirect('/conf/' + conf_id + '/instance/' + id + '/edit');
         })
     }
 })
@@ -84,7 +85,7 @@ router.put('/', (req, res) => {
         url: req.body.url
     }
     instance_storage.update(req.body.id, updates, (id) => {
-        res.redirect('/instance/' + id);
+        res.redirect('/conf/' + req.params.conf_id + '/instance/' + id);
     })
 })
 
@@ -92,7 +93,7 @@ router.put('/', (req, res) => {
 router.delete('/:id', (req, res) => {
     console.log('delete instance', req.params.id)
     instance_storage.del(req.params.id, () => {
-        res.redirect('/conf/' + req.body.conf_id)
+        res.redirect('/conf/' + req.params.conf_id)
     })
 })
 
