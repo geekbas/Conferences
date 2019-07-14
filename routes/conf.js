@@ -17,7 +17,7 @@ router.get('/', (req, res) => {
     console.log('conf list, show_all =', req.session.show_all)
 //    console.log('current session:', req.session)
     conf_storage.get_all('name', (confs) => {
-        confs = User.public_or_mine(confs, req.user)
+//        confs = User.public_or_mine(confs, req.user)
         Following.select_followed(
             confs,
             req.session.show_all ? null : req.user,
@@ -35,6 +35,16 @@ router.get('/', (req, res) => {
     })
 })
 
+function user_can_edit_conf(conf, user) { // TODO: To a User service class
+    return user &&
+        ((user.id === conf.added_by_user_id) ||
+            (user.id === 'gGdCRwnUndzKDM6gclbA')) // TODO: admin
+}
+
+function user_can_delete_conf(conf, user) { // TODO: To a User service class
+    return user && (user.id === 'gGdCRwnUndzKDM6gclbA') // TODO: admin
+}
+
 // noinspection JSUnresolvedFunction
 router.get('/:id', (req, res) => {
     conf_storage.get_by_id(req.params.id,(c) => {
@@ -43,7 +53,7 @@ router.get('/:id', (req, res) => {
             [ { key_name: 'conf_id', value: c.id } ],
             { desc: 'year' },
             (list) => {
-                list = User.public_or_mine(list, req.user)
+//                list = User.public_or_mine(list, req.user)
                 follow_storage.get_all_by_key(
                 [
                     { key_name: 'conf_id', value: c.id },
@@ -58,6 +68,10 @@ router.get('/:id', (req, res) => {
                         instances: list,
                         following: (follows.length > 0) ? follows[0] : null,
                         navconf: true,
+                        perms: {
+                            can_edit: user_can_edit_conf(c, req.user)
+                            , can_delete: user_can_delete_conf(c, req.user)
+                        },
                         user: req.user
                     })
                 })
@@ -73,12 +87,23 @@ function require_user(req, res, next, return_path) {
     next()
 }
 
-function require_public_or_mine(req, res, next, return_path) {
+function can_edit_conf(req, res, next) {
     conf_storage.get_by_id(req.params.id,(c) => {
-        if (!User.public_or_my_obj(c, req.user)) {
-            return res.redirect(return_path)
+        if (!user_can_edit_conf(c, req.user)) {
+            return res.redirect('/')
         }
-        console.log('require_public_or_mine, saving conf', c)
+        console.log('can_edit_conf', c)
+        req.params.conf = c
+        next()
+    })
+}
+
+function can_delete_conf(req, res, next) {
+    conf_storage.get_by_id(req.params.id,(c) => {
+        if (!user_can_delete_conf(c, req.user)) {
+            return res.redirect('/')
+        }
+        console.log('can_delete_conf', c)
         req.params.conf = c
         next()
     })
@@ -86,8 +111,7 @@ function require_public_or_mine(req, res, next, return_path) {
 
 // noinspection JSUnresolvedFunction
 router.get('/:id/edit',
-    (req, res, next) => { require_user(req, res, next, '/') },
-    (req, res, next) => { require_public_or_mine(req, res, next, '/') },
+    (req, res, next) => { can_edit_conf(req, res, next) },
     (req, res) => {
         const c = req.params.conf
         console.log('edit conf', c)
@@ -97,8 +121,7 @@ router.get('/:id/edit',
 
 // noinspection JSUnresolvedFunction
 router.delete('/:id',
-    (req, res, next) => { require_user(req, res, next, '/') },
-    (req, res, next) => { require_public_or_mine(req, res, next, '/') },
+    (req, res, next) => { can_delete_conf(req, res, next) }, // TODO: only admin
     (req, res) => {
         const c = req.params.conf
         console.log('delete conf', c)
@@ -121,7 +144,10 @@ router.post('/',
                 added_by_user_id: user_id,
                 private_for_user_id: user_id
             },(id) => {
-                res.redirect('/conf/edit/' + id)
+                Following.follow(
+                    req.user,
+                    { conf_id: id },
+                    (id) => res.redirect('/conf/' + id))
             })
         }
     }
@@ -129,8 +155,7 @@ router.post('/',
 
 // noinspection JSUnresolvedFunction
 router.put('/:id',
-    (req, res, next) => { require_user(req, res, next, '/') },
-    (req, res, next) => { require_public_or_mine(req, res, next, '/') },
+    (req, res, next) => { can_edit_conf(req, res, next) },
     (req, res) => {
         const params = req.body
         console.log('update conf / with params', params)

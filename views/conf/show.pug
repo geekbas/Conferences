@@ -23,6 +23,7 @@ block content
                 td #{conf.acceptance_rate}
 
         if (user)
+            //-
                 tr
                     th(scope='row') Private?
                     td
@@ -42,11 +43,12 @@ block content
                 form(method='POST', action='/follow')
                     input(type='hidden', name='conf_id', value=conf.id)
                     button(class='btn btn-sm btn-primary', type='submit') Follow
-            a(href='/conf/' + conf.id + '/edit')
-                button(class='btn btn-sm btn-info', type='submit') Edit
-            form(method='POST', action='/conf/' + conf.id + '?_method=DELETE')
-                input(type='hidden', name='id', value=conf.id)
-                button(class='btn btn-sm btn-danger', type='submit') Delete
+            if perms.can_edit
+                a(href='/conf/' + conf.id + '/edit')
+                    button(class='btn btn-sm btn-info', type='submit') Edit
+            if perms.can_delete
+                form(method='POST', action='/conf/' + conf.id + '?_method=DELETE')
+                    button(class='btn btn-sm btn-danger', type='submit') Delete
 
     h3 Instances
     table(class='table table-sm table-striped')
@@ -56,12 +58,13 @@ block content
                 th(scope='col') Site
                 th(scope='col') &nbsp;
         tbody
-            tr
-                td(colspan="3")
-                    form(method='POST', action='/conf/' + conf.id + '/instance')
-                        div(class='input-group input-group-sm')
-                            input(type='number', min="2015", max="2020", name='year')
-                            button(class='btn btn-sm', type='submit') New
+            if (user)
+                tr
+                    td(colspan="3")
+                        form(method='POST', action='/conf/' + conf.id + '/instance')
+                            div(class='input-group input-group-sm')
+                                input(type='number', min="2015", max="2020", name='year')
+                                button(class='btn btn-sm', type='submit') New
             each instance in instances
                 tr
                     th(scope='row')

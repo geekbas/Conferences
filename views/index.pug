@@ -23,8 +23,9 @@ block content
           td #{conf.name}
           td
             a(href='/conf/' + conf.id + '/edit') Edit
-            if conf.private_for_user_id
-              | &nbsp; (Private)
+              //-
+                if conf.private_for_user_id
+                  | &nbsp; (Private)
     if (user)
       tr
         form(method='post', action='/conf')
