@@ -23,8 +23,12 @@ const do_auth = function(app) {
     }))
     app.use(passport.initialize());
     app.use(passport.session());
-
-    passport.use(new GoogleStrategy(require('./google-credentials.json'),
+    passport.use(new GoogleStrategy(
+        Object.assign({
+            "clientID": process.env.GOOGLE_AUTH_CLIENT_ID,
+            "clientSecret": process.env.GOOGLE_AUTH_CLIENT_SECRET,
+            "callbackURL": "http://127.0.0.1:3000/auth/google/callback"
+        }),
         (token, tokenSecret, profile, done) => {
             console.log(profile)
             User.findOrCreate(
