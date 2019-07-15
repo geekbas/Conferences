@@ -50,14 +50,12 @@ function can_delete(req, res, next) {
 
 function get_one(req, done) {
     console.log('instances/get_one, params =', req.params)
-    const id = req.params.instance_id
     const ci = req.session.instance
     date_storage.get_all_by_key(
         [ { key_name: 'instance_id', value: ci.id } ],
         { asc: 'datevalue' },
         (c_dates) => {
         console.log('ci_dates', c_dates)
-        const conf = req.session.conf
         tracks_storage.get_all_by_key(
             [ { key_name: 'instance_id', value: ci.id } ],
             null,

@@ -53,7 +53,6 @@ function can_delete_conf(req, res, next) {
 // noinspection JSUnresolvedFunction
 router.get('/', (req, res) => {
     console.log('conf list, show_all =', req.session.show_all)
-//    console.log('current session:', req.session)
     conf_storage.get_all('name', (confs) => {
 //        confs = User.public_or_mine(confs, req.user)
         Following.select_followed(
