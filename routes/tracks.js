@@ -3,11 +3,21 @@ const router = express.Router({mergeParams: true});
 const path = require('path');
 
 const Storage = require(path.join('..', 'modules', 'storage'))
-const conf_storage = new Storage('confs')
-const instance_storage = new Storage('instances')
 const tracks_storage = new Storage('tracks')
 const date_storage = new Storage('dates')
 const User = require(path.join('..', 'modules', 'user'))
+
+router.param('track_id',
+    (req, res, next, track_id) => {
+        tracks_storage.get_by_id(track_id,(track) => {
+            console.log('loaded', track)
+            req.session.track = track
+            req.session.viewdata.track = track
+            req.session.viewdata.track_path = req.session.viewdata.ci_path + '/track/' + track.id
+            next()
+        })
+    }
+)
 
 function require_user(req, res, next, return_path) {
     console.log('require_user, user is', req.user)
@@ -18,25 +28,21 @@ function require_user(req, res, next, return_path) {
 }
 
 function can_edit(req, res, next) {
-    tracks_storage.get_by_id(req.params.id,(obj) => {
-        if (!User.can_edit(obj, req.user)) {
-            return res.redirect('/')
-        }
-        console.log('can_edit', obj)
-        req.params.track = obj
-        next()
-    })
+    const obj = req.session.track
+    if (!User.can_edit(obj, req.user)) {
+        return res.redirect('/')
+    }
+    console.log('can_edit', obj)
+    next()
 }
 
 function can_delete(req, res, next) {
-    tracks_storage.get_by_id(req.params.id,(obj) => {
-        if (!User.can_delete(obj, req.user)) {
-            return res.redirect('/')
-        }
-        console.log('can_delete', obj)
-        req.params.track = obj
-        next()
-    })
+    const obj = req.session.track
+    if (!User.can_delete(obj, req.user)) {
+        return res.redirect('/')
+    }
+    console.log('can_delete', obj)
+    next()
 }
 
 // noinspection JSUnresolvedFunction
@@ -46,7 +52,6 @@ router.post('/',
         console.log('tracks.post with body', req.body, 'and params', req.params)
         if (!req.body.empty) {
             const user_id = req.user.id
-            const conf_id = req.params.conf_id
             const instance_id = req.params.instance_id
             tracks_storage.add({
                 instance_id: instance_id,
@@ -54,50 +59,38 @@ router.post('/',
                 added_by_user_id: user_id,
                 private_for_user_id: user_id
             }, (id) => {
-                res.redirect('/conf/' + conf_id + '/instance/' + instance_id + '/track/' + id + '/edit')
+                res.redirect(req.session.viewdata.ci_path + '/track/' + id + '/edit')
             })
         }
     }
 )
 
 function get_one(req, done) {
-    const id = req.params.id
-    tracks_storage.get_by_id(id, (track) => {
-        console.log('show', track)
-        date_storage.get_all_by_key(
-            [ { key_name: 'track_id', value: id } ],
-            { asc: 'datevalue' },
-            (dates) => {
-            instance_storage.get_by_id(track.instance_id, (ci) => {
-                console.log('instance', ci)
-                conf_storage.get_by_id(ci.conf_id, (conf) => {
-                    console.log('conference', conf)
-                    done({
-                        track: Object.assign(track, { dates }),
-                        conf: conf,
-                        instance: ci,
-                        c_path: '/conf/' + conf.id,
-                        ci_path: '/conf/' + conf.id + '/instance/' + ci.id,
-                        track_path: '/conf/' + conf.id + '/instance/' + ci.id + '/track/' + track.id,
-                        perms: {
-                            can_edit: User.can_edit(track, req.user),
-                            can_delete: User.can_delete(track, req.user)
-                        },
-                        user: req.user
-                    })
+    const track = req.session.track
+    console.log('show', track)
+    date_storage.get_all_by_key(
+        [ { key_name: 'track_id', value: track.id } ],
+        { asc: 'datevalue' },
+        (dates) => {
+            done(Object.assign(req.session.viewdata, {
+                track: Object.assign(track, { dates }),
+                perms: {
+                    can_edit: User.can_edit(track, req.user),
+                    can_delete: User.can_delete(track, req.user)
+                },
+                user: req.user
                 })
-            })
+            )
         })
-    })
 }
 
 // noinspection JSUnresolvedFunction
-router.get('/:id', (req, res) => {
+router.get('/:track_id', (req, res) => {
     get_one(req, (items) => res.render('track/show', items))
 })
 
 // noinspection JSUnresolvedFunction
-router.get('/:id/edit',
+router.get('/:track_id/edit',
     (req, res, next) => { can_edit(req, res, next) },
     (req, res) => {
         get_one(req, (items) => res.render('track/edit', items))
@@ -105,7 +98,7 @@ router.get('/:id/edit',
 )
 
 // noinspection JSUnresolvedFunction
-router.put('/:id',
+router.put('/:track_id',
     (req, res, next) => { can_edit(req, res, next) },
     (req, res) => {
         console.log('put with params', req.body)
@@ -116,19 +109,19 @@ router.put('/:id',
             including_references: !!req.body.including_references,
             double_blind: !!req.body.double_blind
         }
-        tracks_storage.update(req.params.id, updates, (id) => {
-            res.redirect('/conf/' + req.params.conf_id + '/instance/' + req.params.instance_id + '/track/' + id)
+        tracks_storage.update(req.params.track_id, updates, (id) => {
+            res.redirect(req.session.viewdata.ci_path + '/track/' + id)
         })
     }
 )
 
 // noinspection JSUnresolvedFunction
-router.delete('/:id',
+router.delete('/:track_id',
     (req, res, next) => { can_edit(req, res, next) },
     (req, res) => {
-        console.log('delete track', req.params.id)
-        tracks_storage.del(req.params.id, (track) => {
-            res.redirect('/conf/' + req.params.conf_id + '/instance/' + req.params.instance_id)
+        console.log('delete track', req.params.track_id)
+        tracks_storage.del(req.params.track_id, (track) => {
+            res.redirect(req.session.viewdata.ci_path)
         })
     }
 )

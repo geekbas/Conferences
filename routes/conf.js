@@ -9,6 +9,18 @@ const follow_storage = new Storage('follows')
 const Following = require(path.join('..', 'modules', 'follow'))
 const User = require(path.join('..', 'modules', 'user'))
 
+router.param('conf_id',
+    (req, res, next, conf_id) => {
+        conf_storage.get_by_id(conf_id,(c) => {
+            console.log('loaded', c)
+            req.session.conf = c
+            req.session.viewdata.conf = c
+            req.session.viewdata.c_path = '/conf/' + c.id
+            next()
+        })
+    }
+)
+
 router.use('/:conf_id/instance', require('./instances'));
 
 function require_user(req, res, next, return_path) {
@@ -20,25 +32,21 @@ function require_user(req, res, next, return_path) {
 }
 
 function can_edit_conf(req, res, next) {
-    conf_storage.get_by_id(req.params.id,(c) => {
-        if (!User.can_edit(c, req.user)) {
-            return res.redirect('/')
-        }
-        console.log('can_edit_conf', c)
-        req.params.conf = c
-        next()
-    })
+    const c = req.session.conf
+    if (!User.can_edit(c, req.user)) {
+        return res.redirect('/')
+    }
+    console.log('can_edit_conf', c)
+    next()
 }
 
 function can_delete_conf(req, res, next) {
-    conf_storage.get_by_id(req.params.id,(c) => {
-        if (!User.can_delete(c, req.user)) {
-            return res.redirect('/')
-        }
-        console.log('can_delete_conf', c)
-        req.params.conf = c
-        next()
-    })
+    const c = req.session.conf
+    if (!User.can_delete(c, req.user)) {
+        return res.redirect('/')
+    }
+    console.log('can_delete_conf', c)
+    next()
 }
 
 /* GET home page. */
@@ -66,26 +74,24 @@ router.get('/', (req, res) => {
 })
 
 // noinspection JSUnresolvedFunction
-router.get('/:id', (req, res) => {
-    conf_storage.get_by_id(req.params.id,(c) => {
-        console.log('show', c)
-        instance_storage.get_all_by_key(
-            [ { key_name: 'conf_id', value: c.id } ],
-            { desc: 'year' },
-            (list) => {
+router.get('/:conf_id', (req, res) => {
+    const c = req.session.conf
+    instance_storage.get_all_by_key(
+        [ { key_name: 'conf_id', value: c.id } ],
+        { desc: 'year' },
+        (list) => {
 //                list = User.public_or_mine(list, req.user)
-                follow_storage.get_all_by_key(
-                [
-                    { key_name: 'conf_id', value: c.id },
-                    { key_name: 'user_id', value: req.user ? req.user.id : null }
-                ],
-                { limit: 1 },
-                (follows) => {
-                    console.log('follow list', follows)
-                    res.render('conf/show', {
+            follow_storage.get_all_by_key(
+            [
+                { key_name: 'conf_id', value: c.id },
+                { key_name: 'user_id', value: req.user ? req.user.id : null }
+            ],
+            { limit: 1 },
+            (follows) => {
+                console.log('follow list', follows)
+                res.render('conf/show',
+                    Object.assign(req.session.viewdata, {
                         title: 'Conference',
-                        conf: c,
-                        c_path: '/conf/' + c.id,
                         instances: list,
                         following: (follows.length > 0) ? follows[0] : null,
                         navconf: true,
@@ -95,26 +101,32 @@ router.get('/:id', (req, res) => {
                         },
                         user: req.user
                     })
-                })
+                )
             })
         })
 })
 
 // noinspection JSUnresolvedFunction
-router.get('/:id/edit',
+router.get('/:conf_id/edit',
     (req, res, next) => { can_edit_conf(req, res, next) },
     (req, res) => {
-        const c = req.params.conf
+        const c = req.session.conf
         console.log('edit conf', c)
-        res.render('conf/edit', {title: 'Conference', conf: c, navconf: true, user: req.user})
+        res.render('conf/edit',
+            Object.assign(req.session.viewdata, {
+                title: 'Conference',
+                navconf: true,
+                user: req.user}
+            )
+        )
     }
 )
 
 // noinspection JSUnresolvedFunction
-router.delete('/:id',
+router.delete('/:conf_id',
     (req, res, next) => { can_delete_conf(req, res, next) },
     (req, res) => {
-        const c = req.params.conf
+        const c = req.session.conf
         console.log('delete conf', c)
         conf_storage.del(c.id, () => {
             res.redirect('/conf')
@@ -145,7 +157,7 @@ router.post('/',
 )
 
 // noinspection JSUnresolvedFunction
-router.put('/:id',
+router.put('/:conf_id',
     (req, res, next) => { can_edit_conf(req, res, next) },
     (req, res) => {
         const params = req.body
@@ -157,7 +169,7 @@ router.put('/:id',
             format: params.format,
             acceptance_rate: params.acceptance_rate
         }
-        conf_storage.update(req.params.conf.id, updates,(id) => {
+        conf_storage.update(req.session.conf.id, updates,(id) => {
             res.redirect('/conf/' + id)
         })
     }

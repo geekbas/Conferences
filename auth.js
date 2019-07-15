@@ -21,6 +21,7 @@ const do_auth = function(app) {
         ,store: new FileStore({})
 //        ,cookie: {//secure: true -- only if https}
     }))
+    app.use((req, res, next) => { req.session.viewdata = {}; next() })
     app.use(passport.initialize());
     app.use(passport.session());
     passport.use(new GoogleStrategy(
