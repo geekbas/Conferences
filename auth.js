@@ -27,7 +27,7 @@ const do_auth = function(app) {
         Object.assign({
             "clientID": process.env.GOOGLE_AUTH_CLIENT_ID,
             "clientSecret": process.env.GOOGLE_AUTH_CLIENT_SECRET,
-            "callbackURL": "http://127.0.0.1:3000/auth/google/callback"
+            "callbackURL": process.env.BASE_URL + "auth/google/callback"
         }),
         (token, tokenSecret, profile, done) => {
             console.log(profile)
