@@ -17,6 +17,8 @@ Items further down on the list may depend on items higher up.
 * Personal stuff: dates
   * new field: added_by_user_id
   * new field: private_for_user_id
+Instance
+  * Fasta fält för SubmitPaper, Notification, ConfStart och ConfEnd
 * Twitter-auth
 * Submissions
   * Links
