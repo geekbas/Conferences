@@ -39,3 +39,15 @@ Maybe the topics should be possible to relate in a hierarchy or in some other wa
   * Maybe [Firebase](https://firebase.google.com)?
 * How should tracking notification be done? Some sort of event queue?
 * What is the semantics for conferences with multiple submission dates?
+
+## Environment variables
+
+Some environment variables must be set.
+For development, this can be done in the IntelliJ run configuration.
+For deployment at Heroku, use "heroku config:set".
+
+* BASE_URL: The base url, e.g. http://example.com/
+* FIREBASE_AUTH: The Firebase authentication information, as a JSON object.
+* GOOGLE_AUTH_CLIENT_ID
+* GOOGLE_AUTH_CLIENT_SECRET
+
