@@ -11,6 +11,36 @@ const User = require(path.join('..', 'modules', 'user'))
 
 router.use('/:conf_id/instance', require('./instances'));
 
+function require_user(req, res, next, return_path) {
+    console.log('require_user, user is', req.user)
+    if (!req.user) {
+        return res.redirect(return_path)
+    }
+    next()
+}
+
+function can_edit_conf(req, res, next) {
+    conf_storage.get_by_id(req.params.id,(c) => {
+        if (!User.can_edit(c, req.user)) {
+            return res.redirect('/')
+        }
+        console.log('can_edit_conf', c)
+        req.params.conf = c
+        next()
+    })
+}
+
+function can_delete_conf(req, res, next) {
+    conf_storage.get_by_id(req.params.id,(c) => {
+        if (!User.can_delete(c, req.user)) {
+            return res.redirect('/')
+        }
+        console.log('can_delete_conf', c)
+        req.params.conf = c
+        next()
+    })
+}
+
 /* GET home page. */
 // noinspection JSUnresolvedFunction
 router.get('/', (req, res) => {
@@ -34,16 +64,6 @@ router.get('/', (req, res) => {
         })
     })
 })
-
-function user_can_edit_conf(conf, user) { // TODO: To a User service class
-    return user &&
-        ((user.id === conf.added_by_user_id) ||
-            (user.id === 'gGdCRwnUndzKDM6gclbA')) // TODO: admin
-}
-
-function user_can_delete_conf(conf, user) { // TODO: To a User service class
-    return user && (user.id === 'gGdCRwnUndzKDM6gclbA') // TODO: admin
-}
 
 // noinspection JSUnresolvedFunction
 router.get('/:id', (req, res) => {
@@ -69,8 +89,8 @@ router.get('/:id', (req, res) => {
                         following: (follows.length > 0) ? follows[0] : null,
                         navconf: true,
                         perms: {
-                            can_edit: user_can_edit_conf(c, req.user),
-                            can_delete: user_can_delete_conf(c, req.user)
+                            can_edit: User.can_edit(c, req.user),
+                            can_delete: User.can_delete(c, req.user)
                         },
                         user: req.user
                     })
@@ -78,36 +98,6 @@ router.get('/:id', (req, res) => {
             })
         })
 })
-
-function require_user(req, res, next, return_path) {
-    console.log('require_user, user is', req.user)
-    if (!req.user) {
-        return res.redirect(return_path)
-    }
-    next()
-}
-
-function can_edit_conf(req, res, next) {
-    conf_storage.get_by_id(req.params.id,(c) => {
-        if (!user_can_edit_conf(c, req.user)) {
-            return res.redirect('/')
-        }
-        console.log('can_edit_conf', c)
-        req.params.conf = c
-        next()
-    })
-}
-
-function can_delete_conf(req, res, next) {
-    conf_storage.get_by_id(req.params.id,(c) => {
-        if (!user_can_delete_conf(c, req.user)) {
-            return res.redirect('/')
-        }
-        console.log('can_delete_conf', c)
-        req.params.conf = c
-        next()
-    })
-}
 
 // noinspection JSUnresolvedFunction
 router.get('/:id/edit',
@@ -126,7 +116,7 @@ router.delete('/:id',
         const c = req.params.conf
         console.log('delete conf', c)
         conf_storage.del(c.id, () => {
-            res.redirect('/conf');
+            res.redirect('/conf')
         })
     }
 )

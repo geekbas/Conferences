@@ -39,7 +39,7 @@ block content
             each val in tracks
                 tr
                     td
-                        a(href='/track/' + instance.id) #{instance.name}
+                        a(href='/conf/' + conf.id + '/instance/' + instance.id + '/track/' + val.id) #{val.name}
 
     h3 Dates
     table(class='table table-sm')

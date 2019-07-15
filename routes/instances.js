@@ -9,6 +9,8 @@ const tracks_storage = new Storage('tracks')
 const date_storage = new Storage('dates')
 const User = require(path.join('..', 'modules', 'user'))
 
+router.use('/:instance_id/track', require('./tracks'));
+
 function require_user(req, res, next, return_path) {
     console.log('require_user, user is', req.user)
     if (!req.user) {
@@ -17,19 +19,9 @@ function require_user(req, res, next, return_path) {
     next()
 }
 
-function user_can_edit(ci, user) {
-    return user &&
-        ((user.id === ci.added_by_user_id) ||
-            (user.id === 'gGdCRwnUndzKDM6gclbA'))
-}
-
-function user_can_delete(ci, user) {
-    return user && (user.id === 'gGdCRwnUndzKDM6gclbA')
-}
-
 function can_edit(req, res, next) {
     instance_storage.get_by_id(req.params.id,(ci) => {
-        if (!user_can_edit(ci, req.user)) {
+        if (!User.can_edit(ci, req.user)) {
             return res.redirect('/')
         }
         console.log('can_edit', ci)
@@ -40,7 +32,7 @@ function can_edit(req, res, next) {
 
 function can_delete(req, res, next) {
     instance_storage.get_by_id(req.params.id,(ci) => {
-        if (!user_can_delete(ci, req.user)) {
+        if (!User.can_delete(ci, req.user)) {
             return res.redirect('/')
         }
         console.log('can_delete', ci)
@@ -65,15 +57,15 @@ function get_one(req, done) {
                     null,
                     (list) => {
                         console.log('tracks', list)
-                        list = User.public_or_mine(list, req.user)
+//                        list = User.public_or_mine(list, req.user)
                         done({
                                 conf: c,
                                 instance: Object.assign(ci, {dates: c_dates}),
                                 tracks: list,
 //                                following: (follows.length > 0) ? follows[0] : null,
                                 perms: {
-                                    can_edit: user_can_edit(ci, req.user),
-                                    can_delete: user_can_delete(ci, req.user)
+                                    can_edit: User.can_edit(ci, req.user),
+                                    can_delete: User.can_delete(ci, req.user)
                                 },
                                 user: req.user
                             })

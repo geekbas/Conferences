@@ -41,6 +41,16 @@ class User {
         return list.filter((obj) => User.public_or_my_obj(obj, user))
     }
 
+    static can_edit(obj, user) {
+        return user &&
+            ((user.id === obj.added_by_user_id) ||
+                (user.id === 'gGdCRwnUndzKDM6gclbA'))
+    }
+
+    static can_delete(obj, user) {
+        return user && (user.id === 'gGdCRwnUndzKDM6gclbA')
+    }
+
 }
 
 module.exports = User

@@ -8,6 +8,7 @@ Items further down on the list may depend on items higher up.
 
 ### Usable for others
 
+* c_path, ci_path, etc
 * User profile page
   * Admin flag
   * Admins can
