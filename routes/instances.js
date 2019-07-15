@@ -51,7 +51,7 @@ function get_one(req, done) {
             { asc: 'datevalue' },
             (c_dates) => {
             console.log('ci_dates', c_dates)
-            conf_storage.get_by_id(req.params.conf_id, (c) => {
+            conf_storage.get_by_id(req.params.conf_id, (conf) => {
                 tracks_storage.get_all_by_key(
                     [ { key_name: 'instance_id', value: ci.id } ],
                     null,
@@ -59,10 +59,11 @@ function get_one(req, done) {
                         console.log('tracks', list)
 //                        list = User.public_or_mine(list, req.user)
                         done({
-                                conf: c,
+                                conf: conf,
+                                c_path: '/conf/' + conf.id,
                                 instance: Object.assign(ci, {dates: c_dates}),
+                                ci_path: '/conf/' + conf.id + '/instance/' + ci.id,
                                 tracks: list,
-//                                following: (follows.length > 0) ? follows[0] : null,
                                 perms: {
                                     can_edit: User.can_edit(ci, req.user),
                                     can_delete: User.can_delete(ci, req.user)

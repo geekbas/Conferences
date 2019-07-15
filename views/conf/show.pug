@@ -44,10 +44,10 @@ block content
                     input(type='hidden', name='conf_id', value=conf.id)
                     button(class='btn btn-sm btn-primary', type='submit') Follow
             if perms.can_edit
-                a(href='/conf/' + conf.id + '/edit')
+                a(href=c_path + '/edit')
                     button(class='btn btn-sm btn-info', type='submit') Edit
             if perms.can_delete
-                form(method='POST', action='/conf/' + conf.id + '?_method=DELETE')
+                form(method='POST', action=c_path + '?_method=DELETE')
                     button(class='btn btn-sm btn-danger', type='submit') Delete
 
     h3 Instances
@@ -61,14 +61,14 @@ block content
             if (user)
                 tr
                     td(colspan="3")
-                        form(method='POST', action='/conf/' + conf.id + '/instance')
+                        form(method='POST', action=c_path + '/instance')
                             div(class='input-group input-group-sm')
                                 input(type='number', min="2015", max="2020", name='year')
                                 button(class='btn btn-sm', type='submit') New
             each instance in instances
                 tr
                     th(scope='row')
-                        a(href='/conf/' + conf.id + '/instance/' + instance.id)
+                        a(href=c_path + '/instance/' + instance.id)
                             | #{instance.year}
                     td
                         if instance.url

@@ -2,15 +2,14 @@ extends ../layout
 
 block content
     h1 CFP Track for&nbsp;
-        a(href='/conf/' + conf.id)
+        a(href=c_path)
             | #{conf.name},
         | &nbsp;
-        a(href='/instance/' + instance.id)
+        a(href=ci_path)
             | #{instance.year}
 
     p
-        form(method='post', action='/track/?_method=PUT')
-            input(type='hidden', name='id', value=track.id)
+        form(method='post', action=track_path + '/?_method=PUT')
             div(class='form-group row')
                 label(for='name', class="col-sm-2 col-form-label") Name:
                 input#name(class='form-control col-sm-10', type='text', name='name', value=track.name)
@@ -31,3 +30,4 @@ block content
             div(class='form-group row')
                 div(class='button')
                     button(class='btn btn-sm btn-primary mr-3', type='submit') Update
+                    a(href=track_path, class='btn btn-sm btn-primary') Cancel

@@ -2,7 +2,7 @@ extends ../layout
 
 block content
     h2
-        a(href='/conf/'+conf.id)
+        a(href=c_path)
             | #{conf.name}
         | &nbsp;#{instance.year}
 
@@ -17,11 +17,11 @@ block content
     if (user)
         div(class="input-group mb-3")
             if perms.can_edit
-                a(href='/conf/' + conf.id + '/instance/' + instance.id + '/edit')
+                a(href=ci_path + '/edit')
                     button(class='btn btn-sm btn-info', type='submit') Edit
 
             if perms.can_delete
-                form(method='POST', action='/conf/' + conf.id + '/instance/' + instance.id + '?_method=DELETE')
+                form(method='POST', action=ci_path + '?_method=DELETE')
                     button(class='btn btn-sm btn-danger', type='submit') Delete
 
     h3 Call For Papers
@@ -30,8 +30,7 @@ block content
             if (user)
                 tr
                     td(scope='row')
-                        form(method='POST', action='/track')
-                            input(type='hidden', name='instance_id', value=instance.id)
+                        form(method='POST', action=ci_path + '/track')
                             div(class='input-group input-group-sm')
                                 label(class="input-group-text", for='instance_name') Name:
                                 input#instance_name(type='text', name='name')
@@ -39,7 +38,7 @@ block content
             each val in tracks
                 tr
                     td
-                        a(href='/conf/' + conf.id + '/instance/' + instance.id + '/track/' + val.id) #{val.name}
+                        a(href=ci_path + '/track/' + val.id) #{val.name}
 
     h3 Dates
     table(class='table table-sm')

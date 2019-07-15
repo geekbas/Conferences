@@ -2,10 +2,10 @@ extends ../layout
 
 block content
     h2 Call For Papers, Track for&nbsp;
-        a(href='/conf/' + conf.id)
+        a(href=c_path)
             | #{conf.name},
         | &nbsp;
-        a(href='/instance/' + instance.id)
+        a(href=ci_path)
             | #{instance.year}
 
     table(class='table table-sm')
@@ -36,11 +36,12 @@ block content
                         | No
 
     div(class="input-group mb-3")
-        a(href='/track/edit/' + track.id)
-            button(class='btn btn-sm btn-info', type='submit') Edit
-        form(method='POST', action='/track/' + track.id + '?_method=DELETE')
-            input(type='hidden', name='instance_id', value=track.instance_id)
-            button(class='btn btn-sm btn-danger', type='submit') Delete
+        if perms.can_edit
+            a(href=ci_path + '/track/' + track.id + '/edit')
+                button(class='btn btn-sm btn-info', type='submit') Edit
+        if perms.can_delete
+            form(method='POST', action=ci_path + '/track/' + track.id + '?_method=DELETE')
+                button(class='btn btn-sm btn-danger', type='submit') Delete
 
     h3 Track Specific Dates
     table(class='table table-sm')
@@ -63,9 +64,9 @@ block content
             if (track.dates)
                 each val in track.dates
                     tr
-                        td #{instance.datevalue}
-                        td #{instance.what}
+                        td #{val.datevalue}
+                        td #{val.what}
                         td
-                            form(method='POST', action='/date/' + instance.id + '?_method=DELETE')
+                            form(method='POST', action='/date/' + val.id + '?_method=DELETE')
                                 input(type='hidden', name='track_id', value=track.id)
                                 button(class='btn btn-sm btn-danger', type='submit') Delete

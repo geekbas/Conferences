@@ -85,6 +85,7 @@ router.get('/:id', (req, res) => {
                     res.render('conf/show', {
                         title: 'Conference',
                         conf: c,
+                        c_path: '/conf/' + c.id,
                         instances: list,
                         following: (follows.length > 0) ? follows[0] : null,
                         navconf: true,

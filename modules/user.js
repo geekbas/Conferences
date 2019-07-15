@@ -33,7 +33,7 @@ class User {
     }
 
     static public_or_my_obj(obj, user) {
-        return !obj.private_for_user_id ||
+        return (obj.private_for_user_id === undefined) ||
             (user && (user.id === obj.private_for_user_id))
     }
 
