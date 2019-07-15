@@ -69,8 +69,8 @@ router.get('/:id', (req, res) => {
                         following: (follows.length > 0) ? follows[0] : null,
                         navconf: true,
                         perms: {
-                            can_edit: user_can_edit_conf(c, req.user)
-                            , can_delete: user_can_delete_conf(c, req.user)
+                            can_edit: user_can_edit_conf(c, req.user),
+                            can_delete: user_can_delete_conf(c, req.user)
                         },
                         user: req.user
                     })
@@ -121,7 +121,7 @@ router.get('/:id/edit',
 
 // noinspection JSUnresolvedFunction
 router.delete('/:id',
-    (req, res, next) => { can_delete_conf(req, res, next) }, // TODO: only admin
+    (req, res, next) => { can_delete_conf(req, res, next) },
     (req, res) => {
         const c = req.params.conf
         console.log('delete conf', c)

@@ -17,12 +17,43 @@ function require_user(req, res, next, return_path) {
     next()
 }
 
-function get_one(req, done, on_reject) {
+function user_can_edit(ci, user) {
+    return user &&
+        ((user.id === ci.added_by_user_id) ||
+            (user.id === 'gGdCRwnUndzKDM6gclbA'))
+}
+
+function user_can_delete(ci, user) {
+    return user && (user.id === 'gGdCRwnUndzKDM6gclbA')
+}
+
+function can_edit(req, res, next) {
+    instance_storage.get_by_id(req.params.id,(ci) => {
+        if (!user_can_edit(ci, req.user)) {
+            return res.redirect('/')
+        }
+        console.log('can_edit', ci)
+        req.params.instance = ci
+        next()
+    })
+}
+
+function can_delete(req, res, next) {
+    instance_storage.get_by_id(req.params.id,(ci) => {
+        if (!user_can_delete(ci, req.user)) {
+            return res.redirect('/')
+        }
+        console.log('can_delete', ci)
+        req.params.instance = ci
+        next()
+    })
+}
+
+function get_one(req, done) {
     console.log('instances/get_one, params =', req.params)
     const id = req.params.id
     instance_storage.get_by_id(id, (ci) => {
         console.log('show', ci)
-        if (!User.public_or_my_obj(ci, req.user)) { return on_reject() }
         date_storage.get_all_by_key(
             [ { key_name: 'instance_id', value: ci.id } ],
             { asc: 'datevalue' },
@@ -40,6 +71,10 @@ function get_one(req, done, on_reject) {
                                 instance: Object.assign(ci, {dates: c_dates}),
                                 tracks: list,
 //                                following: (follows.length > 0) ? follows[0] : null,
+                                perms: {
+                                    can_edit: user_can_edit(ci, req.user),
+                                    can_delete: user_can_delete(ci, req.user)
+                                },
                                 user: req.user
                             })
                     })
@@ -50,18 +85,25 @@ function get_one(req, done, on_reject) {
 
 // noinspection JSUnresolvedFunction
 router.get('/:id', (req, res) => {
-    get_one(req,
-        (items) => res.render('instance/show', items),
-        () => res.redirect('/'))
+    get_one(req, (fields) => res.render('instance/show', fields))
 })
 
 // noinspection JSUnresolvedFunction
 router.get('/:id/edit',
-    (req, res, next) => { require_user(req, res, next, '/') },
+    (req, res, next) => { can_edit(req, res, next) },
     (req, res) => {
-        get_one(req,
-            (items) => res.render('instance/edit', items),
-            () => res.redirect('/'))
+        get_one(req, (fields) => res.render('instance/edit', fields))
+    }
+)
+
+// noinspection JSUnresolvedFunction
+router.delete('/:id',
+    (req, res, next) => { can_delete(req, res, next) },
+    (req, res) => {
+        console.log('delete instance', req.params.id)
+        instance_storage.del(req.params.id, () => {
+            res.redirect('/conf/' + req.params.conf_id)
+        })
     }
 )
 
@@ -86,27 +128,16 @@ router.post('/',
 )
 
 // noinspection JSUnresolvedFunction
-router.put('/',
-    (req, res, next) => { require_user(req, res, next, req.headers.referer) },
+router.put('/:id',
+    (req, res, next) => { can_edit(req, res, next) },
     (req, res) => {
         console.log('put with params', req.body)
         const updates = {
             year: req.body.year,
             url: req.body.url
         }
-        instance_storage.update(req.body.id, updates, (id) => {
+        instance_storage.update(req.params.id, updates, (id) => {
             res.redirect('/conf/' + req.params.conf_id + '/instance/' + id);
-        })
-    }
-)
-
-// noinspection JSUnresolvedFunction
-router.delete('/:id',
-    (req, res, next) => { require_user(req, res, next, req.headers.referer) },
-    (req, res) => {
-        console.log('delete instance', req.params.id)
-        instance_storage.del(req.params.id, () => {
-            res.redirect('/conf/' + req.params.conf_id)
         })
     }
 )
