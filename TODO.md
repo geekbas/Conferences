@@ -8,7 +8,6 @@ Items further down on the list may depend on items higher up.
 
 ### Usable for others
 
-* c_path, ci_path, etc
 * User profile page
   * Admin flag
   * Admins can
@@ -18,9 +17,8 @@ Items further down on the list may depend on items higher up.
 * Personal stuff: dates
   * new field: added_by_user_id
   * new field: private_for_user_id
-Instance
+* Instance
   * Fasta fält för SubmitPaper, Notification, ConfStart och ConfEnd
-* Twitter-auth
 * Submissions
   * Links
     * Overleaf
@@ -28,11 +26,13 @@ Instance
   * If submitted to a particular CFPA:
     * Which ones get blocked out?
     * Which are the fallbacks?
+* Delete confirmation popups
 * Find a better product name?
   * "Submission planner"
 * Dates
   * gruppera på år och månad
   * visa bara från "nu minus 1 månad"
+* Twitter-auth
 
 ### Good To Have
 
