@@ -1,0 +1,14 @@
+extends layout
+
+block content
+    h2 Profile
+
+    h3 Imported
+    p Name: #{user.given_name} #{user.family_name}
+
+    h3 Followed conferences
+    ul
+        each fc in confs
+            li
+                a(href='/conf/' + fc.conf_id)
+                    | #{fc.conf.name}

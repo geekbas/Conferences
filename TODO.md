@@ -32,7 +32,9 @@ Items further down on the list may depend on items higher up.
 * Dates
   * gruppera på år och månad
   * visa bara från "nu minus 1 månad"
-* Twitter-auth
+* Twitter-auth?
+* Mastodon-auth?
+  * http://www.passportjs.org/packages/passport-mastodon/
 
 ### Good To Have
 
