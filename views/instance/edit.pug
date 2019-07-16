@@ -9,10 +9,37 @@ block content
                 label(for='year', class="col-sm-2 col-form-label") Year:
                 input#year(class='form-control col-sm-10', type='number', min="2000", max="2020", name='year',
                     value=instance.year)
+
             div(class='form-group row')
                 label(for='url', class="col-sm-2 col-form-label") URL:
                 input#url(class='form-control col-sm-10', type='url', name='url',
                     value=instance.url)
+
+            div(class='form-group row')
+                label(for='submission', class="col-sm-2 col-form-label") Submission:
+                input#submission(class='form-control col-sm-10', type='date', name='submission',
+                    value=instance.submission)
+
+            div(class='form-group row')
+                label(for='notification', class="col-sm-2 col-form-label") Notification:
+                input#notification(class='form-control col-sm-10', type='date', name='notification',
+                    value=instance.notification)
+
+            div(class='form-group row')
+                label(for='camera_ready', class="col-sm-2 col-form-label") Camera ready:
+                input#camera_ready(class='form-control col-sm-10', type='date', name='camera_ready',
+                    value=instance.camera_ready)
+
+            div(class='form-group row')
+                label(for='conf_start', class="col-sm-2 col-form-label") Conference start:
+                input#conf_start(class='form-control col-sm-10', type='date', name='conf_start',
+                    value=instance.conf_start)
+
+            div(class='form-group row')
+                label(for='conf_end', class="col-sm-2 col-form-label") Conference end:
+                input#conf_end(class='form-control col-sm-10', type='date', name='conf_end',
+                    value=instance.conf_end)
+
             div(class='form-group row')
                 button(class='btn btn-sm btn-primary mr-3', type='submit') Update
                 a(href='/conf/' + conf.id + '/instance/' + instance.id, class='btn btn-sm btn-primary') Cancel

@@ -51,6 +51,7 @@ block content
             if (user)
                 tr
                     form(method='POST', action='/date')
+                        input(type='hidden', name='conf_id', value=conf.id)
                         input(type='hidden', name='instance_id', value=instance.id)
                         td(scope='row')
                             input#date_when(type='date', name='datevalue')
@@ -59,7 +60,33 @@ block content
                         td
                             button(class='btn btn-sm', type='submit') New
 
-            each val in instance.dates
+            if (instance.submission)
+                tr
+                    td #{instance.submission}
+                    td Submission
+                    td &nbsp;
+            if (instance.notification)
+                tr
+                    td #{instance.notification}
+                    td Notification
+                    td &nbsp;
+            if (instance.camera_ready)
+                tr
+                    td #{instance.camera_ready}
+                    td Camera ready
+                    td &nbsp;
+            if (instance.conf_start)
+                tr
+                    td #{instance.conf_start}
+                    td Conference start
+                    td &nbsp;
+            if (instance.conf_end)
+                tr
+                    td #{instance.conf_end}
+                    td Conference end
+                    td &nbsp;
+
+        each val in instance.dates
                 tr
                     td #{val.datevalue}
                     td #{val.what}
@@ -67,5 +94,6 @@ block content
                         if (user)
                             form(method='POST', action='/date/' + val.id + '?_method=DELETE')
                                 span(class="input-group")
+                                    input(type='hidden', name='conf_id', value=conf.id)
                                     input(type='hidden', name='instance_id', value=instance.id)
                                     button(class='btn btn-sm btn-danger', type='submit') Delete

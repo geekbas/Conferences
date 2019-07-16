@@ -27,6 +27,7 @@ Items further down on the list may depend on items higher up.
     * Which ones get blocked out?
     * Which are the fallbacks?
 * Delete confirmation popups
+* /date below both instance and track?
 * Find a better product name?
   * "Submission planner"
 * Dates

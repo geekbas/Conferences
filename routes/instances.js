@@ -128,7 +128,12 @@ router.put('/:instance_id',
         console.log('put with params', req.body)
         const updates = {
             year: req.body.year,
-            url: req.body.url
+            url: req.body.url,
+            submission: req.body.submission,
+            notification: req.body.notification,
+            camera_ready: req.body.camera_ready,
+            conf_start: req.body.conf_start,
+            conf_end: req.body.conf_end
         }
         instance_storage.update(req.params.instance_id, updates, (id) => {
             res.redirect(req.session.viewdata.c_path + '/instance/' + id);

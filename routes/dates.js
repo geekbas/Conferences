@@ -88,14 +88,14 @@ router.post('/', (req, res) => {
                 { instance_id: req.body.instance_id })
             console.log('add', entry)
             date_storage.add(entry, (id) => {
-                res.redirect('/instance/' + req.body.instance_id)
+                res.redirect('/conf/' + req.body.conf_id + '/instance/' + req.body.instance_id)
             })
         } else if (req.body.track_id) {
             entry = Object.assign(entry,
                 { track_id: req.body.track_id })
             console.log('add', entry)
             date_storage.add(entry, (id) => {
-                res.redirect('/track/' + req.body.track_id)
+                res.redirect('/conf/' + req.body.conf_id + '/instance/' + req.body.instance_id + '/track/' + req.body.track_id)
             })
         }
     }
@@ -106,7 +106,7 @@ router.delete('/:id', (req, res) => {
     console.log('delete date', req.params.id)
     date_storage.del(req.params.id, () => {
         if (req.body.instance_id) {
-            res.redirect('/instance/' + req.body.instance_id)
+            res.redirect('/conf/' + req.body.conf_id + '/instance/' + req.body.instance_id)
         }
     })
 })
