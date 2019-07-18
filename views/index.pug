@@ -16,7 +16,7 @@ block content
         th(scope='col') Name
         th(scope='col') &nbsp;
     tbody
-      each conf, id in confs
+      each conf in confs
         tr
           td
             a(href='/conf/' + conf.id) #{conf.acronym}

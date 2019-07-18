@@ -22,26 +22,30 @@ class Following {
 
     static select_followed(list, user, field, filtered_list, done) {
         if (!user) {
-            console.log('no filter')
+//            console.log('no filter')
             return done(list)
         }
-        if (list.length < 1) {
+//        console.log('filtered so far', filtered_list)
+        const obj_id = list.keys().next().value
+//        console.log('select_followed, next id is', obj_id)
+        if ((list.size < 1) || (obj_id === undefined)) {
             return done(filtered_list)
         }
-        const obj = list[0]
-        console.log('check', obj, 'filter on', field)
+        const obj = list.get(obj_id)
+//        console.log('check', obj, 'filter on', field, '=', obj_id)
         follow_storage.get_all_by_key(
             [
-                { key_name: field, value: obj.id },
+                { key_name: field, value: obj_id },
                 { key_name: 'user_id', value: user.id }
             ],
             { limit: 1 },
             (follows) => {
-    //            console.log('follows = ', follows)
-                if (follows.length > 0) {
-                    filtered_list.push(obj)
+//                console.log('follows = ', follows, 'length', follows.size)
+                if (follows.size > 0) {
+                    filtered_list.set(obj_id, obj)
                 }
-                return Following.select_followed(list.slice(1), user, field, filtered_list, done)
+                list.delete(obj_id)
+                return Following.select_followed(list, user, field, filtered_list, done)
             })
     }
 

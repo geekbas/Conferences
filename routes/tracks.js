@@ -73,7 +73,7 @@ function get_one(req, done) {
         { asc: 'datevalue' },
         (dates) => {
             done(Object.assign(req.session.viewdata, {
-                track: Object.assign(track, { dates }),
+                track: Object.assign(track, { dates: Storage.map_to_array(dates) }),
                 perms: {
                     can_edit: User.can_edit(track, req.user),
                     can_delete: User.can_delete(track, req.user)

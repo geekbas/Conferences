@@ -40,15 +40,13 @@ class Storage {
         }
         q.get()
             .then((snapshot) => {
-                var list = []
+                var list = new Map()
                 snapshot.docs.forEach((entry) => {
 //                console.log(entry.id, entry.data());
                     const d = this.fix_types(entry.data())
-                    list.push(Object.assign({id: entry.id }, d))
+                    list.set(entry.id, d)
                 })
-                if (list.length > 0) {
-                    f(list)
-                }
+                f(list)
             })
     }
 
@@ -80,10 +78,12 @@ class Storage {
         }
         q.get()
             .then((snapshot) => {
-                var docs = []
+                var docs = new Map()
                 snapshot.docs.forEach((entry) => {
                     const d = this.fix_types(entry.data())
-                    docs.push(Object.assign({id: entry.id}, d))
+                    if (!params || !params.post_filter || params.post_filter(d)) {
+                        docs.set(entry.id, d)
+                    }
                 })
                 f(docs)
             })
@@ -105,6 +105,14 @@ class Storage {
             .then((doc) => {
                 f(doc)
             })
+    }
+
+    static map_to_array(map) {
+        let a = []
+        map.forEach((value, key) => {
+            a.push(Object.assign(value, { id: key }))
+        })
+        return a
     }
 
 }

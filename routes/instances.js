@@ -64,8 +64,8 @@ function get_one(req, done) {
 //                        list = User.public_or_mine(list, req.user)
                 done(
                     Object.assign(req.session.viewdata, {
-                        instance: Object.assign(ci, {dates: c_dates}),
-                        tracks: list,
+                        instance: Object.assign(ci, { dates: Storage.map_to_array(c_dates) }),
+                        tracks: Storage.map_to_array(list),
                         perms: {
                             can_edit: User.can_edit(ci, req.user),
                             can_delete: User.can_delete(ci, req.user)

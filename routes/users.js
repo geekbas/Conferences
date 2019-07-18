@@ -3,26 +3,21 @@ var router = express.Router();
 const path = require('path');
 const Storage = require(path.join('..', 'modules', 'storage'))
 const follow_storage = new Storage('follows')
-const conf_storage = new Storage('confs')
+const Conf = require(path.join('..', 'modules', 'conf'))
 //const User = require(path.join('..', 'modules', 'user'))
 
-function load_all_confs(done) {
-    let confs = []
-    conf_storage.get_all(null, (clist) => {
-        clist.forEach((entry) => confs[entry.id] = entry)
-        done(confs)
-    })
-}
-
 router.get('/',
-    (req, res) => {
+    (req, res, next) => {
         if (!req.user) { return res.redirect('/') }
-        load_all_confs((confs) => {
+        next()
+    },
+    (req, res) => {
+        Conf.load_all_as_array((confs) => {
             follow_storage.get_all_by_key(
                 [
-                    { key_name: 'user_id', value: req.user.id }
+                    {key_name: 'user_id', value: req.user.id}
                 ],
-                { },
+                {},
                 (follows) => {
                     console.log('follow list', follows)
                     let followed_confs = []

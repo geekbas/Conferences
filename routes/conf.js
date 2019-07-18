@@ -59,26 +59,29 @@ router.get('/', (req, res) => {
             confs,
             req.session.show_all ? null : req.user,
             'conf_id',
-            [],
+            new Map(),
             (list) => {
-            res.render('index', {
-                title: 'Conferences',
-                confs: list,
-                navconf: true,
-                show_all: !!req.session.show_all,
-                user: req.user
-            })
-        })
+                res.render('index', {
+                    title: 'Conferences',
+                    confs: Storage.map_to_array(list),
+                    navconf: true,
+                    show_all: !!req.session.show_all,
+                    user: req.user
+                })
+            }
+        )
     })
 })
 
 // noinspection JSUnresolvedFunction
 router.get('/:conf_id', (req, res) => {
     const c = req.session.conf
+    console.log('show', c)
     instance_storage.get_all_by_key(
         [ { key_name: 'conf_id', value: c.id } ],
         { desc: 'year' },
         (list) => {
+            console.log('instances', list)
 //                list = User.public_or_mine(list, req.user)
             follow_storage.get_all_by_key(
             [
@@ -91,8 +94,8 @@ router.get('/:conf_id', (req, res) => {
                 res.render('conf/show',
                     Object.assign(req.session.viewdata, {
                         title: 'Conference',
-                        instances: list,
-                        following: (follows.length > 0) ? follows[0] : null,
+                        instances: Storage.map_to_array(list),
+                        following: (follows.size > 0) ? follows[0] : null,
                         navconf: true,
                         perms: {
                             can_edit: User.can_edit(c, req.user),

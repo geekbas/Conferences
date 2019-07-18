@@ -39,7 +39,10 @@ const do_auth = function(app) {
                     family_name: profile.name.familyName,
                     email: profile.emails.length > 0 ? profile.emails[0].value : null
                 },
-                (err, user) => { return done(err, user) })
+                (err, user) => {
+                    console.log('found/created', user)
+                    return done(err, user)
+                })
         }
     ))
 
@@ -56,7 +59,7 @@ const do_auth = function(app) {
 
     app.get('/auth/google/callback',
         passport.authenticate('google',
-            { failureRedirect: '/login' }),
+            { failureRedirect: '/' }),
         (req, res) => { res.redirect(req.session.referer) }
     )
 

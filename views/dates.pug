@@ -22,10 +22,10 @@ block content
             tr
                 th(scope='row') #{date.datevalue}
                 td
-                    a(href='/conf/' + date.conf.id) #{date.conf.name}
+                    a(href=date.c_path) #{date.conf.name}
                 td
-                    a(href='/conf/' + date.conf.id + '/instance/' + date.instance.id) #{date.instance.year}
+                    a(href=date.ci_path) #{date.instance.year}
                 td #{date.what}
                 td
                     if (date.track)
-                        a(href='/track/' + date.track.id) #{date.track.name}
+                        a(href=date.ci_path + '/track/' + date.track.id) #{date.track.name}

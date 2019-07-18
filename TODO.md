@@ -17,8 +17,6 @@ Items further down on the list may depend on items higher up.
 * Personal stuff: dates
   * new field: added_by_user_id
   * new field: private_for_user_id
-* Instance
-  * Fasta fält för SubmitPaper, Notification, ConfStart och ConfEnd
 * Submissions
   * Links
     * Overleaf
@@ -31,8 +29,8 @@ Items further down on the list may depend on items higher up.
 * Find a better product name?
   * "Submission planner"
 * Dates
+  * fixed instance dates
   * gruppera på år och månad
-  * visa bara från "nu minus 1 månad"
 * Twitter-auth?
 * Mastodon-auth?
   * http://www.passportjs.org/packages/passport-mastodon/

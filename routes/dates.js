@@ -12,66 +12,78 @@ const moment = require('moment')
 
 // noinspection JSUnresolvedFunction
 router.get('/', (req, res) => {
-    let confs = []
     conf_storage.get_all(null, (clist) => {
+//        console.log('conf get_all returned', clist)
         Following.select_followed(
             clist,
             req.session.show_all ? null : req.user,
             'conf_id',
-            [],
-            (clist2) => {
-                clist2.forEach((entry) => confs[entry.id] = entry)
-
-                let cis = []
-                instance_storage.get_all(null, (cilist) => {
-                    cilist.forEach((entry) => {
-                        if (confs[entry.conf_id]) cis[entry.id] = entry
-                    })
-                    console.log('cis', cis)
-
-                    let tracks = []
-                    tracks_storage.get_all(null, (tlist) => {
-                        tlist.forEach((entry) => {
-                            if (cis[entry.instance_id]) tracks[entry.id] = entry
-                        })
-
-                        let datelist = []
-                        const today = moment().format("YYYY-MM-DD")
-                        date_storage.get_all('datevalue', (list) => {
-                            list.forEach((entry) => {
-//                                console.log('elaborate on entry', entry)
-                                if (entry.datevalue >= today) {
-                                    if (entry.track_id) {
-                                        const t = tracks[entry.track_id]
-                                        if (t) {
-                                            Object.assign(entry, {
-                                                track: t,
-                                                instance_id: t.instance_id
-                                            })
+            new Map(),
+            (confs) => {
+//                console.log('select followed returned', confs)
+                instance_storage.get_all_by_key(
+                    [],
+                    {
+                        post_filter: (obj) => { return !!confs.get(obj.conf_id) }
+                    },
+                    (cis) => {
+//                        console.log('filtered instance list is', cis)
+                        tracks_storage.get_all_by_key(
+                            [],
+                            {
+                                post_filter: (obj => { return !!cis.get(obj.instance_id)})
+                            },
+                            (tracks) => {
+//                                console.log('filtered track list is', tracks)
+                                const not_before = moment().subtract(1, 'month').format("YYYY-MM-DD")
+                                date_storage.get_all('datevalue', (list) => {
+//                                    console.log('full date list is', list)
+                                    let datelist = []
+                                    list.forEach((entry) => {
+//                                        console.log('examine date entry', entry)
+                                        if (entry.datevalue >= not_before) {
+                                            if (entry.track_id) {
+                                                const t = tracks.get(entry.track_id)
+                                                if (t) {
+                                                    Object.assign(entry, {
+                                                        track: Object.assign(t, { id: entry.track_id }),
+                                                        instance_id: t.instance_id
+                                                    })
+                                                }
+                                            }
+                                            if (entry.instance_id) {
+                                                const instance = cis.get(entry.instance_id)
+                                                if (instance) {
+                                                    Object.assign(entry, { instance })
+                                                    const conf = confs.get(instance.conf_id)
+                                                    const c_path = '/conf/' + instance.conf_id
+                                                    const ci_path = c_path + '/instance/' + entry.instance_id
+                                                    Object.assign(entry,
+                                                        {
+                                                            conf,
+                                                            c_path,
+                                                            instance,
+                                                            ci_path
+                                                        })
+//                                                    console.log('datelist push', entry)
+                                                    datelist.push(entry)
+                                                }
+                                            }
                                         }
-                                    }
-                                    if (entry.instance_id) {
-                                        const instance = cis[entry.instance_id]
-                                        if (instance) {
-                                            Object.assign(entry, {instance})
-                                            const conf = confs[instance.conf_id]
-                                            Object.assign(entry, {conf})
-                                            datelist.push(entry)
-                                        }
-                                    }
-                                }
+                                    })
+                                    res.render('dates', {
+                                        title: 'Dates',
+                                        dates: datelist,
+                                        navdate: true,
+                                        show_all: !!req.session.show_all,
+                                        user: req.user
+                                    })
+                                })
                             })
-                            res.render('dates', {
-                                title: 'Dates',
-                                dates: datelist,
-                                navdate: true,
-                                show_all: !!req.session.show_all,
-                                user: req.user
-                            })
-                    })
-                })
-            })
-        })
+                    }
+                )
+            }
+        )
     })
 })
 
