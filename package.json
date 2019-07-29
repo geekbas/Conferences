@@ -13,6 +13,7 @@
     "clean-css": "^4.2.1",
     "cookie-parser": "~1.4.4",
     "cuid": "^2.1.6",
+    "db-migrate-pg": "1.0.0",
     "debug": "~2.6.9",
     "express": "~4.16.1",
     "express-session": "^1.16.2",

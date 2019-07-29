@@ -1,69 +1,70 @@
 
 const path = require('path')
 const fs = require('fs')
-const db_root = path.join(__dirname, '..', 'leveldb')
-const level = require('level')
-var user_db = null
-var user_idx_extid = null
 const cuid = require('cuid')
 const basic70_id = 'gGdCRwnUndzKDM6gclbA'
+const basic70_google_id = '107690245925696602851'
+const { Pool, Client } = require('pg')
 
-fs.mkdir(db_root, (err) => {
-    if (err && (err.code !== "EEXIST")) {
-        console.log('mkdir errno', err.code)
-    }
-    user_db = level(path.join(db_root, 'users'), { valueEncoding: 'json' })
-    user_idx_extid = level(path.join(db_root, 'users_idx_extid'))
-
-    // init?
-    const basic70_google_id = 'googleId-107690245925696602851'
-    user_idx_extid.get(basic70_google_id, (err, value) => {
-        if (err) {
-            console.log('basic70 not found')
-            user_db.put(basic70_id, {
-                email: 'basic70@gmail.com',
-                given_name: 'Daniel',
-                family_name: 'Brahneborg'
-            }, (err) => {
-                user_idx_extid.put(basic70_google_id, basic70_id, (err) => {
-                    console.log('basic70 saved')
-                })
-            })
-        }
-    })
-
+//console.log('Pool', Pool, 'Client', Client)
+const pool = new Pool({
+    connectionString: process.env.DATABASE_URL
 })
+//console.log('pool', pool)
 
 class User {
     static findOrCreate(id_params, misc_params, f) {
         console.log('look for user', 'googleId', id_params.googleId)
-        const key = 'googleId-' + id_params.googleId
-        user_idx_extid.get(key, (err, value) => {
-            console.log('foundOrCreate', id_params, 'misc', misc_params, '=> err', err, 'value', value)
-            if (err.notFound) {
-                const new_user = Object.assign(misc_params, { id: cuid() })
-                user_db.put(new_user.id, new_user, (err) => {
-                    user_idx_extid.put(key, new_user.id, (err) => {
-                        f(err, new_user)
-                    })
+        pool.connect((err, client, done) => {
+            if (err) throw err
+            client.query(
+                'SELECT * FROM users WHERE google_id=$1 LIMIT 1',
+                [ id_params.googleId ],
+                (err, res) => {
+                    if (err) {
+                        done()
+                        throw err
+                    }
+//                    console.log('result', res)
+                    if (res.rowCount > 0) {
+                        done()
+                        const user = res.rows[0]
+                        f(null, user)
+                    } else {
+                        console.log('adding user with fields', misc_params)
+                        client.query(
+                            'INSERT INTO users(google_id, email, given_name, family_name) VALUES ($1, $2, $3, $4) RETURNING *',
+                            [ id_params.googleId, misc_params.email, misc_params.given_name, misc_params.family_name ],
+                            (err, res) => {
+                                done()
+                                if (err) throw err
+                                const user = res.rows[0]
+                                f(null, user)
+                            }
+                        )
+                    }
                 })
-            } else {
-                user_db.get(value, (err, value2) => {
-                    f(err, value2 === undefined ? value2 : Object.assign(value2), { id: value })
-                })
-            }
         })
     }
 
     static findById(id, f) {
         console.log('findById: look for user', id)
-        user_db.get(id, (err, value) => {
-            console.log('findById: found user', value)
-            if ((err && err.notFound) || (value === undefined)) {
-                f(null, undefined)
-            } else {
-                f(err, Object.assign(value, { id }))
-            }
+        pool.connect((err, client, done) => {
+            if (err) throw err
+            client.query(
+                'SELECT * FROM users WHERE id=$1 LIMIT 1',
+                [ id ],
+                (err, res) => {
+                    done()
+                    if (err) throw err
+//                    console.log('result', res)
+                    if (res.rowCount > 0) {
+                        const user = res.rows[0]
+                        f(null, user)
+                    } else {
+                        f(null, undefined)
+                    }
+                })
         })
     }
 
