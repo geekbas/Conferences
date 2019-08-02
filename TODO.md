@@ -8,6 +8,10 @@ Items further down on the list may depend on items higher up.
 
 ### Usable for others
 
+* Store in local postgres
+  * instances
+  * dates
+  * tracks
 * User profile page
   * Admin flag
   * Admins can

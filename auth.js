@@ -75,7 +75,12 @@ const do_auth = function(app) {
     })
 
     passport.deserializeUser((id, done) => {
-        User.findById(id, (err, user) => { done(err, user) })
+        User.findById(id, (err, user) => {
+            if (err) {
+                req.logout
+            }
+            done(err, user)
+        })
     })
 }
 

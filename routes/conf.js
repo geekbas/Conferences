@@ -3,7 +3,7 @@ const router = express.Router();
 const path = require('path');
 
 const Storage = require(path.join('..', 'modules', 'storage'))
-const conf_storage = new Storage('confs')
+const Conf = require(path.join('..', 'modules', 'conf'))
 const instance_storage = new Storage('instances')
 const follow_storage = new Storage('follows')
 const Following = require(path.join('..', 'modules', 'follow'))
@@ -11,7 +11,7 @@ const User = require(path.join('..', 'modules', 'user'))
 
 router.param('conf_id',
     (req, res, next, conf_id) => {
-        conf_storage.get_by_id(conf_id,(c) => {
+        Conf.get_by_id(conf_id,(c) => {
             console.log('loaded', c)
             req.session.conf = c
             req.session.viewdata.conf = c
@@ -53,7 +53,7 @@ function can_delete_conf(req, res, next) {
 // noinspection JSUnresolvedFunction
 router.get('/', (req, res) => {
     console.log('conf list, show_all =', req.session.show_all)
-    conf_storage.get_all('name', (confs) => {
+    Conf.get_all({ asc: 'name' }, (confs) => {
 //        confs = User.public_or_mine(confs, req.user)
         Following.select_followed(
             confs,
@@ -130,7 +130,7 @@ router.delete('/:conf_id',
     (req, res) => {
         const c = req.session.conf
         console.log('delete conf', c)
-        conf_storage.del(c.id, () => {
+        Conf.del(c.id, () => {
             res.redirect('/conf')
         })
     }
@@ -143,16 +143,17 @@ router.post('/',
         console.log('new conf with params', req.body)
         if (!req.body.empty) {
             const user_id = req.user.id
-            conf_storage.add({
+            Conf.add({
                 acronym: req.body.acronym,
                 name: req.body.name,
                 added_by_user_id: user_id,
                 private_for_user_id: user_id
-            },(id) => {
+            }, (conf_id) => {
+                console.log('router got conf_id', conf_id)
                 Following.follow(
                     req.user,
-                    { conf_id: id },
-                    (id) => res.redirect('/conf/' + id))
+                    { conf_id },
+                    (id) => res.redirect('/conf/' + conf_id))
             })
         }
     }
@@ -171,7 +172,7 @@ router.put('/:conf_id',
             format: params.format,
             acceptance_rate: params.acceptance_rate
         }
-        conf_storage.update(req.session.conf.id, updates,(id) => {
+        Conf.update(req.session.conf.id, updates,(id) => {
             res.redirect('/conf/' + id)
         })
     }

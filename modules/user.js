@@ -1,22 +1,13 @@
 
-const path = require('path')
-const fs = require('fs')
-const cuid = require('cuid')
-const basic70_id = 'gGdCRwnUndzKDM6gclbA'
-const basic70_google_id = '107690245925696602851'
-const { Pool, Client } = require('pg')
-
-//console.log('Pool', Pool, 'Client', Client)
-const pool = new Pool({
-    connectionString: process.env.DATABASE_URL
-})
-//console.log('pool', pool)
+//const cuid = require('cuid')
+const basic70_id = 1
+//const basic70_google_id = '107690245925696602851'
+const pool = require('./pgpool')
 
 class User {
     static findOrCreate(id_params, misc_params, f) {
         console.log('look for user', 'googleId', id_params.googleId)
-        pool.connect((err, client, done) => {
-            if (err) throw err
+        pool.get_client((client, done) => {
             client.query(
                 'SELECT * FROM users WHERE google_id=$1 LIMIT 1',
                 [ id_params.googleId ],
@@ -25,7 +16,7 @@ class User {
                         done()
                         throw err
                     }
-//                    console.log('result', res)
+                    console.log('result', res)
                     if (res.rowCount > 0) {
                         done()
                         const user = res.rows[0]
@@ -43,29 +34,22 @@ class User {
                             }
                         )
                     }
-                })
+                }
+            )
         })
     }
 
     static findById(id, f) {
         console.log('findById: look for user', id)
-        pool.connect((err, client, done) => {
-            if (err) throw err
-            client.query(
-                'SELECT * FROM users WHERE id=$1 LIMIT 1',
-                [ id ],
-                (err, res) => {
-                    done()
-                    if (err) throw err
-//                    console.log('result', res)
-                    if (res.rowCount > 0) {
-                        const user = res.rows[0]
-                        f(null, user)
-                    } else {
-                        f(null, undefined)
-                    }
-                })
-        })
+        pool.query(
+            'SELECT * FROM users WHERE id=$1 LIMIT 1',
+            [ id ],
+            { single: true },
+            (res) => {
+                console.log('result', res)
+                f(null, res)
+            }
+        )
     }
 
     static public_or_my_obj(obj, user) {
