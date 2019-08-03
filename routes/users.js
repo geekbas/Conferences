@@ -12,7 +12,7 @@ router.get('/',
         next()
     },
     (req, res) => {
-        Conf.load_all_as_array((confs) => {
+        Conf.get_all({ as_array: true }, (confs) => {
             follow_storage.get_all_by_key(
                 [
                     {key_name: 'user_id', value: req.user.id}
@@ -24,7 +24,8 @@ router.get('/',
                     follows.forEach((f) => {
                         if (f.conf_id !== undefined) {
                             f.conf = confs[f.conf_id]
-                            followed_confs.push(f)
+                            if (f.conf !== undefined)
+                                followed_confs.push(f)
                         }
                     })
                     console.log('confs', followed_confs)

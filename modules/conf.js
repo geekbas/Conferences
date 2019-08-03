@@ -1,6 +1,4 @@
 
-const Storage = require('./storage')
-const conf_storage = new Storage('confs')
 const pool = require('./pgpool')
 
 class Conf {
@@ -38,13 +36,13 @@ class Conf {
         )
     }
 
-    static get_all(params, f) {
-        let sql = 'SELECT * FROM confs'
-        if (params.asc)
-            sql = sql + ' ORDER BY ' + params.asc + ' ASC'
-        pool.query(sql, null, null, (res) => {
-            f(res)
-        })
+    static get_all(options, f) {
+        let sql = 'SELECT * FROM confs ORDER BY name ASC'
+        pool.query(sql,
+            null,
+            (options && options.as_array) ? { as_array: true } : null, (res) => {
+                f(res)
+            })
     }
 
     static get_by_id(id, f) {
@@ -56,15 +54,6 @@ class Conf {
             (res) => { f(res) }
         )
     }
-
-    static load_all_as_array(done) {
-        let confs = []
-        conf_storage.get_all(null, (clist) => {
-            clist.forEach((entry) => confs[entry.id] = entry)
-            done(confs)
-        })
-    }
-
 }
 
 module.exports = Conf
