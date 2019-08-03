@@ -1,5 +1,6 @@
 
 const pool = require('./pgpool')
+const Following = require('./follow')
 
 class Conf {
 
@@ -26,7 +27,11 @@ class Conf {
     }
 
     static get_all(options, f) {
-        let sql = 'SELECT * FROM confs ORDER BY name ASC'
+        let sql = 'SELECT * FROM confs c'
+        if (options && options.followed_by) {
+            sql += ' INNER JOIN follows f ON f.conf_id=c.id'
+        }
+        sql += ' ORDER BY c.name ASC'
         pool.query(sql,
             null,
             (options && options.as_array) ? { as_array: true } : null, (res) => {
@@ -37,7 +42,9 @@ class Conf {
     // generics
 
     static del(id, f) {
-        return pool.del('confs', id, f)
+        Following.removing_conf(id, () => {
+            return pool.del('confs', id, f)
+        })
     }
 
     static get_by_id(id, f) {

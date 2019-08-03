@@ -2,8 +2,6 @@ const express = require('express');
 const router = express.Router();
 const path = require('path');
 
-const Storage = require(path.join('..', 'modules', 'storage'))
-const follow_storage = new Storage('follows')
 const Following = require(path.join('..', 'modules', 'follow'))
 
 // noinspection JSUnresolvedFunction
@@ -16,7 +14,7 @@ router.post('/', (req, res) => {
         const conf_id = req.body.conf_id
         Following.follow(
             req.user,
-            { conf_id: conf_id },
+            conf_id,
             (id) => { res.redirect('/conf/' + conf_id) })
     }
 })

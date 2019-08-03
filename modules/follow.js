@@ -1,26 +1,46 @@
 
 const path = require('path')
 const Storage = require(path.join('..', 'modules', 'storage'))
-const follow_storage = new Storage('follows')
+
+const pool = require('./pgpool')
 
 class Following {
 
-    static follow(user, entry, done) {
+    static follow(user, conf_id, done) {
         if (user) {
-            follow_storage.add(
-                Object.assign(entry, { user_id: user.id }),
-                (id) => done(id))
+            pool.query(
+                'INSERT INTO follows (user_id, conf_id) VALUES ($1, $2) RETURNING id',
+                [ user.id, conf_id ],
+                { single: true },
+                (id) => { done(id) })
         } else {
             done(null)
         }
     }
 
-    static unfollow(id, done) {
-        console.log('delete', req.params.id)
-        follow_storage.del(req.params.id, (entry) => done)
+    static follows_conf(user_id, conf_id, done) {
+        if (!user_id) return done(null)
+        pool.query('SELECT id FROM follows WHERE user_id=$1 AND conf_id=$2 LIMIT 1',
+            [ user_id, conf_id ],
+            { single: true },
+            (res) => { done(res) })
     }
 
-    static select_followed(list, user, field, filtered_list, done) {
+    static unfollow(id, done) {
+        pool.query('DELETE FROM follows WHERE id=$1',
+            [ id ],
+            { single: true },
+            () => { done() })
+    }
+
+    static removing_conf(conf_id, done) {
+        pool.query('DELETE FROM follows WHERE conf_id=$1',
+            [ conf_id ],
+            { single: true },
+            () => { done() })
+    }
+
+    static select_followed(list, user, filtered_list, done) {
         if (!user) {
 //            console.log('no filter')
             return done(list)
@@ -32,20 +52,18 @@ class Following {
             return done(filtered_list)
         }
         const obj = list.get(obj_id)
-//        console.log('check', obj, 'filter on', field, '=', obj_id)
-        follow_storage.get_all_by_key(
-            [
-                { key_name: field, value: obj_id },
-                { key_name: 'user_id', value: user.id }
-            ],
-            { limit: 1 },
-            (follows) => {
-//                console.log('follows = ', follows, 'length', follows.size)
-                if (follows.size > 0) {
+//        console.log('check', obj, 'filter on conf_id=', obj_id)
+        pool.query(
+            'SELECT COUNT(*) AS count FROM follows WHERE conf_id=$1 AND user_id=$2',
+            [ obj_id, user.id ],
+            { single: true },
+            (res) => {
+//                console.log('got res', res, 'for conf', obj_id)
+                if (res.count > 0) {
                     filtered_list.set(obj_id, obj)
                 }
                 list.delete(obj_id)
-                return Following.select_followed(list, user, field, filtered_list, done)
+                return Following.select_followed(list, user, filtered_list, done)
             })
     }
 

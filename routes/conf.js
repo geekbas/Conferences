@@ -5,7 +5,6 @@ const path = require('path');
 const Storage = require(path.join('..', 'modules', 'storage'))
 const Conf = require(path.join('..', 'modules', 'conf'))
 const Instance = require(path.join('..', 'modules', 'instance'))
-const follow_storage = new Storage('follows')
 const Following = require(path.join('..', 'modules', 'follow'))
 const User = require(path.join('..', 'modules', 'user'))
 
@@ -58,9 +57,9 @@ router.get('/', (req, res) => {
         Following.select_followed(
             confs,
             req.session.show_all ? null : req.user,
-            'conf_id',
             new Map(),
             (list) => {
+//                console.log('got follow list', list)
                 res.render('index', {
                     title: 'Conferences',
                     confs: Storage.map_to_array(list),
@@ -80,19 +79,12 @@ router.get('/:conf_id', (req, res) => {
     Instance.get_all(c.id, (list) => {
         console.log('instances', list)
 //                list = User.public_or_mine(list, req.user)
-        follow_storage.get_all_by_key(
-        [
-            { key_name: 'conf_id', value: c.id },
-            { key_name: 'user_id', value: req.user ? req.user.id : null }
-        ],
-        { limit: 1 },
-        (follows) => {
-            console.log('follow list', follows)
+        Following.follows_conf(req.user ? req.user.id : null, c.id, (follows) => {
             res.render('conf/show',
                 Object.assign(req.session.viewdata, {
                     title: 'Conference',
                     instances: list,
-                    following: (follows.size > 0) ? follows[0] : null,
+                    following: follows,
                     navconf: true,
                     perms: {
                         can_edit: User.can_edit(c, req.user),
@@ -149,8 +141,8 @@ router.post('/',
                 console.log('router got conf_id', conf_id)
                 Following.follow(
                     req.user,
-                    { conf_id },
-                    (id) => res.redirect('/conf/' + conf_id))
+                    conf_id,
+                    () => res.redirect('/conf/' + conf_id))
             })
         }
     }
