@@ -16,22 +16,11 @@ class Conf {
 
     static update(id, fields, done) {
         pool.query(
-            'UPDATE confs SET acronym=$2, name=$3, url=$4, format=$5, acceptance_rate=$6 WHERE id=$1',
+            'UPDATE confs SET acronym=$2, name=$3, url=$4, format=$5, acceptance_rate=$6 WHERE id=$1 RETURNING id',
             [ id, fields.acronym, fields.name, fields.url, fields.format, fields.acceptance_rate ],
             { single: true },
             (res) => {
                 done(id)
-            }
-        )
-    }
-
-    static del(id, f) {
-        pool.query(
-            'DELETE FROM confs WHERE id=$1',
-            [ id ],
-            null,
-            (res) => {
-                f(res)
             }
         )
     }
@@ -45,14 +34,14 @@ class Conf {
             })
     }
 
+    // generics
+
+    static del(id, f) {
+        return pool.del('confs', id, f)
+    }
+
     static get_by_id(id, f) {
-        console.log('Conf.get_by_id', id)
-        pool.query(
-            'SELECT * FROM confs WHERE id=$1 LIMIT 1',
-            [ id ],
-            { single: true },
-            (res) => { f(res) }
-        )
+        return pool.get_by_id('confs', id, (res) => { f(res) })
     }
 }
 

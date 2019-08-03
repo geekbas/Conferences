@@ -2,15 +2,16 @@ const express = require('express');
 const router = express.Router({mergeParams: true});
 const path = require('path');
 
+const Instance = require(path.join('..', 'modules', 'instance'))
+
 const Storage = require(path.join('..', 'modules', 'storage'))
-const instance_storage = new Storage('instances')
 const tracks_storage = new Storage('tracks')
 const date_storage = new Storage('dates')
 const User = require(path.join('..', 'modules', 'user'))
 
 router.param('instance_id',
     (req, res, next, instance_id) => {
-        instance_storage.get_by_id(instance_id,(ci) => {
+        Instance.get_by_id(instance_id, (ci) => {
             console.log('loaded', ci)
             req.session.instance = ci
             req.session.viewdata.instance = ci
@@ -95,7 +96,7 @@ router.delete('/:instance_id',
     (req, res, next) => { can_delete(req, res, next) },
     (req, res) => {
         console.log('delete instance', req.params.instance_id)
-        instance_storage.del(req.params.instance_id, () => {
+        Instance.del(req.params.instance_id, () => {
             res.redirect(req.session.viewdata.c_path)
         })
     }
@@ -109,7 +110,7 @@ router.post('/',
         if (!req.body.empty) {
             const user_id = req.user.id
             const conf_id = req.params.conf_id
-            instance_storage.add({
+            Instance.add({
                 conf_id: conf_id,
                 year: req.body.year,
                 added_by_user_id: user_id,
@@ -135,7 +136,7 @@ router.put('/:instance_id',
             conf_start: req.body.conf_start,
             conf_end: req.body.conf_end
         }
-        instance_storage.update(req.params.instance_id, updates, (id) => {
+        Instance.update(req.params.instance_id, updates, (id) => {
             res.redirect(req.session.viewdata.c_path + '/instance/' + id);
         })
     }

@@ -4,7 +4,7 @@ const path = require('path');
 
 const Storage = require(path.join('..', 'modules', 'storage'))
 const Conf = require(path.join('..', 'modules', 'conf'))
-const instance_storage = new Storage('instances')
+const Instance = require(path.join('..', 'modules', 'instance'))
 const follow_storage = new Storage('follows')
 const Following = require(path.join('..', 'modules', 'follow'))
 const User = require(path.join('..', 'modules', 'user'))
@@ -77,35 +77,32 @@ router.get('/', (req, res) => {
 router.get('/:conf_id', (req, res) => {
     const c = req.session.conf
     console.log('show', c)
-    instance_storage.get_all_by_key(
-        [ { key_name: 'conf_id', value: c.id } ],
-        { desc: 'year' },
-        (list) => {
-            console.log('instances', list)
+    Instance.get_all(c.id, (list) => {
+        console.log('instances', list)
 //                list = User.public_or_mine(list, req.user)
-            follow_storage.get_all_by_key(
-            [
-                { key_name: 'conf_id', value: c.id },
-                { key_name: 'user_id', value: req.user ? req.user.id : null }
-            ],
-            { limit: 1 },
-            (follows) => {
-                console.log('follow list', follows)
-                res.render('conf/show',
-                    Object.assign(req.session.viewdata, {
-                        title: 'Conference',
-                        instances: Storage.map_to_array(list),
-                        following: (follows.size > 0) ? follows[0] : null,
-                        navconf: true,
-                        perms: {
-                            can_edit: User.can_edit(c, req.user),
-                            can_delete: User.can_delete(c, req.user)
-                        },
-                        user: req.user
-                    })
-                )
-            })
+        follow_storage.get_all_by_key(
+        [
+            { key_name: 'conf_id', value: c.id },
+            { key_name: 'user_id', value: req.user ? req.user.id : null }
+        ],
+        { limit: 1 },
+        (follows) => {
+            console.log('follow list', follows)
+            res.render('conf/show',
+                Object.assign(req.session.viewdata, {
+                    title: 'Conference',
+                    instances: list,
+                    following: (follows.size > 0) ? follows[0] : null,
+                    navconf: true,
+                    perms: {
+                        can_edit: User.can_edit(c, req.user),
+                        can_delete: User.can_delete(c, req.user)
+                    },
+                    user: req.user
+                })
+            )
         })
+    })
 })
 
 // noinspection JSUnresolvedFunction
