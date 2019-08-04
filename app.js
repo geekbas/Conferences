@@ -27,7 +27,7 @@ auth(app)
 app.use('/', indexRouter);
 app.use('/conf', confRouter);
 app.use('/track', require(path.join(__dirname, 'routes', 'tracks')));
-app.use('/date', require(path.join(__dirname, 'routes', 'dates')));
+//app.use('/date', require(path.join(__dirname, 'routes', 'dates')));
 app.use('/follow', require(path.join(__dirname, 'routes', 'follows')));
 app.use('/user', require(path.join(__dirname, 'routes', 'users')));
 

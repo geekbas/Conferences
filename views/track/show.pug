@@ -42,31 +42,3 @@ block content
         if perms.can_delete
             form(method='POST', action=ci_path + '/track/' + track.id + '?_method=DELETE')
                 button(class='btn btn-sm btn-danger', type='submit') Delete
-
-    h3 Track Specific Dates
-    table(class='table table-sm')
-        thead
-            tr
-                th(scope='col') When
-                th(scope='col') What
-                th(scope='col') &nbsp;
-        tbody
-            tr
-                form(method='POST', action='/date')
-                    input(type='hidden', name='track_id', value=track.id)
-                    td
-                        input#date_when(type='date', name='datevalue')
-                    td(scope='row')
-                        input#date_what(type='text', name='what')
-                    td
-                        button(class='btn btn-sm', type='submit') New
-
-            if (track.dates)
-                each val in track.dates
-                    tr
-                        td #{val.datevalue}
-                        td #{val.what}
-                        td
-                            form(method='POST', action='/date/' + val.id + '?_method=DELETE')
-                                input(type='hidden', name='track_id', value=track.id)
-                                button(class='btn btn-sm btn-danger', type='submit') Delete

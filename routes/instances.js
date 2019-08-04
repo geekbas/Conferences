@@ -4,10 +4,6 @@ const path = require('path');
 
 const Instance = require(path.join('..', 'modules', 'instance'))
 const Track = require(path.join('..', 'modules', 'track'))
-
-const Storage = require(path.join('..', 'modules', 'storage'))
-const tracks_storage = new Storage('tracks')
-const date_storage = new Storage('dates')
 const User = require(path.join('..', 'modules', 'user'))
 
 router.param('instance_id',
@@ -53,25 +49,19 @@ function can_delete(req, res, next) {
 function get_one(req, done) {
     console.log('instances/get_one, params =', req.params)
     const ci = req.session.instance
-    date_storage.get_all_by_key(
-        [ { key_name: 'instance_id', value: ci.id } ],
-        { asc: 'datevalue' },
-        (c_dates) => {
-        console.log('ci_dates', c_dates)
-        Track.get_all(ci.id, (tracks) => {
-            console.log('tracks', tracks)
-            done(
-                Object.assign(req.session.viewdata, {
-                    instance: Object.assign(ci, { dates: Storage.map_to_array(c_dates) }),
-                    tracks: tracks,
-                    perms: {
-                        can_edit: User.can_edit(ci, req.user),
-                        can_delete: User.can_delete(ci, req.user)
-                    },
-                    user: req.user
-                })
-            )
-        })
+    Track.get_all(ci.id, (tracks) => {
+        console.log('tracks', tracks)
+        done(
+            Object.assign(req.session.viewdata, {
+                instance: ci,
+                tracks: tracks,
+                perms: {
+                    can_edit: User.can_edit(ci, req.user),
+                    can_delete: User.can_delete(ci, req.user)
+                },
+                user: req.user
+            })
+        )
     })
 }
 
@@ -127,9 +117,9 @@ router.put('/:instance_id',
         const updates = {
             year: req.body.year,
             url: req.body.url,
-            submission: req.body.submission,
-            notification: req.body.notification,
-            camera_ready: req.body.camera_ready,
+//            submission: req.body.submission,
+//            notification: req.body.notification,
+//            camera_ready: req.body.camera_ready,
             conf_start: req.body.conf_start,
             conf_end: req.body.conf_end
         }

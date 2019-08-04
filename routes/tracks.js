@@ -3,8 +3,6 @@ const router = express.Router({mergeParams: true});
 const path = require('path');
 
 const Track = require(path.join('..', 'modules', 'track'))
-const Storage = require(path.join('..', 'modules', 'storage'))
-const date_storage = new Storage('dates')
 const User = require(path.join('..', 'modules', 'user'))
 
 router.param('track_id',
@@ -67,21 +65,14 @@ router.post('/',
 
 function get_one(req, done) {
     const track = req.session.track
-    console.log('show', track)
-    date_storage.get_all_by_key(
-        [ { key_name: 'track_id', value: track.id } ],
-        { asc: 'datevalue' },
-        (dates) => {
-            done(Object.assign(req.session.viewdata, {
-                track: Object.assign(track, { dates: Storage.map_to_array(dates) }),
-                perms: {
-                    can_edit: User.can_edit(track, req.user),
-                    can_delete: User.can_delete(track, req.user)
-                },
-                user: req.user
-                })
-            )
-        })
+    done(Object.assign(req.session.viewdata, {
+        track: track,
+        perms: {
+            can_edit: User.can_edit(track, req.user),
+            can_delete: User.can_delete(track, req.user)
+        },
+        user: req.user
+    }))
 }
 
 // noinspection JSUnresolvedFunction

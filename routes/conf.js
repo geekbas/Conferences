@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 const path = require('path');
 
-const Storage = require(path.join('..', 'modules', 'storage'))
 const Conf = require(path.join('..', 'modules', 'conf'))
 const Instance = require(path.join('..', 'modules', 'instance'))
 const Following = require(path.join('..', 'modules', 'follow'))
