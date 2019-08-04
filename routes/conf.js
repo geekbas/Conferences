@@ -52,17 +52,17 @@ function can_delete_conf(req, res, next) {
 // noinspection JSUnresolvedFunction
 router.get('/', (req, res) => {
     console.log('conf list, show_all =', req.session.show_all)
-    Conf.get_all(null, (confs) => {
+    Conf.get_all({ as_array: true }, (confs) => {
 //        confs = User.public_or_mine(confs, req.user)
         Following.select_followed(
             confs,
             req.session.show_all ? null : req.user,
-            new Map(),
+            [],
             (list) => {
 //                console.log('got follow list', list)
                 res.render('index', {
                     title: 'Conferences',
-                    confs: Storage.map_to_array(list),
+                    confs: list,
                     navconf: true,
                     show_all: !!req.session.show_all,
                     user: req.user

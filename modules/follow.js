@@ -40,30 +40,26 @@ class Following {
             () => { done() })
     }
 
-    static select_followed(list, user, filtered_list, done) {
+    static select_followed(entries, user, filtered_list, done) {
         if (!user) {
 //            console.log('no filter')
-            return done(list)
+            return done(entries)
         }
 //        console.log('filtered so far', filtered_list)
-        const obj_id = list.keys().next().value
-//        console.log('select_followed, next id is', obj_id)
-        if ((list.size < 1) || (obj_id === undefined)) {
+        const obj = entries.shift()
+        if (obj === undefined) {
             return done(filtered_list)
         }
-        const obj = list.get(obj_id)
-//        console.log('check', obj, 'filter on conf_id=', obj_id)
         pool.query(
             'SELECT COUNT(*) AS count FROM follows WHERE conf_id=$1 AND user_id=$2',
-            [ obj_id, user.id ],
+            [ obj.id, user.id ],
             { single: true },
             (res) => {
 //                console.log('got res', res, 'for conf', obj_id)
                 if (res.count > 0) {
-                    filtered_list.set(obj_id, obj)
+                    filtered_list.push(obj)
                 }
-                list.delete(obj_id)
-                return Following.select_followed(list, user, filtered_list, done)
+                return Following.select_followed(entries, user, filtered_list, done)
             })
     }
 
