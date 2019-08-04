@@ -2,14 +2,14 @@ const express = require('express');
 const router = express.Router({mergeParams: true});
 const path = require('path');
 
+const Track = require(path.join('..', 'modules', 'track'))
 const Storage = require(path.join('..', 'modules', 'storage'))
-const tracks_storage = new Storage('tracks')
 const date_storage = new Storage('dates')
 const User = require(path.join('..', 'modules', 'user'))
 
 router.param('track_id',
     (req, res, next, track_id) => {
-        tracks_storage.get_by_id(track_id,(track) => {
+        Track.get_by_id(track_id, (track) => {
             console.log('loaded', track)
             req.session.track = track
             req.session.viewdata.track = track
@@ -53,7 +53,7 @@ router.post('/',
         if (!req.body.empty) {
             const user_id = req.user.id
             const instance_id = req.params.instance_id
-            tracks_storage.add({
+            Track.add({
                 instance_id: instance_id,
                 name: req.body.name,
                 added_by_user_id: user_id,
@@ -109,7 +109,7 @@ router.put('/:track_id',
             including_references: !!req.body.including_references,
             double_blind: !!req.body.double_blind
         }
-        tracks_storage.update(req.params.track_id, updates, (id) => {
+        Track.update(req.params.track_id, updates, (id) => {
             res.redirect(req.session.viewdata.ci_path + '/track/' + id)
         })
     }
@@ -120,7 +120,7 @@ router.delete('/:track_id',
     (req, res, next) => { can_edit(req, res, next) },
     (req, res) => {
         console.log('delete track', req.params.track_id)
-        tracks_storage.del(req.params.track_id, (track) => {
+        Track.del(req.params.track_id, () => {
             res.redirect(req.session.viewdata.ci_path)
         })
     }

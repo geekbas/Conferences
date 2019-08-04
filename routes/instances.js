@@ -3,6 +3,7 @@ const router = express.Router({mergeParams: true});
 const path = require('path');
 
 const Instance = require(path.join('..', 'modules', 'instance'))
+const Track = require(path.join('..', 'modules', 'track'))
 
 const Storage = require(path.join('..', 'modules', 'storage'))
 const tracks_storage = new Storage('tracks')
@@ -57,24 +58,20 @@ function get_one(req, done) {
         { asc: 'datevalue' },
         (c_dates) => {
         console.log('ci_dates', c_dates)
-        tracks_storage.get_all_by_key(
-            [ { key_name: 'instance_id', value: ci.id } ],
-            null,
-            (list) => {
-                console.log('tracks', list)
-//                        list = User.public_or_mine(list, req.user)
-                done(
-                    Object.assign(req.session.viewdata, {
-                        instance: Object.assign(ci, { dates: Storage.map_to_array(c_dates) }),
-                        tracks: Storage.map_to_array(list),
-                        perms: {
-                            can_edit: User.can_edit(ci, req.user),
-                            can_delete: User.can_delete(ci, req.user)
-                        },
-                        user: req.user
-                    })
-                )
-            })
+        Track.get_all(ci.id, (tracks) => {
+            console.log('tracks', tracks)
+            done(
+                Object.assign(req.session.viewdata, {
+                    instance: Object.assign(ci, { dates: Storage.map_to_array(c_dates) }),
+                    tracks: tracks,
+                    perms: {
+                        can_edit: User.can_edit(ci, req.user),
+                        can_delete: User.can_delete(ci, req.user)
+                    },
+                    user: req.user
+                })
+            )
+        })
     })
 }
 
