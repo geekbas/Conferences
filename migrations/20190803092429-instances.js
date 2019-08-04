@@ -25,7 +25,7 @@ exports.up = function(db) {
     added_by_user_id: 'int',
     private_for_user_id: 'int',
     url: 'string',
-    year: 'string',
+    year: 'int',
     // dates later
   })
 };
