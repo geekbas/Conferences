@@ -22,7 +22,7 @@ function format_dates(entry, options) {
 function query(sql, params, options, done) {
     pool.query(
         sql,
-        params.map((entry) => entry === '' ? null : entry),
+        params ? params.map((entry) => entry === '' ? null : entry) : null,
         (err, res) => {
         if (err) throw err
 

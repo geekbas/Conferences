@@ -27,16 +27,14 @@ class Conf {
     }
 
     static get_all(options, f) {
-        let sql = 'SELECT * FROM confs c'
+        let sql = 'SELECT c.* FROM confs c'
+        let params = []
         if (options && options.followed_by) {
-            sql += ' INNER JOIN follows f ON f.conf_id=c.id'
+            sql += ' INNER JOIN follows f ON f.conf_id=c.id AND f.user_id=$1'
+            params.push(options.followed_by)
         }
         sql += ' ORDER BY c.name ASC'
-        pool.query(sql,
-            null,
-            (options && options.as_array) ? { as_array: true } : null, (res) => {
-                f(res)
-            })
+        pool.query(sql, params, options, (res) => { f(res) })
     }
 
     // generics
