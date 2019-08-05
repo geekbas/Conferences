@@ -9,7 +9,7 @@ const User = require(path.join('..', 'modules', 'user'))
 router.param('instance_id',
     (req, res, next, instance_id) => {
         Instance.get_by_id(instance_id, (ci) => {
-            console.log('loaded', ci)
+            console.log('loaded instance', ci)
             req.session.instance = ci
             req.session.viewdata.instance = ci
             req.session.viewdata.ci_path = req.session.viewdata.c_path + '/instance/' + ci.id
@@ -50,7 +50,7 @@ function get_one(req, done) {
     console.log('instances/get_one, params =', req.params)
     const ci = req.session.instance
     Track.get_all(ci.id, (tracks) => {
-        console.log('tracks', tracks)
+//        console.log('tracks', tracks)
         done(
             Object.assign(req.session.viewdata, {
                 instance: ci,

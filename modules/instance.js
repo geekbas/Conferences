@@ -1,4 +1,5 @@
 const pool = require('./pgpool')
+const moment = require('moment')
 
 class Instance {
 
@@ -34,7 +35,14 @@ class Instance {
     }
 
     static get_by_id(id, f) {
-        return pool.get_by_id('instances', id, (res) => { f(res) })
+        return pool.get_by_id('instances', id, (obj) => {
+            if (!obj) return f(obj)
+            if (obj.conf_start)
+                obj.conf_start = moment(obj.conf_start).format('YYYY-MM-DD')
+            if (obj.conf_end)
+                obj.conf_end = moment(obj.conf_end).format('YYYY-MM-DD')
+            f(obj)
+        })
     }
 }
 
