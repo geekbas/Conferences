@@ -1,5 +1,7 @@
 const pool = require('./pgpool')
 
+const date_fields = [ 'submission', 'notification', 'camera_ready' ]
+
 class Track {
     static add(fields, done) {
         pool.query(
@@ -30,8 +32,23 @@ class Track {
     static get_all(instance_id, f) {
         pool.query('SELECT * FROM tracks where instance_id=$1 ORDER BY name ASC',
             [ instance_id ],
-            { as_array: true },
-            (res) => { f(res) })
+            { as_array: true, date_fields },
+            (res) => {
+                let dates = []
+                res.forEach((entry) => {
+                    date_fields.forEach((field) => {
+                        if (entry[field]) {
+                            dates.push({
+                                what: field.replace('_', ' '),
+                                when: entry[field],
+                                track_id: entry.id,
+                                name: entry.name
+                            })
+                        }
+                    })
+                })
+                f(res, dates)
+            })
     }
 
     static del(id, f) {
@@ -39,11 +56,7 @@ class Track {
     }
 
     static get_by_id(id, f) {
-        return pool.get_by_id(
-            'tracks',
-            id,
-            { date_fields: [ 'submission', 'notification', 'camera_ready' ] },
-            (obj) => { f(obj) })
+        return pool.get_by_id('tracks', id, { date_fields }, (obj) => { f(obj) })
     }
 }
 

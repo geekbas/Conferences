@@ -9,6 +9,16 @@ const pool = new Pool({
 
 const moment = require('moment')
 
+function format_dates(entry, options) {
+    if (entry && options && options.date_fields) {
+        options.date_fields.forEach((field) => {
+            if (entry[field])
+                entry[field] = moment(entry[field]).format('YYYY-MM-DD')
+        })
+    }
+    return entry
+}
+
 function query(sql, params, options, done) {
     pool.query(
         sql,
@@ -18,7 +28,7 @@ function query(sql, params, options, done) {
 
         if (options && options.single) {
             if (res.rowCount > 0) {
-                const obj = res.rows[0]
+                const obj = format_dates(res.rows[0], options)
                 return done(obj)
             } else {
                 return done(null)
@@ -27,7 +37,7 @@ function query(sql, params, options, done) {
 
         if (options && options.as_array) {
             let an_array = []
-            res.rows.forEach((entry) => an_array.push(entry))
+            res.rows.forEach((entry) => an_array.push(format_dates(entry, options)))
             return done(an_array)
         }
 
@@ -35,7 +45,7 @@ function query(sql, params, options, done) {
         res.rows.forEach((entry) => {
 //                console.log(entry.id, entry.data());
 //                const d = this.fix_types(entry.data())
-            list.set(entry.id, entry)
+            list.set(entry.id, format_dates(entry, options))
         })
         done(list)
     })
@@ -62,16 +72,8 @@ function get_by_id(table, id, options, f) {
     return query(
         'SELECT * FROM ' + table + ' WHERE id=$1 LIMIT 1',
         [ id ],
-        { single: true },
-        (res) => {
-            if (res && options && options.date_fields) {
-                options.date_fields.forEach((field) => {
-                    if (res[field])
-                        res[field] = moment(res[field]).format('YYYY-MM-DD')
-                })
-            }
-            f(res)
-        })
+        Object.assign({ single: true }, options),
+        (res) => { f(res) })
 }
 
 module.exports = {

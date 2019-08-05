@@ -1,6 +1,8 @@
 const pool = require('./pgpool')
 
-class Instance {
+const date_fields = [ 'conf_start', 'conf_end' ]
+
+    class Instance {
 
     static add(fields, done) {
         pool.query(
@@ -35,8 +37,19 @@ class Instance {
         return pool.get_by_id(
             'instances',
             id,
-            { date_fields: [ 'conf_start', 'conf_end' ] },
-            (obj) => { f(obj) })
+            { date_fields },
+            (entry) => {
+                let dates = []
+                date_fields.forEach((field) => {
+                    if (entry[field]) {
+                        dates.push({
+                            what: field.replace('conf_', ''),
+                            when: entry[field]
+                        })
+                    }
+                })
+                f(entry, dates)
+            })
     }
 }
 

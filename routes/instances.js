@@ -8,9 +8,10 @@ const User = require(path.join('..', 'modules', 'user'))
 
 router.param('instance_id',
     (req, res, next, instance_id) => {
-        Instance.get_by_id(instance_id, (ci) => {
-            console.log('loaded instance', ci)
+        Instance.get_by_id(instance_id, (ci, dates) => {
+            console.log('loaded instance', ci, 'with dates', dates)
             req.session.instance = ci
+            req.session.instance_dates = dates
             req.session.viewdata.instance = ci
             req.session.viewdata.ci_path = req.session.viewdata.c_path + '/instance/' + ci.id
             next()
@@ -49,12 +50,14 @@ function can_delete(req, res, next) {
 function get_one(req, done) {
     console.log('instances/get_one, params =', req.params)
     const ci = req.session.instance
-    Track.get_all(ci.id, (tracks) => {
+    Track.get_all(ci.id, (tracks, dates) => {
 //        console.log('tracks', tracks)
+//        console.log('dates', dates)
         done(
             Object.assign(req.session.viewdata, {
                 instance: ci,
                 tracks: tracks,
+                dates: dates.concat(req.session.instance_dates).sort((a, b) => { return a.when >= b.when }),
                 perms: {
                     can_edit: User.can_edit(ci, req.user),
                     can_delete: User.can_delete(ci, req.user)

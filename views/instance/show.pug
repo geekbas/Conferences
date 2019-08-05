@@ -60,30 +60,13 @@ block content
                         td
                             button(class='btn btn-sm', type='submit') New
 
-            //
-                if (instance.submission)
-                    tr
-                        td #{instance.submission}
-                        td Submission
-                        td &nbsp;
-                if (instance.notification)
-                    tr
-                        td #{instance.notification}
-                        td Notification
-                        td &nbsp;
-                if (instance.camera_ready)
-                    tr
-                        td #{instance.camera_ready}
-                        td Camera ready
-                        td &nbsp;
-
-            if (instance.conf_start)
+            each entry in dates
                 tr
-                    td #{instance.conf_start}
-                    td Conference start
-                    td &nbsp;
-            if (instance.conf_end)
-                tr
-                    td #{instance.conf_end}
-                    td Conference end
+                    td #{entry.when}
+                    td
+                        if entry.track_id
+                            a(href=ci_path + '/track/' + entry.track_id) #{entry.name}
+                            | , #{entry.what}
+                        else
+                            | Conference #{entry.what}
                     td &nbsp;
