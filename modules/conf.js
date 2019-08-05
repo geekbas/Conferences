@@ -48,7 +48,7 @@ class Conf {
     }
 
     static get_by_id(id, f) {
-        return pool.get_by_id('confs', id, (res) => { f(res) })
+        return pool.get_by_id('confs', id, null, (res) => { f(res) })
     }
 }
 

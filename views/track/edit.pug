@@ -27,6 +27,22 @@ block content
                 label(for='double_blind', class="col-sm-2 col-form-label") Double blind?
                 input#double_blind(class='form-control col-sm-10', type='checkbox', name='double_blind',
                     checked=track.double_blind)
+
+            div(class='form-group row')
+                label(for='submission', class="col-sm-2 col-form-label") Submission:
+                input#submission(class='form-control col-sm-10', type='date', name='submission',
+                    value=track.submission)
+
+            div(class='form-group row')
+                label(for='notification', class="col-sm-2 col-form-label") Notification:
+                input#notification(class='form-control col-sm-10', type='date', name='notification',
+                    value=track.notification)
+
+            div(class='form-group row')
+                label(for='camera_ready', class="col-sm-2 col-form-label") Camera ready:
+                input#camera_ready(class='form-control col-sm-10', type='date', name='camera_ready',
+                    value=track.camera_ready)
+
             div(class='form-group row')
                 div(class='button')
                     button(class='btn btn-sm btn-primary mr-3', type='submit') Update

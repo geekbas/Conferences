@@ -35,6 +35,30 @@ block content
                     else
                         | No
 
+    h3 Dates
+    table(class='table table-sm')
+        thead
+            tr
+                th(scope='col') When
+                th(scope='col') What
+                th(scope='col') &nbsp;
+        tbody
+            if (track.submission)
+                tr
+                    td #{track.submission}
+                    td Submission
+                    td &nbsp;
+            if (track.notification)
+                tr
+                    td #{track.notification}
+                    td Notification
+                    td &nbsp;
+            if (track.camera_ready)
+                tr
+                    td #{track.camera_ready}
+                    td Camera ready
+                    td &nbsp;
+
     div(class="input-group mb-3")
         if perms.can_edit
             a(href=ci_path + '/track/' + track.id + '/edit')

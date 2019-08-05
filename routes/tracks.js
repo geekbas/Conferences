@@ -98,7 +98,10 @@ router.put('/:track_id',
             url: req.body.url,
             page_limit: req.body.page_limit,
             including_references: !!req.body.including_references,
-            double_blind: !!req.body.double_blind
+            double_blind: !!req.body.double_blind,
+            submission: req.body.submission,
+            notification: req.body.notification,
+            camera_ready: req.body.camera_ready,
         }
         Track.update(req.params.track_id, updates, (id) => {
             res.redirect(req.session.viewdata.ci_path + '/track/' + id)

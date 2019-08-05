@@ -7,8 +7,13 @@ const pool = new Pool({
 })
 //console.log('pool', pool)
 
+const moment = require('moment')
+
 function query(sql, params, options, done) {
-    pool.query(sql, params, (err, res) => {
+    pool.query(
+        sql,
+        params.map((entry) => entry === '' ? null : entry),
+        (err, res) => {
         if (err) throw err
 
         if (options && options.single) {
@@ -53,12 +58,20 @@ function del(table, id, f) {
         (res) => { f(res) })
 }
 
-function get_by_id(table, id, f) {
+function get_by_id(table, id, options, f) {
     return query(
         'SELECT * FROM ' + table + ' WHERE id=$1 LIMIT 1',
         [ id ],
         { single: true },
-        (res) => { f(res) })
+        (res) => {
+            if (res && options && options.date_fields) {
+                options.date_fields.forEach((field) => {
+                    if (res[field])
+                        res[field] = moment(res[field]).format('YYYY-MM-DD')
+                })
+            }
+            f(res)
+        })
 }
 
 module.exports = {

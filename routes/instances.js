@@ -117,9 +117,6 @@ router.put('/:instance_id',
         const updates = {
             year: req.body.year,
             url: req.body.url,
-//            submission: req.body.submission,
-//            notification: req.body.notification,
-//            camera_ready: req.body.camera_ready,
             conf_start: req.body.conf_start,
             conf_end: req.body.conf_end
         }
