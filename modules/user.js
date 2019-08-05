@@ -16,7 +16,7 @@ class User {
                         done()
                         throw err
                     }
-                    console.log('result', res)
+//                    console.log('result', res)
                     if (res.rowCount > 0) {
                         done()
                         const user = res.rows[0]
@@ -46,7 +46,7 @@ class User {
             [ id ],
             { single: true },
             (res) => {
-                console.log('result', res)
+//                console.log('result', res)
                 f(null, res)
             }
         )

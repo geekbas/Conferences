@@ -3,12 +3,6 @@ extends layout
 block content
     h2 Upcoming events
 
-    if (user)
-        form(method='POST', action='/follow/filter')
-            label(for='show_all', class="col-sm-2 col-form-label") Show all:
-            input#show_all(type='checkbox', name='show_all' class='mr-3' checked=show_all)
-            button(class='btn btn-sm btn-secondary', type='submit') Filter
-
     table(class='table table-sm table-striped')
         thead
             tr
@@ -20,12 +14,12 @@ block content
         tbody
         each date in dates
             tr
-                th(scope='row') #{date.datevalue}
+                th(scope='row') #{date.when}
                 td
-                    a(href=date.c_path) #{date.conf.name}
+                    a(href=date.c_path) #{date.conf_name}
                 td
-                    a(href=date.ci_path) #{date.instance.year}
+                    a(href=date.ci_path) #{date.instance_year}
                 td #{date.what}
                 td
-                    if (date.track)
-                        a(href=date.ci_path + '/track/' + date.track.id) #{date.track.name}
+                    if (date.track_id)
+                        a(href=date.ci_path + '/track/' + date.track_id) #{date.track_name}

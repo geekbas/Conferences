@@ -2,7 +2,23 @@ const pool = require('./pgpool')
 
 const date_fields = [ 'conf_start', 'conf_end' ]
 
-    class Instance {
+function get_dates(entry) {
+    let dates = []
+    date_fields.forEach((field) => {
+        if (entry[field]) {
+            dates.push({
+                what: field.replace('conf_', ''),
+                when: entry[field],
+                conf_id: entry.conf_id,
+                instance_id: entry.id,
+                instance_year: entry.year
+            })
+        }
+    })
+    return dates
+}
+
+class Instance {
 
     static add(fields, done) {
         pool.query(
@@ -25,8 +41,27 @@ const date_fields = [ 'conf_start', 'conf_end' ]
     static get_all(id, f) {
         pool.query('SELECT * FROM instances where conf_id=$1 ORDER BY year DESC',
             [ id ],
-            { as_array: true },
-            (res) => { f(res) })
+            { as_array: true, date_fields },
+            (res) => {
+                let dates = []
+                res.forEach((entry) => {
+                    Array.prototype.push.apply(dates, get_dates(entry))
+                })
+                f(res, dates)
+            })
+    }
+
+    static get_all_for(ids, f) {
+        pool.query('SELECT * FROM instances where conf_id=ANY($1) ORDER BY year DESC',
+            [ ids ],
+            { as_array: true, date_fields },
+            (res) => {
+                let dates = []
+                res.forEach((entry) => {
+                    Array.prototype.push.apply(dates, get_dates(entry))
+                })
+                f(res, dates)
+            })
     }
 
     static del(id, f) {
@@ -39,16 +74,7 @@ const date_fields = [ 'conf_start', 'conf_end' ]
             id,
             { date_fields },
             (entry) => {
-                let dates = []
-                date_fields.forEach((field) => {
-                    if (entry[field]) {
-                        dates.push({
-                            what: field.replace('conf_', ''),
-                            when: entry[field]
-                        })
-                    }
-                })
-                f(entry, dates)
+                f(entry, get_dates(entry))
             })
     }
 }
