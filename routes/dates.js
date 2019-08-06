@@ -22,7 +22,7 @@ router.get('/', (req, res) => {
             Track.get_all_for(
                 instances.map(i => i.id),
                 (tracks, tdates) => {
-                    console.log('got tdates', tdates)
+//                    console.log('got tdates', tdates)
                     let dates = [];
                     (cidates.concat(tdates)).forEach((cidate) => {
                         let c_path = '/conf/' + cidate.conf_id

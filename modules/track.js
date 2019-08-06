@@ -69,7 +69,7 @@ class Track {
             [ instance_ids ],
             { as_array: true, date_fields },
             (res) => {
-                console.log('got all tracks', res)
+//                console.log('got all tracks', res)
                 let dates = []
                 res.forEach((entry) => {
                     Array.prototype.push.apply(dates, this.get_dates(entry))
