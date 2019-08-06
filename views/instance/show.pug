@@ -65,8 +65,7 @@ block content
                     td #{entry.when}
                     td
                         if entry.track_id
-                            a(href=ci_path + '/track/' + entry.track_id) #{entry.name}
-                            | , #{entry.what}
-                        else
-                            | Conference #{entry.what}
+                            a(href=ci_path + '/track/' + entry.track_id) #{entry.track_name}
+                            | ,&nbsp;
+                        | #{entry.what}
                     td &nbsp;

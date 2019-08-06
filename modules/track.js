@@ -30,25 +30,53 @@ class Track {
     }
 
     static get_all(instance_id, f) {
-        pool.query('SELECT * FROM tracks where instance_id=$1 ORDER BY name ASC',
+        pool.query('SELECT * FROM tracks WHERE instance_id=$1 ORDER BY name ASC',
             [ instance_id ],
             { as_array: true, date_fields },
             (res) => {
                 let dates = []
                 res.forEach((entry) => {
-                    date_fields.forEach((field) => {
-                        if (entry[field]) {
-                            dates.push({
-                                what: field.replace('_', ' '),
-                                when: entry[field],
-                                track_id: entry.id,
-                                name: entry.name
-                            })
-                        }
-                    })
+                    Array.prototype.push.apply(dates, this.get_dates(entry))
                 })
                 f(res, dates)
             })
+    }
+
+    static get_dates(entry) {
+        let dates = []
+        date_fields.forEach((field) => {
+            if (entry[field]) {
+                let dentry = {
+                    what: field.replace('_', ' '),
+                    when: entry[field],
+                    track_id: entry.id,
+                    instance_id: entry.instance_id,
+                    instance_year: entry.year,
+                    conf_id: entry.conf_id,
+                    track_name: entry.name,
+                }
+                dates.push(dentry)
+            }
+        })
+        return dates
+    }
+
+    static get_all_for(instance_ids, f) {
+        pool.query(
+            'SELECT t.*, i.conf_id, i.year FROM tracks t' +
+            ' INNER JOIN instances i ON t.instance_id=i.id' +
+            ' WHERE i.id=ANY($1)',
+            [ instance_ids ],
+            { as_array: true, date_fields },
+            (res) => {
+                console.log('got all tracks', res)
+                let dates = []
+                res.forEach((entry) => {
+                    Array.prototype.push.apply(dates, this.get_dates(entry))
+                })
+                f(res, dates)
+            }
+        )
     }
 
     static del(id, f) {

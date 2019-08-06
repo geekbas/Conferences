@@ -10,16 +10,17 @@ block content
                 th(scope='col') Conference
                 th(scope='col') Year/Instance
                 th(scope='col') What
-                th(scope='col') Track
         tbody
         each date in dates
             tr
                 th(scope='row') #{date.when}
                 td
-                    a(href=date.c_path) #{date.conf_name}
+                    a(href=date.c_path) #{date.conf.name}
+                    | &nbsp;(#{date.conf.acronym})
                 td
                     a(href=date.ci_path) #{date.instance_year}
-                td #{date.what}
                 td
                     if (date.track_id)
                         a(href=date.ci_path + '/track/' + date.track_id) #{date.track_name}
+                        | ,&nbsp;
+                    | #{date.what}
