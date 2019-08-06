@@ -14,12 +14,7 @@ router.get('/', (req, res) => {
     Conf.get_all({ followed_by: req.user.id }, (confs) => {
 //        console.log('dates/get confs', confs)
         let conf_ids = []
-        let conf_itor = confs.values()
-        let it = conf_itor.next()
-        while (!it.done) {
-            conf_ids.push(it.value.id)
-            it = conf_itor.next()
-        }
+        confs.forEach((value, key) => conf_ids.push(key))
         Instance.get_all_for(conf_ids,
             (instances, cidates) => {
 //            console.log('got instance list', instances)
