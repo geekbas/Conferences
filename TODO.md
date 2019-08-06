@@ -8,30 +8,23 @@ Items further down on the list may depend on items higher up.
 
 ### Usable for others
 
-* Store in local postgres
-  * dates
+* Submissions
+  * Links
+    * Overleaf
+    * EasyChair?
+  * If submitted to a particular CFP:
+    * Which ones get blocked out?
+    * Which are the fallbacks?
 * User profile page
   * Admin flag
   * Admins can
     * List/search users
     * Promote to Admin
     * Update/Delete public stuff
-* Personal stuff: dates
-  * new field: added_by_user_id
-  * new field: private_for_user_id
-* Submissions
-  * Links
-    * Overleaf
-    * EasyChair
-  * If submitted to a particular CFPA:
-    * Which ones get blocked out?
-    * Which are the fallbacks?
 * Delete confirmation popups
-* /date below both instance and track?
 * Find a better product name?
   * "Submission planner"
 * Dates
-  * fixed instance dates
   * gruppera på år och månad
 * Twitter-auth?
 * Mastodon-auth?
