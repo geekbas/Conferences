@@ -1,7 +1,4 @@
 
-const path = require('path')
-const Storage = require(path.join('..', 'modules', 'storage'))
-
 const pool = require('./pgpool')
 
 class Following {
