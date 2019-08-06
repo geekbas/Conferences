@@ -12,6 +12,7 @@ Items further down on the list may depend on items higher up.
   * Links
     * Overleaf
     * EasyChair?
+  * Only see own entries
   * If submitted to a particular CFP:
     * Which ones get blocked out?
     * Which are the fallbacks?

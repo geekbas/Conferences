@@ -4,11 +4,12 @@ const path = require('path');
 
 const Track = require(path.join('..', 'modules', 'track'))
 const User = require(path.join('..', 'modules', 'user'))
+const Submission = require(path.join('..', 'modules', 'submission'))
 
 router.param('track_id',
     (req, res, next, track_id) => {
         Track.get_by_id(track_id, (track) => {
-            console.log('loaded', track)
+            console.log('loaded track', track)
             req.session.track = track
             req.session.viewdata.track = track
             req.session.viewdata.track_path = req.session.viewdata.ci_path + '/track/' + track.id
@@ -16,6 +17,8 @@ router.param('track_id',
         })
     }
 )
+
+router.use('/:track_id/submission', require('./submissions'));
 
 function require_user(req, res, next, return_path) {
     console.log('require_user, user is', req.user)
@@ -65,14 +68,17 @@ router.post('/',
 
 function get_one(req, done) {
     const track = req.session.track
-    done(Object.assign(req.session.viewdata, {
-        track: track,
-        perms: {
-            can_edit: User.can_edit(track, req.user),
-            can_delete: User.can_delete(track, req.user)
-        },
-        user: req.user
-    }))
+    Submission.get_all(track.id, req.user ? req.user.id : null, (submissions) => {
+        done(Object.assign(req.session.viewdata, {
+            track: track,
+            submissions,
+            perms: {
+                can_edit: User.can_edit(track, req.user),
+                can_delete: User.can_delete(track, req.user)
+            },
+            user: req.user
+        }))
+    })
 }
 
 // noinspection JSUnresolvedFunction

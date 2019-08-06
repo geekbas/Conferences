@@ -16,7 +16,7 @@ block content
             tr
                 th(scope='row') URL
                 td
-                    a(href=track.url) #{track.url}
+                    a(href=track.url, target='_blank') #{track.url}
             tr
                 th(scope='row') Page limit
                 td
@@ -61,8 +61,25 @@ block content
 
     div(class="input-group mb-3")
         if perms.can_edit
-            a(href=ci_path + '/track/' + track.id + '/edit')
+            a(href=track_path + '/edit')
                 button(class='btn btn-sm btn-info', type='submit') Edit
         if perms.can_delete
-            form(method='POST', action=ci_path + '/track/' + track.id + '?_method=DELETE')
+            form(method='POST', action=track_path + '?_method=DELETE')
                 button(class='btn btn-sm btn-danger', type='submit') Delete
+
+    if (user)
+        h3 Submissions
+        table(class='table table-sm')
+            thead
+                tr
+                    th(scope='col') Title
+                    th(scope='col') URL
+            tbody
+                each entry in submissions
+                    tr
+                        td
+                            a(href=track_path + '/submission/' + entry.id)
+                                | #{entry.title}
+                        td
+                            if (entry.url)
+                                a(href=entry.url, target='_blank') #{entry.url}

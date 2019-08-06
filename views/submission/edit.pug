@@ -1,0 +1,30 @@
+extends ../layout
+
+block content
+
+    h2 Submission
+
+    p
+    | For&nbsp;
+    a(href=c_path)
+        | #{conf.name},
+    | &nbsp;
+    a(href=ci_path)
+        | #{instance.year}
+    | ,&nbsp;
+    a(href=track_path)
+        | #{track.name}
+
+    p
+        form(method='post', action=submission_path + '?_method=PUT')
+            div(class='form-group row')
+                label(for='title', class="col-sm-2 col-form-label") Title:
+                input#name(class='form-control col-sm-10', type='text', name='title', value=submission.title)
+            div(class='form-group row')
+                label(for='url', class="col-sm-2 col-form-label") URL:
+                input#url(class='form-control col-sm-10', type='url', name='url', value=submission.url)
+
+            div(class='form-group row')
+                div(class='button')
+                    button(class='btn btn-sm btn-primary mr-3', type='submit') Update
+                    a(href=submission_path, class='btn btn-sm btn-primary') Cancel

@@ -1,0 +1,30 @@
+extends ../layout
+
+block content
+
+    h2 Submission: #{submission.title}
+
+    p
+    | For&nbsp;
+    a(href=c_path)
+        | #{conf.name},
+    | &nbsp;
+    a(href=ci_path)
+        | #{instance.year}
+    | ,&nbsp;
+    a(href=track_path)
+        | #{track.name}
+
+    p
+        table(class='table table-sm')
+            tbody
+                tr
+                    th(scope='row') URL
+                    td
+                        a(href=submission.url, target='_blank') #{submission.url}
+
+    p
+        a(href=submission_path + '/edit')
+            button(class='btn btn-sm btn-info', type='submit') Edit
+        form(method='POST', action=submission_path + '?_method=DELETE')
+            button(class='btn btn-sm btn-danger', type='submit') Delete
