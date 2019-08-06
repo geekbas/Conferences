@@ -12,3 +12,31 @@ block content
             li
                 a(href='/conf/' + fc.conf_id)
                     | #{fc.name}
+
+    h3 Submissions
+    table(class='table table-sm')
+        thead
+            tr
+                th(scope='col') Title
+                th(scope='col') URL
+                th(scope='col') Conference
+                th(scope='col') Year
+                th(scope='col') Track
+        tbody
+            each entry in submissions
+                tr
+                    td
+                        a(href=entry.submission_path)
+                            | #{entry.title}
+                    td
+                        if (entry.url)
+                            a(href=entry.url, target='_blank') #{entry.url}
+                    td
+                        a(href=entry.c_path)
+                            | #{entry.conf_name}
+                    td
+                        a(href=entry.ci_path)
+                            | #{entry.instance_year}
+                    td
+                        a(href=entry.track_path)
+                            | #{entry.track_name}

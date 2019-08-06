@@ -19,15 +19,34 @@ class Submission {
         )
     }
 
-    static get_all(track_id, user_id, f) {
-        if (!track_id || !user_id) return f(null)
-        pool.query('SELECT * FROM submissions WHERE track_id=$1 AND user_id=$2 ORDER BY title ASC',
-            [ track_id, user_id ],
+    static get_all(user_id, track_id, f) {
+        if (!user_id || !track_id) return f(null)
+        pool.query(
+            'SELECT * FROM submissions WHERE user_id=$1 AND track_id=$2 ORDER BY title ASC',
+            [ user_id, track_id ],
             { as_array: true },
             (res) => {
                 console.log('Submission.get_all loaded', res)
                 f(res)
             })
+    }
+
+    static get_all_mine(user_id, f) {
+        if (!user_id) return f(null)
+        pool.query(
+            'SELECT s.*,' +
+            ' t.id AS track_id, t.name AS track_name, t.instance_id,' +
+            ' i.year AS instance_year, i.conf_id,' +
+            ' c.name AS conf_name' +
+            ' FROM submissions s' +
+            ' INNER JOIN tracks t ON s.track_id=t.id' +
+            ' INNER JOIN instances i ON t.instance_id=i.id' +
+            ' INNER JOIN confs c ON i.conf_id=c.id' +
+            ' AND s.user_id=$1',
+            [ user_id ],
+            { as_array: true },
+            (res) => f(res)
+        )
     }
 
     static del(id, f) {

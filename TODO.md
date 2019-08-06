@@ -9,10 +9,6 @@ Items further down on the list may depend on items higher up.
 ### Usable for others
 
 * Submissions
-  * Links
-    * Overleaf
-    * EasyChair?
-  * Only see own entries
   * If submitted to a particular CFP:
     * Which ones get blocked out?
     * Which are the fallbacks?
@@ -22,7 +18,7 @@ Items further down on the list may depend on items higher up.
     * List/search users
     * Promote to Admin
     * Update/Delete public stuff
-* Delete confirmation popups
+* Confirmation popups for deletions
 * Find a better product name?
   * "Submission planner"
 * Dates

@@ -68,7 +68,7 @@ router.post('/',
 
 function get_one(req, done) {
     const track = req.session.track
-    Submission.get_all(track.id, req.user ? req.user.id : null, (submissions) => {
+    Submission.get_all(req.user ? req.user.id : null, track.id, (submissions) => {
         done(Object.assign(req.session.viewdata, {
             track: track,
             submissions,
