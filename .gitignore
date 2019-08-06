@@ -5,3 +5,4 @@ node_modules
 sessions
 firebase.html
 leveldb
+.DS_Store
