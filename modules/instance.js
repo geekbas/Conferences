@@ -7,7 +7,7 @@ function get_dates(entry) {
     date_fields.forEach((field) => {
         if (entry[field]) {
             dates.push({
-                what: field.replace('conf_', ''),
+                what: field.replace('conf_', 'Conference '),
                 when: entry[field],
                 conf_id: entry.conf_id,
                 instance_id: entry.id,
@@ -38,22 +38,12 @@ class Instance {
         )
     }
 
-    static get_all(id, f) {
-        pool.query('SELECT * FROM instances where conf_id=$1 ORDER BY year DESC',
-            [ id ],
-            { as_array: true, date_fields },
-            (res) => {
-                let dates = []
-                res.forEach((entry) => {
-                    Array.prototype.push.apply(dates, get_dates(entry))
-                })
-                f(res, dates)
-            })
-    }
-
-    static get_all_for(ids, f) {
-        pool.query('SELECT * FROM instances where conf_id=ANY($1) ORDER BY year DESC',
-            [ ids ],
+    static get_all(id_or_ids, f) {
+        let sql ='SELECT * FROM instances where conf_id='
+        sql += Array.isArray(id_or_ids) ? 'ANY($1)' : '$1'
+        sql +=' ORDER BY year DESC'
+        pool.query(sql,
+            [ id_or_ids ],
             { as_array: true, date_fields },
             (res) => {
                 let dates = []
