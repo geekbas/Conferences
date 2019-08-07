@@ -13,6 +13,28 @@ block content
                 a(href='/conf/' + fc.id)
                     | #{fc.name}
 
+    h3 Upcoming CFP
+    table(class='table table-sm')
+        thead
+            tr
+                th(scope='col') Conference
+                th(scope='col') Year
+                th(scope='col') Track
+                th(scope='col') Submission
+        tbody
+            each entry in upcoming
+                tr
+                    td
+                        a(href=entry.c_path)
+                            | #{entry.conf_name}
+                    td
+                        a(href=entry.ci_path)
+                            | #{entry.instance_year}
+                    td
+                        a(href=entry.track_path)
+                            | #{entry.track_name}
+                    td #{entry.submission}
+
     h3 Submissions
     table(class='table table-sm')
         thead
@@ -22,6 +44,7 @@ block content
                 th(scope='col') Conference
                 th(scope='col') Year
                 th(scope='col') Track
+                th(scope='col') Submission
         tbody
             each entry in submissions
                 tr
@@ -40,3 +63,4 @@ block content
                     td
                         a(href=entry.track_path)
                             | #{entry.track_name}
+                    td #{entry.submission}

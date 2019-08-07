@@ -79,6 +79,22 @@ class Track {
         )
     }
 
+    static find_upcoming(user_id, f) {
+        pool.query(
+            'SELECT c.id AS conf_id, c.name AS conf_name,' +
+            ' i.year AS instance_year,' +
+            ' t.id AS track_id, t.name AS track_name, t.* FROM tracks t' +
+            ' INNER JOIN instances i ON t.instance_id=i.id' +
+            ' INNER JOIN confs c ON i.conf_id=c.id' +
+            ' INNER JOIN follows f ON f.conf_id=c.id AND f.user_id=$1' +
+            ' AND submission>now()' +
+            ' ORDER BY t.submission',
+            [ user_id ],
+            { as_array: true, date_fields },
+            (res) => { f(res) }
+        )
+    }
+
     static del(id, f) {
         return pool.del('tracks', id, f)
     }
