@@ -19,6 +19,12 @@ Items further down on the list may depend on items higher up.
     * Promote to Admin
     * Update/Delete public stuff
 * Confirmation popups for deletions
+* Conference info
+  * Twitter
+* Instance info
+  * Twitter
+  * Venue
+  * Private fields/links
 * Find a better product name?
   * "Submission planner"
 * Dates
