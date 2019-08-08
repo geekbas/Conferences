@@ -5,6 +5,7 @@ const path = require('path');
 const Track = require(path.join('..', 'modules', 'track'))
 const User = require(path.join('..', 'modules', 'user'))
 const Submission = require(path.join('..', 'modules', 'submission'))
+const helpers = require('./helpers')
 
 router.param('submission_id',
     (req, res, next, submission_id) => {
@@ -28,10 +29,17 @@ function require_same_user(req, res, next, return_path) {
 
 function get_one(req, done) {
     const submission = req.session.submission
-    done(Object.assign(req.session.viewdata, {
-        submission,
-        user: req.user
-    }))
+    let options = {}
+    if (req.session.track.notification)
+        options.after = req.session.track.notification
+    Track.find_upcoming(req.user.id, options, (tracks) => {
+        const upcoming = helpers.add_paths(tracks)
+        done(Object.assign(req.session.viewdata, {
+            submission,
+            upcoming,
+            user: req.user
+        }))
+    })
 }
 
 // noinspection JSUnresolvedFunction

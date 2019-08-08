@@ -10,7 +10,7 @@ block content
         | #{conf.name}
     | &nbsp;
     a(href=ci_path)
-        | (#{instance.year})
+        | '#{instance.year}
     | ,&nbsp;
     a(href=track_path)
         | #{track.name}
@@ -22,9 +22,40 @@ block content
                     th(scope='row') URL
                     td
                         a(href=submission.url, target='_blank') #{submission.url}
+                tr
+                    th(scope='row') Submission
+                    td #{track.submission}
+                tr
+                    th(scope='row') Notification
+                    td #{track.notification}
 
     p
         a(href=submission_path + '/edit')
             button(class='btn btn-sm btn-info', type='submit') Edit
         form(method='POST', action=submission_path + '?_method=DELETE')
             button(class='btn btn-sm btn-danger', type='submit') Delete
+
+    h3 Alternatives
+    if (upcoming.length > 0)
+        table(class='table table-sm')
+            thead
+                tr
+                    th(scope='col') Conference
+                    th(scope='col') Year
+                    th(scope='col') Track
+                    th(scope='col') Submission
+            tbody
+                each entry in upcoming
+                    tr
+                        td
+                            a(href=entry.c_path)
+                                | #{entry.conf_name}
+                        td
+                            a(href=entry.ci_path)
+                                | #{entry.instance_year}
+                        td
+                            a(href=entry.track_path)
+                                | #{entry.track_name}
+                        td #{entry.submission}
+    else
+        p There are no known alternatives.

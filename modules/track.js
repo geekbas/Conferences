@@ -1,4 +1,5 @@
 const pool = require('./pgpool')
+const moment = require('moment')
 
 const date_fields = [ 'submission', 'notification', 'camera_ready' ]
 
@@ -79,17 +80,25 @@ class Track {
         )
     }
 
-    static find_upcoming(user_id, f) {
-        pool.query(
+    static find_upcoming(user_id, options, f) {
+        let params = [ user_id ]
+        let sql =
             'SELECT c.id AS conf_id, c.name AS conf_name,' +
             ' i.year AS instance_year,' +
             ' t.id AS track_id, t.name AS track_name, t.* FROM tracks t' +
             ' INNER JOIN instances i ON t.instance_id=i.id' +
             ' INNER JOIN confs c ON i.conf_id=c.id' +
             ' INNER JOIN follows f ON f.conf_id=c.id AND f.user_id=$1' +
-            ' AND submission>now()' +
-            ' ORDER BY t.submission',
-            [ user_id ],
+            ' AND submission>'
+        if (options && options.after) {
+            sql += '$2'
+            params.push(moment(options.after))
+        } else {
+            sql += 'now()'
+        }
+        sql += ' ORDER BY t.submission'
+        pool.query(sql,
+            params,
             { as_array: true, date_fields },
             (res) => { f(res) }
         )

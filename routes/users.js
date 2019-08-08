@@ -16,7 +16,7 @@ router.get('/',
         Conf.get_all({ followed_by: req.user.id, as_array: true }, (confs) => {
             Submission.get_all_mine(req.user.id, (submissions) => {
                 const papers = helpers.add_paths(submissions)
-                Track.find_upcoming(req.user.id, (tracks) => {
+                Track.find_upcoming(req.user.id, null, (tracks) => {
                     const upcoming = helpers.add_paths(tracks)
                     res.render('profile', {
                         user: req.user,

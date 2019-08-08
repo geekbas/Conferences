@@ -1,12 +1,12 @@
 extends ../layout
 
 block content
-    h2 Call For Papers, Track for&nbsp;
+    h2 Call For Papers for&nbsp;
         a(href=c_path)
             | #{conf.name}
         | &nbsp;
         a(href=ci_path)
-            | (#{instance.year})
+            | '#{instance.year}
 
     table(class='table table-sm')
         tbody
