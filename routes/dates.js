@@ -15,10 +15,12 @@ router.get('/', (req, res) => {
 //        console.log('dates/get confs', confs)
         let conf_ids = []
         confs.forEach((value, key) => conf_ids.push(key))
+
         Instance.get_all(conf_ids,
             (instances, cidates) => {
 //            console.log('got instance list', instances)
 //            console.log('got dates', cidates)
+
             Track.get_all_for(
                 instances.map(i => i.id),
                 (tracks, tdates) => {
@@ -26,6 +28,7 @@ router.get('/', (req, res) => {
                     const dates = helpers.add_paths(cidates.concat(tdates), (e) => {
                         return { conf: confs.get(e.conf_id) }
                     }).filter((e) => { return e.when >= moment().format('YYYY-MM-DD') })
+
                     res.render('dates', Object.assign(req.session.viewdata, {
                         user: req.user,
                         dates: helpers.string_sort(dates)

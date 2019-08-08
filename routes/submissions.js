@@ -32,13 +32,21 @@ function get_one(req, done) {
     let options = {}
     if (req.session.track.notification)
         options.after = req.session.track.notification
+
     Track.find_upcoming(req.user.id, options, (tracks) => {
         const upcoming = helpers.add_paths(tracks)
-        done(Object.assign(req.session.viewdata, {
-            submission,
-            upcoming,
-            user: req.user
-        }))
+
+        Track.find_upcoming(req.user.id, null, (tracks2) => {
+            const alternatives = helpers.add_paths(tracks2).
+                filter((e) => { return e.track_id !== req.session.track.id })
+
+            done(Object.assign(req.session.viewdata, {
+                submission,
+                upcoming,
+                alternatives,
+                user: req.user
+            }))
+        })
     })
 }
 
@@ -68,6 +76,22 @@ router.put('/:submission_id',
         }
         Submission.update(req.params.submission_id, updates, (id) => {
             res.redirect(req.session.viewdata.track_path + '/submission/' + id)
+        })
+    }
+)
+
+router.put('/:submission_id/track_id',
+    (req, res, next) => { require_same_user(req, res, next, req.session.viewdata.track_path) },
+    (req, res) => {
+        const track_id = req.body.track_id
+        console.log('change track to', track_id)
+        const updates = { track_id }
+        Submission.update(req.params.submission_id, updates, (id) => {
+            res.redirect(
+                '/conf/' + req.body.conf_id +
+                '/instance/' + req.body.instance_id +
+                '/track/' + track_id +
+                '/submission/' + id)
         })
     }
 )

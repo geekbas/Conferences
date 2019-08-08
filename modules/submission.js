@@ -11,9 +11,23 @@ class Submission {
     }
 
     static update(id, fields, done) {
+        let field_names = []
+        let params = [ id ]
+        let sql = 'UPDATE submissions SET';
+        [ 'title', 'url', 'track_id' ].forEach((field_name) => {
+            if (fields[field_name]) {
+                let np = params.length
+                if (np > 1)
+                    sql += ','
+                sql += ' ' + field_name + '=$' + (np + 1)
+                params.push(fields[field_name])
+            }
+        })
+        sql += ' WHERE id=$1'
+        console.log('final sql:', sql)
         pool.query(
-            'UPDATE submissions SET title=$2, url=$3 WHERE id=$1',
-            [ id, fields.title, fields.url ],
+            sql,
+            params,
             { single: true },
             (res) => { done(id) }
         )

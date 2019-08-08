@@ -11,7 +11,6 @@ Items further down on the list may depend on items higher up.
 * Submissions
   * If submitted to a particular CFP:
     * Which ones get blocked out?
-    * Which are the fallbacks?
 * User profile page
   * Admin flag
   * Admins can
