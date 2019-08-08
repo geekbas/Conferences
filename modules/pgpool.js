@@ -76,9 +76,27 @@ function get_by_id(table, id, options, f) {
         (res) => { f(res) })
 }
 
+function update(table, id, field_names, values, f) {
+    let params = [ id ]
+    let sql = 'UPDATE ' + table + ' SET';
+    field_names.forEach((field_name) => {
+        if (fields[field_name]) {
+            let np = params.length
+            if (np > 1)
+                sql += ','
+            sql += ' ' + field_name + '=$' + (np + 1)
+            params.push(fields[field_name])
+        }
+    })
+    sql += ' WHERE id=$1 RETURNING id'
+    console.log('final sql:', sql)
+    return query(sql, params,{ single: true },(res) => { f(id) })
+}
+
 module.exports = {
     query,
     get_client,
     del,
-    get_by_id
+    get_by_id,
+    update,
 }

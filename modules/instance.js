@@ -29,13 +29,8 @@ class Instance {
         )
     }
 
-    static update(id, fields, done) {
-        pool.query(
-            'UPDATE instances SET year=$2, url=$3, conf_start=$4, conf_end=$5 WHERE id=$1 RETURNING id',
-            [ id, fields.year, fields.url, fields.conf_start, fields.conf_end ],
-            { single: true },
-            (res) => { done(id) }
-        )
+    static update(id, values, done) {
+        pool.update('instances', id, [ 'year', 'url', 'conf_start', 'conf_end' ], values, done)
     }
 
     static get_all(id_or_ids, f) {

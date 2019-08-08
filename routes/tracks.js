@@ -102,7 +102,7 @@ router.put('/:track_id',
         const updates = {
             name: req.body.name,
             url: req.body.url,
-            page_limit: req.body.page_limit,
+            page_limit: 0 + req.body.page_limit,
             including_references: !!req.body.including_references,
             double_blind: !!req.body.double_blind,
             submission: req.body.submission,

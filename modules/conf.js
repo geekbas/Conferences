@@ -15,15 +15,10 @@ class Conf {
         )
     }
 
-    static update(id, fields, done) {
-        pool.query(
-            'UPDATE confs SET acronym=$2, name=$3, url=$4, format=$5, acceptance_rate=$6 WHERE id=$1 RETURNING id',
-            [ id, fields.acronym, fields.name, fields.url, fields.format, fields.acceptance_rate ],
-            { single: true },
-            (res) => {
-                done(id)
-            }
-        )
+    static update(id, values, done) {
+        pool.update('confs', id,
+            [ 'acronym', 'name', 'url', 'format', 'acceptance_rate' ],
+            values, done)
     }
 
     static get_all(options, f) {

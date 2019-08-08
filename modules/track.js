@@ -13,21 +13,11 @@ class Track {
         )
     }
 
-    static update(id, fields, done) {
-        pool.query(
-            'UPDATE tracks SET name=$2, url=$3, page_limit=$4' +
-                ', including_references=$5, double_blind=$6' +
-                ', submission=$7, notification=$8, camera_ready=$9' +
-                ' WHERE id=$1 RETURNING id',
-            [
-                id,
-                fields.name, fields.url, fields.page_limit ? 0 + fields.page_limit : null,
-                fields.including_references, fields.double_blind,
-                fields.submission, fields.notification, fields.camera_ready,
-            ],
-            { single: true },
-            (res) => { done(id) }
-        )
+    static update(id, values, done) {
+        pool.update('tracks', id,
+            [ 'name', 'url', 'page_limit', 'including_references', 'double_blind',
+                'submission', 'notification', 'camera_ready' ],
+            values, done)
     }
 
     static get_all(instance_id, f) {
