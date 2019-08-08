@@ -5,7 +5,7 @@ const path = require('path');
 const Conf = require(path.join('..', 'modules', 'conf'))
 const Instance = require(path.join('..', 'modules', 'instance'))
 const Track = require(path.join('..', 'modules', 'track'))
-
+const helpers = require('./helpers')
 const moment = require('moment')
 
 // noinspection JSUnresolvedFunction
@@ -23,19 +23,12 @@ router.get('/', (req, res) => {
                 instances.map(i => i.id),
                 (tracks, tdates) => {
 //                    console.log('got tdates', tdates)
-                    let dates = [];
-                    (cidates.concat(tdates)).forEach((cidate) => {
-                        let c_path = '/conf/' + cidate.conf_id
-                        let ci_path = c_path + '/instance/' + cidate.instance_id
-                        dates.push(Object.assign(cidate, {
-                            conf: confs.get(cidate.conf_id),
-                            c_path,
-                            ci_path
-                        }))
-                    })
+                    const dates = helpers.add_paths(cidates.concat(tdates), (e) => {
+                        return { conf: confs.get(e.conf_id) }
+                    }).filter((e) => { return e.when >= moment().format('YYYY-MM-DD') })
                     res.render('dates', Object.assign(req.session.viewdata, {
                         user: req.user,
-                        dates: dates.sort((a, b) => { return ('' + a.when).localeCompare('' + b.when) })
+                        dates: helpers.string_sort(dates)
                     }))
                 }
             )

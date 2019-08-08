@@ -5,6 +5,7 @@ const path = require('path');
 const Instance = require(path.join('..', 'modules', 'instance'))
 const Track = require(path.join('..', 'modules', 'track'))
 const User = require(path.join('..', 'modules', 'user'))
+const helpers = require('./helpers')
 
 router.param('instance_id',
     (req, res, next, instance_id) => {
@@ -57,7 +58,7 @@ function get_one(req, done) {
             Object.assign(req.session.viewdata, {
                 instance: ci,
                 tracks: tracks,
-                dates: dates.concat(req.session.instance_dates).sort((a, b) => { return a.when >= b.when }),
+                dates: helpers.string_sort(dates.concat(req.session.instance_dates)),
                 perms: {
                     can_edit: User.can_edit(ci, req.user),
                     can_delete: User.can_delete(ci, req.user)
