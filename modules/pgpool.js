@@ -80,12 +80,12 @@ function update(table, id, field_names, values, f) {
     let params = [ id ]
     let sql = 'UPDATE ' + table + ' SET';
     field_names.forEach((field_name) => {
-        if (fields[field_name]) {
+        if (values[field_name] !== undefined) {
             let np = params.length
             if (np > 1)
                 sql += ','
             sql += ' ' + field_name + '=$' + (np + 1)
-            params.push(fields[field_name])
+            params.push(values[field_name])
         }
     })
     sql += ' WHERE id=$1 RETURNING id'
