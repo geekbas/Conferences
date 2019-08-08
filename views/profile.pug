@@ -18,7 +18,7 @@ block content
         thead
             tr
                 th(scope='col') Conference
-                th(scope='col') Year
+                th(scope='col') Instance
                 th(scope='col') Track
                 th(scope='col') Submission
         tbody
@@ -30,6 +30,8 @@ block content
                     td
                         a(href=entry.ci_path)
                             | #{entry.instance_year}
+                        if (entry.city)
+                            | &nbsp;(#{entry.city}, #{entry.country})
                     td
                         a(href=entry.track_path)
                             | #{entry.track_name}

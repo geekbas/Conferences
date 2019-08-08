@@ -30,7 +30,10 @@ class Instance {
     }
 
     static update(id, values, done) {
-        pool.update('instances', id, [ 'year', 'url', 'conf_start', 'conf_end' ], values, done)
+        pool.update('instances', id,
+            [ 'year', 'url', 'conf_start', 'conf_end',
+                'venue', 'city', 'nearby_city', 'region', 'country' ],
+            values, done)
     }
 
     static get_all(id_or_ids, f) {

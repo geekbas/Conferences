@@ -118,13 +118,7 @@ router.put('/:instance_id',
     (req, res, next) => { can_edit(req, res, next) },
     (req, res) => {
         console.log('put with params', req.body)
-        const updates = {
-            year: req.body.year,
-            url: req.body.url,
-            conf_start: req.body.conf_start,
-            conf_end: req.body.conf_end
-        }
-        Instance.update(req.params.instance_id, updates, (id) => {
+        Instance.update(req.params.instance_id, req.body, (id) => {
             res.redirect(req.session.viewdata.c_path + '/instance/' + id);
         })
     }

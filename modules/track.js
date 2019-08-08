@@ -74,7 +74,7 @@ class Track {
         let params = [ user_id ]
         let sql =
             'SELECT c.id AS conf_id, c.name AS conf_name, c.acronym,' +
-            ' i.year AS instance_year,' +
+            ' i.year AS instance_year, i.city, i.country,' +
             ' t.id AS track_id, t.name AS track_name, t.* FROM tracks t' +
             ' INNER JOIN instances i ON t.instance_id=i.id' +
             ' INNER JOIN confs c ON i.conf_id=c.id' +

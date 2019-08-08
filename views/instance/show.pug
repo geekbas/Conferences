@@ -13,6 +13,15 @@ block content
                 th(scope='row') URL
                 td
                     a(href=instance.url, target='_blank') #{instance.url}
+            tr
+                th(scope='row') Venue
+                td #{instance.venue} in #{instance.city}
+                    if (instance.nearby_city)
+                        | &nbsp;(near #{instance.nearby_city})
+                    | ,&nbsp;
+                    if (instance.region)
+                        | #{instance.region},&nbsp;
+                    | #{instance.country}
 
     if (user)
         div(class="input-group mb-3")

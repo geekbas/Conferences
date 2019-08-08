@@ -26,5 +26,30 @@ block content
                     value=instance.conf_end)
 
             div(class='form-group row')
+                label(for='venue', class="col-sm-2 col-form-label") Venue:
+                input#venue(class='form-control col-sm-10', type='text', name='venue',
+                    value=instance.venue)
+
+            div(class='form-group row')
+                label(for='city', class="col-sm-2 col-form-label") City:
+                input#city(class='form-control col-sm-10', type='text', name='city',
+                    value=instance.city)
+
+            div(class='form-group row')
+                label(for='nearby_city', class="col-sm-2 col-form-label") Nearby city:
+                input#nearby_city(class='form-control col-sm-10', type='text', name='nearby_city',
+                    value=instance.nearby_city)
+
+            div(class='form-group row')
+                label(for='region', class="col-sm-2 col-form-label") Region:
+                input#region(class='form-control col-sm-10', type='text', name='region',
+                    value=instance.region)
+
+            div(class='form-group row')
+                label(for='country', class="col-sm-2 col-form-label") Country:
+                input#country(class='form-control col-sm-10', type='text', name='country',
+                    value=instance.country)
+
+            div(class='form-group row')
                 button(class='btn btn-sm btn-primary mr-3', type='submit') Update
                 a(href='/conf/' + conf.id + '/instance/' + instance.id, class='btn btn-sm btn-primary') Cancel
