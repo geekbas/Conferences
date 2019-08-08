@@ -147,14 +147,7 @@ router.put('/:conf_id',
     (req, res) => {
         const params = req.body
         console.log('update conf / with params', params)
-        const updates = {
-            name: params.name,
-            acronym: params.acronym,
-            url: params.url,
-            format: params.format,
-            acceptance_rate: params.acceptance_rate
-        }
-        Conf.update(req.session.conf.id, updates,(id) => {
+        Conf.update(req.session.conf.id, params,(id) => {
             res.redirect('/conf/' + id)
         })
     }

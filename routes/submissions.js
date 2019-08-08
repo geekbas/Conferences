@@ -70,11 +70,7 @@ router.put('/:submission_id',
     (req, res, next) => { require_same_user(req, res, next, req.session.viewdata.track_path) },
     (req, res) => {
         console.log('put with params', req.body)
-        const updates = {
-            title: req.body.title,
-            url: req.body.url,
-        }
-        Submission.update(req.params.submission_id, updates, (id) => {
+        Submission.update(req.params.submission_id, req.body, (id) => {
             res.redirect(req.session.viewdata.track_path + '/submission/' + id)
         })
     }
