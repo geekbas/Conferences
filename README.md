@@ -35,8 +35,6 @@ Maybe the topics should be possible to relate in a hierarchy or in some other wa
 
 ## Open questions
 
-* What type of SQL, NoSQL or other storage system is suitable?
-  * Maybe [Firebase](https://firebase.google.com)?
 * How should tracking notification be done? Some sort of event queue?
 * What is the semantics for conferences with multiple submission dates?
 
@@ -47,7 +45,6 @@ For development, this can be done in the IntelliJ run configuration.
 For deployment at Heroku, use "heroku config:set".
 
 * BASE_URL: The base url, e.g. http://example.com/
-* FIREBASE_AUTH: The Firebase authentication information, as a JSON object.
 * GOOGLE_AUTH_CLIENT_ID
 * GOOGLE_AUTH_CLIENT_SECRET
 * DATABASE_URL: The Postgres database, e.g. postgres://conf@localhost:5432/confs
