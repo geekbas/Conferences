@@ -11,7 +11,7 @@ block content
         each fc in confs
             li
                 a(href='/conf/' + fc.id)
-                    | #{fc.name}
+                    | #{fc.name} (#{fc.acronym})
 
     h3 Upcoming CFP
     table(class='table table-sm')
@@ -26,7 +26,7 @@ block content
                 tr
                     td
                         a(href=entry.c_path)
-                            | #{entry.conf_name}
+                            | #{entry.conf_name} (#{entry.acronym})
                     td
                         a(href=entry.ci_path)
                             | #{entry.instance_year}
