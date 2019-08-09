@@ -60,25 +60,45 @@ function get_client(f) {
 
 // helpers
 
-function del(table, id, f) {
+function del(table_name, id, f) {
     return query(
-        'DELETE FROM ' + table + ' WHERE id=$1',
+        'DELETE FROM ' + table_name + ' WHERE id=$1',
         [ id ],
         null,
         (res) => { f(res) })
 }
 
-function get_by_id(table, id, options, f) {
+function get_by_id(table_name, id, options, f) {
     return query(
-        'SELECT * FROM ' + table + ' WHERE id=$1 LIMIT 1',
+        'SELECT * FROM ' + table_name + ' WHERE id=$1 LIMIT 1',
         [ id ],
         Object.assign({ single: true }, options),
         (res) => { f(res) })
 }
 
-function update(table, id, field_names, values, f) {
+function add(table_name, field_names, values, f) {
+    let sql = 'INSERT INTO ' + table_name + ' ('
+    let sql_values = 'VALUES ('
+    let params = []
+    field_names.forEach((field_name) => {
+        if (values[field_name] !== undefined) {
+            let np = params.length
+            if (np > 0) {
+                sql += ', '
+                sql_values += ', '
+            }
+            sql += field_name
+            sql_values += '$' + (np + 1)
+            params.push(values[field_name])
+        }
+    })
+    sql += ') ' + sql_values + ') RETURNING id'
+    return query(sql, params,{ single: true }, f)
+}
+
+function update(table_name, id, field_names, values, f) {
     let params = [ id ]
-    let sql = 'UPDATE ' + table + ' SET';
+    let sql = 'UPDATE ' + table_name + ' SET';
     field_names.forEach((field_name) => {
         if (values[field_name] !== undefined) {
             let np = params.length
@@ -98,5 +118,6 @@ module.exports = {
     get_client,
     del,
     get_by_id,
+    add,
     update,
 }

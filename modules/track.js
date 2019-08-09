@@ -1,27 +1,27 @@
 const pool = require('./pgpool')
 const moment = require('moment')
 
+const table_name = 'tracks'
 const date_fields = [ 'submission', 'notification', 'camera_ready' ]
 
 class Track {
     static add(fields, done) {
-        pool.query(
-            'INSERT INTO tracks (instance_id, name, added_by_user_id, private_for_user_id) VALUES ($1, $2, $3, $4) RETURNING id',
-            [ fields.instance_id, fields.name, fields.added_by_user_id, fields.private_for_user_id ],
-            { single: true },
-            (res) => { done(res.id) }
-        )
+        pool.add(
+            table_name,
+            [ 'instance_id', 'name', 'added_by_user_id', 'private_for_user_id' ],
+            fields,
+            done)
     }
 
     static update(id, values, done) {
-        pool.update('tracks', id,
+        pool.update(table_name, id,
             [ 'name', 'url', 'page_limit', 'including_references', 'double_blind',
                 'submission', 'notification', 'camera_ready' ],
             values, done)
     }
 
     static get_all(instance_id, f) {
-        pool.query('SELECT * FROM tracks WHERE instance_id=$1 ORDER BY name ASC',
+        pool.query('SELECT * FROM ' + table_name + ' WHERE instance_id=$1 ORDER BY name ASC',
             [ instance_id ],
             { as_array: true, date_fields },
             (res) => {
@@ -54,13 +54,12 @@ class Track {
 
     static get_all_for(instance_ids, f) {
         pool.query(
-            'SELECT t.*, i.conf_id, i.year FROM tracks t' +
+            'SELECT t.*, i.conf_id, i.year FROM ' + table_name + ' t' +
             ' INNER JOIN instances i ON t.instance_id=i.id' +
             ' WHERE i.id=ANY($1)',
             [ instance_ids ],
             { as_array: true, date_fields },
             (res) => {
-//                console.log('got all tracks', res)
                 let dates = []
                 res.forEach((entry) => {
                     Array.prototype.push.apply(dates, this.get_dates(entry))
@@ -75,7 +74,7 @@ class Track {
         let sql =
             'SELECT c.id AS conf_id, c.name AS conf_name, c.acronym,' +
             ' i.year AS instance_year, i.city, i.country,' +
-            ' t.id AS track_id, t.name AS track_name, t.* FROM tracks t' +
+            ' t.id AS track_id, t.name AS track_name, t.* FROM ' + table_name + ' t' +
             ' INNER JOIN instances i ON t.instance_id=i.id' +
             ' INNER JOIN confs c ON i.conf_id=c.id' +
             ' INNER JOIN follows f ON f.conf_id=c.id AND f.user_id=$1' +
@@ -95,11 +94,11 @@ class Track {
     }
 
     static del(id, f) {
-        return pool.del('tracks', id, f)
+        return pool.del(table_name, id, f)
     }
 
     static get_by_id(id, f) {
-        return pool.get_by_id('tracks', id, { date_fields }, (obj) => { f(obj) })
+        return pool.get_by_id(table_name, id, { date_fields }, f)
     }
 }
 

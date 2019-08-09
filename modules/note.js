@@ -4,12 +4,10 @@ const table_name = 'notes'
 
 class Note {
     static add(fields, done) {
-        pool.query(
-            'INSERT INTO ' + table_name + ' (user_id, private, conf_id, instance_id, track_id, note) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id',
-            [ fields.user_id, fields.private, fields.conf_id, fields.instance_id, fields.track_id, fields.note ],
-            { single: true },
-            (res) => { done(res.id) }
-        )
+        pool.add(table_name,
+            [ 'user_id', 'private', 'conf_id', 'instance_id', 'track_id', 'note' ],
+            fields,
+            done)
     }
 
     static update(id, values, done) {
@@ -47,7 +45,7 @@ class Note {
     }
 
     static get_by_id(id, f) {
-        return pool.get_by_id(table_name, id, null, (obj) => { f(obj) })
+        return pool.get_by_id(table_name, id, null, f)
     }
 }
 
