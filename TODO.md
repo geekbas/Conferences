@@ -8,6 +8,8 @@ Items further down on the list may depend on items higher up.
 
 ### Usable for others
 
+* Notes on conferences, tracks
+  * private / public
 * Submissions
   * If submitted to a particular CFP:
     * Which ones get blocked out?
@@ -41,8 +43,6 @@ Items further down on the list may depend on items higher up.
 * Let's Encrypt
 * Conference instances
   * Link to parent instance (mainly for workshops)
-* Notes
-  * list of key + freetext
 * Cities as first level citizens
   * Public notes (restaurants, sights, etc)
   * Private notes

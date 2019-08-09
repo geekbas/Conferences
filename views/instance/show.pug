@@ -78,3 +78,16 @@ block content
                             | ,&nbsp;
                         | #{entry.what}
                     td &nbsp;
+
+    h3 Notes
+    h4 Public
+    each note in notes
+        if (!note.private)
+            p #{note.note}
+            hr
+
+    h4 Private
+    each note in notes
+        if (note.private)
+            p #{note.note}
+            hr

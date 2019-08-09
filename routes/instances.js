@@ -5,6 +5,7 @@ const path = require('path');
 const Instance = require(path.join('..', 'modules', 'instance'))
 const Track = require(path.join('..', 'modules', 'track'))
 const User = require(path.join('..', 'modules', 'user'))
+const Note = require(path.join('..', 'modules', 'note'))
 const helpers = require('./helpers')
 
 router.param('instance_id',
@@ -71,14 +72,39 @@ function get_one(req, done) {
 
 // noinspection JSUnresolvedFunction
 router.get('/:instance_id', (req, res) => {
-    get_one(req, (fields) => res.render('instance/show', fields))
+    get_one(req, (fields) => {
+        Note.get(
+            req.user ? req.user.id : null,
+            'instance_id', req.session.instance.id,
+            (notes) => {
+                res.render('instance/show', Object.assign(fields, { notes }))
+            }
+        )
+    })
 })
 
 // noinspection JSUnresolvedFunction
 router.get('/:instance_id/edit',
     (req, res, next) => { can_edit(req, res, next) },
     (req, res) => {
-        get_one(req, (fields) => res.render('instance/edit', fields))
+        get_one(req, (fields) => {
+            Note.get_mine(
+                req.user.id,
+                'instance_id',
+                req.session.instance.id,
+                (private_note, public_note) => {
+                    console.log('private note:', private_note)
+                    console.log('public note:', public_note)
+                    res.render(
+                        'instance/edit',
+                        Object.assign(fields, {
+                            private_note,
+                            public_note,
+                        })
+                    )
+                }
+            )
+        })
     }
 )
 
@@ -121,6 +147,31 @@ router.put('/:instance_id',
         Instance.update(req.params.instance_id, req.body, (id) => {
             res.redirect(req.session.viewdata.c_path + '/instance/' + id);
         })
+    }
+)
+
+router.put('/:instance_id/note',
+    (req, res, next) => { require_user(req, res, next, req.headers.referer) },
+    (req, res) => {
+        console.log('post note with params', req.body)
+        if (req.body.note_id) {
+            if (req.body.note.trim().length > 0) {
+                Note.update(req.body.note_id, req.body, (id) => {
+                    res.redirect(req.session.viewdata.ci_path);
+                })
+            } else {
+                Note.del(req.body.note_id, () => {
+                    res.redirect(req.session.viewdata.ci_path);
+                })
+            }
+        } else {
+            Note.add(Object.assign(req.body, {
+                user_id: req.user.id,
+                instance_id: req.session.instance.id,
+            }), (id) => {
+                res.redirect(req.session.viewdata.ci_path);
+            })
+        }
     }
 )
 
