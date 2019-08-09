@@ -15,7 +15,10 @@ block content
                     a(href=instance.url, target='_blank') #{instance.url}
             tr
                 th(scope='row') Venue
-                td #{instance.venue} in #{instance.city}
+                td
+                    if (instance.venue)
+                        | #{instance.venue} in&nbsp;
+                    | #{instance.city}
                     if (instance.nearby_city)
                         | &nbsp;(near #{instance.nearby_city})
                     | ,&nbsp;
