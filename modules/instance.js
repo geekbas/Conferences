@@ -52,6 +52,26 @@ class Instance {
             })
     }
 
+    static get_all_by_region(user_id, f) {
+        let sql =
+            'SELECT c.id AS conf_id, c.name AS conf_name, c.acronym,' +
+            ' i.*,' +
+            ' i.id as instance_id,' +
+            ' COALESCE(i.city,\'.\') as city,' +
+            ' COALESCE(i.nearby_city,\'.\') as nearby_city,' +
+            ' COALESCE(i.region,\'.\') as region,' +
+            ' COALESCE(i.country,\'.\') as country' +
+            ' FROM instances i' +
+            ' INNER JOIN confs c ON i.conf_id=c.id' +
+            ' INNER JOIN follows f ON f.conf_id=c.id AND f.user_id=$1' +
+            ' ORDER BY i.country, i.region, i.nearby_city, i.city, i.conf_start, i.venue'
+        pool.query(sql,
+            [ user_id ],
+            { as_array: true, date_fields },
+            (res) => { f(res) }
+        )
+    }
+
     static del(id, f) {
         return pool.del('instances', id, f)
     }

@@ -1,0 +1,27 @@
+extends layout
+
+block content
+    h2 Conference instances by region
+
+    ul
+        each country in Array.from(countries.entries())
+            li #{country[0]}
+            ul
+                each region in Array.from(country[1].entries())
+                    li #{region[0]}
+                    ul
+                        each nearby_city in Array.from(region[1].entries())
+                            li #{nearby_city[0]}
+                            ul
+                                each city in Array.from(nearby_city[1].entries())
+                                    li #{city[0]}
+                                    ul
+                                        each instance in city[1]
+                                            li
+                                                a(href=instance.c_path)
+                                                    | #{instance.conf_name}
+                                                | &nbsp;
+                                                a(href=instance.ci_path)
+                                                    | '#{instance.year}
+                                                if (instance.conf_start)
+                                                    | ,&nbsp;on #{instance.conf_start}

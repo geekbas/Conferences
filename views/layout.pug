@@ -14,6 +14,7 @@ html(lang='en')
             a(href='/conf', class={'nav-item':true, 'nav-link':true, active: navconf}) Conferences
             if user
               a(href='/date', class={'nav-item':true, 'nav-link':true, active: navdate}) Dates
+              a(href='/region', class={'nav-item': true, 'nav-link': true, active: navregion}) By region
           if user
             a(href='/user')
               span(class='nav-item navbar-text') #{user.given_name} #{user.family_name}

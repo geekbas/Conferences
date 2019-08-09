@@ -43,7 +43,7 @@ Items further down on the list may depend on items higher up.
   * Link to parent instance (mainly for workshops)
 * Notes
   * list of key + freetext
-* Cities
+* Cities as first level citizens
   * Public notes (restaurants, sights, etc)
   * Private notes
 * Topics
