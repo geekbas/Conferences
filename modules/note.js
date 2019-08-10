@@ -26,11 +26,12 @@ class Note {
         let sql = 'SELECT * FROM ' + table_name + ' WHERE ' + field_name + '=$1'
         let params = [ field_value ]
         if (user_id) {
-            sql += ' AND (user_id=$2 OR user_id IS NULL)'
+            sql += ' AND ((user_id=$2 OR user_id IS NULL)'
             params.push(user_id)
         } else {
-            sql += ' AND user_id IS NULL'
+            sql += ' AND (user_id IS NULL'
         }
+        sql += ' OR private=false)'
         pool.query(sql, params, { as_array: true }, notes => { f(markdown_formatted(notes)) })
     }
 
