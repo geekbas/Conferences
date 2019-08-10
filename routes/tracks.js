@@ -5,6 +5,7 @@ const path = require('path');
 const Track = require(path.join('..', 'modules', 'track'))
 const User = require(path.join('..', 'modules', 'user'))
 const Submission = require(path.join('..', 'modules', 'submission'))
+const Note = require(path.join('..', 'modules', 'note'))
 
 const helpers = require('./helpers')
 
@@ -76,14 +77,35 @@ function get_one(req, done) {
 
 // noinspection JSUnresolvedFunction
 router.get('/:track_id', (req, res) => {
-    get_one(req, (items) => res.render('track/show', items))
+    get_one(req, (items) => {
+        Note.get(
+            req.user ? req.user.id : null,
+            'track_id', req.session.track.id,
+            (notes) => {
+                res.render('track/show', Object.assign(items, {notes}))
+            }
+        )
+    })
 })
 
 // noinspection JSUnresolvedFunction
 router.get('/:track_id/edit',
     (req, res, next) => { can_edit(req, res, next) },
     (req, res) => {
-        get_one(req, (items) => res.render('track/edit', items))
+        get_one(req, (items) => {
+            Note.get_mine(
+                req.user.id,
+                'track_id',
+                req.session.track.id,
+                (private_note, public_note) => {
+                    res.render('track/edit', Object.assign(items, {
+                            private_note,
+                            public_note,
+                        })
+                    )
+                }
+            )
+        })
     }
 )
 
@@ -105,6 +127,31 @@ router.put('/:track_id',
         Track.update(req.params.track_id, updates, (id) => {
             res.redirect(req.session.viewdata.ci_path + '/track/' + id)
         })
+    }
+)
+
+router.put('/:track_id/note',
+    (req, res, next) => { helpers.require_user(req, res, next, req.headers.referer) },
+    (req, res) => {
+        console.log('post note with params', req.body)
+        if (req.body.note_id) {
+            if (req.body.note.trim().length > 0) {
+                Note.update(req.body.note_id, req.body, (id) => {
+                    res.redirect(req.session.viewdata.track_path);
+                })
+            } else {
+                Note.del(req.body.note_id, () => {
+                    res.redirect(req.session.viewdata.track_path);
+                })
+            }
+        } else {
+            Note.add(Object.assign(req.body, {
+                user_id: req.user.id,
+                track_id: req.session.track.id,
+            }), (id) => {
+                res.redirect(req.session.viewdata.track_path);
+            })
+        }
     }
 )
 

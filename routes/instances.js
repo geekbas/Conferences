@@ -85,8 +85,6 @@ router.get('/:instance_id/edit',
                 'instance_id',
                 req.session.instance.id,
                 (private_note, public_note) => {
-                    console.log('private note:', private_note)
-                    console.log('public note:', public_note)
                     res.render(
                         'instance/edit',
                         Object.assign(fields, {

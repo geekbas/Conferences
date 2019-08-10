@@ -59,6 +59,19 @@ block content
                     td Camera ready
                     td &nbsp;
 
+    h3 Notes
+    h4 Public
+    each note in notes
+        if (!note.private)
+            p #{note.note}
+            hr
+
+    h4 Private
+    each note in notes
+        if (note.private)
+            p #{note.note}
+            hr
+
     div(class="input-group mb-3")
         if perms.can_edit
             a(href=track_path + '/edit')

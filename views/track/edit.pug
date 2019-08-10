@@ -47,3 +47,14 @@ block content
                 div(class='button')
                     button(class='btn btn-sm btn-primary mr-3', type='submit') Update
                     a(href=track_path, class='btn btn-sm btn-primary') Cancel
+
+    p
+    form(method='post', action=track_path + '/note' + '?_method=PUT')
+        include ../note/edit_private.pug
+        div(class='form-group row')
+            button(class='btn btn-sm btn-primary mr-3', type='submit') Update
+    p
+    form(method='post', action=track_path + '/note' + '?_method=PUT')
+        include ../note/edit_public.pug
+        div(class='form-group row')
+            button(class='btn btn-sm btn-primary mr-3', type='submit') Update

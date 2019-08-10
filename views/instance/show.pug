@@ -26,16 +26,6 @@ block content
                         | #{instance.region},&nbsp;
                     | #{instance.country}
 
-    if (user)
-        div(class="input-group mb-3")
-            if perms.can_edit
-                a(href=ci_path + '/edit')
-                    button(class='btn btn-sm btn-info', type='submit') Edit
-
-            if perms.can_delete
-                form(method='POST', action=ci_path + '?_method=DELETE')
-                    button(class='btn btn-sm btn-danger', type='submit') Delete
-
     h3 Call For Papers
     table(class='table table-sm')
         tbody
@@ -94,3 +84,13 @@ block content
         if (note.private)
             p #{note.note}
             hr
+
+    if (user)
+        div(class="input-group mb-3")
+            if perms.can_edit
+                a(href=ci_path + '/edit')
+                    button(class='btn btn-sm btn-info', type='submit') Edit
+
+            if perms.can_delete
+                form(method='POST', action=ci_path + '?_method=DELETE')
+                    button(class='btn btn-sm btn-danger', type='submit') Delete

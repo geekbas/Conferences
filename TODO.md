@@ -8,11 +8,6 @@ Items further down on the list may depend on items higher up.
 
 ### Usable for others
 
-* Notes on conferences, tracks
-  * private / public
-* Submissions
-  * If submitted to a particular CFP:
-    * Which ones get blocked out?
 * User profile page
   * Admin flag
   * Admins can
@@ -20,12 +15,6 @@ Items further down on the list may depend on items higher up.
     * Promote to Admin
     * Update/Delete public stuff
 * Confirmation popups for deletions
-* Conference info
-  * Twitter
-* Instance info
-  * Twitter
-  * Venue
-  * Private fields/links
 * Find a better product name?
   * "Submission planner"
 * Dates
@@ -60,6 +49,14 @@ Items further down on the list may depend on items higher up.
     * When their papers are accepted
     * (When added as committee members)
 * Committees
+* Conference info
+  * Twitter
+  * Notes?
+* Instance info
+  * Twitter
+* Submissions
+  * If submitted to a particular CFP:
+    * Which ones get blocked out?
 
 ## Without particular order
 

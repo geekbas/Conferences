@@ -1,0 +1,8 @@
+div(class='form-group row')
+    label(for='public_note', class="col-sm-2 col-form-label") Public note:
+    textarea#public_note(class='form-control col-sm-10', rows='5', cols='40', name='note')
+        if (public_note)
+            | #{public_note.note}
+if (public_note)
+    input(type='hidden', name='note_id', value=public_note.id)
+input(type='hidden', name='private', value='0')

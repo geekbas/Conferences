@@ -23,7 +23,7 @@ class Note {
         } else {
             sql += ' AND user_id IS NULL'
         }
-        pool.query(sql, params, { as_array: true }, (res) => { f(res) })
+        pool.query(sql, params, { as_array: true }, f)
     }
 
     static get_mine(user_id, field_name, field_value, f) {
