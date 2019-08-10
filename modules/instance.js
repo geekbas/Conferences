@@ -25,7 +25,7 @@ class Instance {
     static add(fields, done) {
         pool.add(
             table_name,
-            [ 'conf_id', 'year', 'url', 'added_by_user_id', 'private_for_user_id' ],
+            [ 'conf_id', 'year', 'url', 'added_by_user_id' ],
             fields,
             done)
     }

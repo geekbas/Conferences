@@ -8,7 +8,7 @@ class Conf {
 
     static add(fields, done) {
         pool.add(table_name,
-            [ 'acronym', 'name', 'added_by_user_id', 'private_for_user_id' ],
+            [ 'acronym', 'name', 'added_by_user_id' ],
             fields,
             done)
     }

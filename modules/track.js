@@ -8,7 +8,7 @@ class Track {
     static add(fields, done) {
         pool.add(
             table_name,
-            [ 'instance_id', 'name', 'added_by_user_id', 'private_for_user_id' ],
+            [ 'instance_id', 'name', 'added_by_user_id' ],
             fields,
             done)
     }
