@@ -52,15 +52,6 @@ class User {
         )
     }
 
-    static public_or_my_obj(obj, user) {
-        return (obj.private_for_user_id === undefined) ||
-            (user && (user.id === obj.private_for_user_id))
-    }
-
-    static public_or_mine(list, user) {
-        return list.filter((obj) => User.public_or_my_obj(obj, user))
-    }
-
     static can_edit(obj, user) {
         return user &&
             ((user.id === obj.added_by_user_id) ||
