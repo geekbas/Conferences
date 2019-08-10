@@ -21,6 +21,6 @@ block content
                     a(href=date.ci_path) #{date.instance_year}
                 td
                     if (date.track_id)
-                        a(href=date.ci_path + '/track/' + date.track_id) #{date.track_name}
+                        a(href=date.track_path) #{date.track_name}
                         | ,&nbsp;
                     | #{date.what}
