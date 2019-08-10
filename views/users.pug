@@ -1,0 +1,26 @@
+extends layout
+
+block content
+    h2 Users
+
+    table(class='table table-sm')
+        thead
+            tr
+                th(scope='col') Email
+                th(scope='col') Name
+                th(scope='col') Admin
+                th(scope='col')
+        tbody
+            each user2 in users
+                tr
+                    td #{user2.email}
+                    td #{ [ user2.given_name, user2.family_name ].join(' ') }
+                    td #{user2.is_admin ? 'Yes' : ''}
+                    td
+                        form(method='post', action='/user/' + user2.id + '?_method=PUT')
+                            if (user2.is_admin)
+                                input(type='hidden', name='is_admin', value='0')
+                                button(class='btn btn-sm btn-info', type='submit') Demote
+                            else
+                                input(type='hidden', name='is_admin', value='1')
+                                button(class='btn btn-sm btn-info', type='submit') Promote

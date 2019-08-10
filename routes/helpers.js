@@ -26,6 +26,14 @@ function require_user(req, res, next, return_path) {
     next()
 }
 
+function require_admin(req, res, next, return_path) {
+    console.log('require_admin, user is', req.user)
+    if (!req.user || !req.user.is_admin) {
+        return res.redirect(return_path)
+    }
+    next()
+}
+
 function string_sort(values, field = 'when') {
     return values.sort((a, b) => { return ('' + a[field]).localeCompare('' + b[field]) })
 }
@@ -33,5 +41,6 @@ function string_sort(values, field = 'when') {
 module.exports = {
     add_paths,
     require_user,
+    require_admin,
     string_sort,
 }

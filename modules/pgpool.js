@@ -65,7 +65,7 @@ function del(table_name, id, f) {
         'DELETE FROM ' + table_name + ' WHERE id=$1',
         [ id ],
         null,
-        (res) => { f(res) })
+        f)
 }
 
 function get_by_id(table_name, id, options, f) {
@@ -73,7 +73,7 @@ function get_by_id(table_name, id, options, f) {
         'SELECT * FROM ' + table_name + ' WHERE id=$1 LIMIT 1',
         [ id ],
         Object.assign({ single: true }, options),
-        (res) => { f(res) })
+        f)
 }
 
 function add(table_name, field_names, values, f) {

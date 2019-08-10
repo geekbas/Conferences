@@ -16,8 +16,11 @@ html(lang='en')
               a(href='/date', class={'nav-item':true, 'nav-link':true, active: navdate}) Dates
               a(href='/region', class={'nav-item': true, 'nav-link': true, active: navregion}) By region
           if user
+            if user.is_admin
+              a(href='/user/list')
+                span(class='nav-item navbar-text nav-link') Users
             a(href='/user')
-              span(class='nav-item navbar-text') #{user.given_name} #{user.family_name}
+              span(class='nav-item navbar-text nav-link') #{user.given_name} #{user.family_name}
             a(href='/auth/logout', class='nav-item nav-link') Logout
           else
             div(class='nav-item dropdown')

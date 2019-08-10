@@ -1,8 +1,8 @@
 
 //const cuid = require('cuid')
-const basic70_id = 1
-//const basic70_google_id = '107690245925696602851'
 const pool = require('./pgpool')
+
+const table_name = 'users'
 
 class User {
     static findOrCreate(id_params, misc_params, f) {
@@ -46,20 +46,27 @@ class User {
             [ id ],
             { single: true },
             (res) => {
-//                console.log('result', res)
+                console.log('found user', res)
                 f(null, res)
             }
         )
     }
 
+    static find_all(done) {
+        pool.query('SELECT * FROM users ORDER BY email', null, { as_array: true}, done)
+    }
+
+    static update(id, values, done) {
+        pool.update(table_name, id, [ 'is_admin' ], values, done)
+    }
+
     static can_edit(obj, user) {
         return user &&
-            ((user.id === obj.added_by_user_id) ||
-                (user.id === basic70_id))
+            ((user.id === obj.added_by_user_id) || user.is_admin)
     }
 
     static can_delete(obj, user) {
-        return user && (user.id === basic70_id)
+        return user && (user.is_admin)
     }
 
 }

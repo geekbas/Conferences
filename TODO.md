@@ -8,13 +8,8 @@ Items further down on the list may depend on items higher up.
 
 ### Usable for others
 
-* User profile page
-  * Admin flag
-  * Admins can
-    * List/search users
-    * Promote to Admin
-    * Update/Delete public stuff
 * Confirmation popups for deletions
+* Database references
 * Find a better product name?
   * "Submission planner"
 * Twitter-auth?
@@ -23,6 +18,7 @@ Items further down on the list may depend on items higher up.
 
 ### Good To Have
 
+* Block users?
 * Audit Log
 * Conference list
   * Show next date
