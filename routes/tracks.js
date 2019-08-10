@@ -98,7 +98,8 @@ router.get('/:track_id/edit',
                 'track_id',
                 req.session.track.id,
                 (private_note, public_note) => {
-                    res.render('track/edit', Object.assign(items, {
+                    res.render('track/edit',
+                        Object.assign(items, {
                             private_note,
                             public_note,
                         })
