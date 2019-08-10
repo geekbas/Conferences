@@ -15,6 +15,7 @@ Items further down on the list may depend on items higher up.
 * Twitter-auth?
 * Mastodon-auth?
   * http://www.passportjs.org/packages/passport-mastodon/
+* Mobile friendly
 
 ### Good To Have
 
@@ -23,7 +24,6 @@ Items further down on the list may depend on items higher up.
 * Conference list
   * Show next date
 * Breadcrumbs
-* Let's Encrypt
 * Conference instances
   * Link to parent instance (mainly for workshops)
 * Cities as first level citizens
@@ -63,3 +63,4 @@ Items further down on the list may depend on items higher up.
 * Offline usage?
 * Docker container?
 * http://docs.sequelizejs.com/?
+
