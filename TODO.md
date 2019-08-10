@@ -17,8 +17,6 @@ Items further down on the list may depend on items higher up.
 * Confirmation popups for deletions
 * Find a better product name?
   * "Submission planner"
-* Dates
-  * gruppera på år och månad
 * Twitter-auth?
 * Mastodon-auth?
   * http://www.passportjs.org/packages/passport-mastodon/
@@ -42,6 +40,8 @@ Items further down on the list may depend on items higher up.
 
 ### Later
 
+* Dates
+  * gruppera på år och månad?
 * Co-authors
   * Require ack
 * Following
