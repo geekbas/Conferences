@@ -63,13 +63,13 @@ block content
     h4 Public
     each note in notes
         if (!note.private)
-            p #{note.note}
+            p !{note.note}
             hr
 
     h4 Private
     each note in notes
         if (note.private)
-            p #{note.note}
+            p !{note.note}
             hr
 
     div(class="input-group mb-3")

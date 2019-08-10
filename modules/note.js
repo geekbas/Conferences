@@ -1,6 +1,14 @@
 const pool = require('./pgpool')
+const md = require('jstransformer')(require('jstransformer-markdown-it'));
 
 const table_name = 'notes'
+
+function markdown_formatted(notes) {
+    return notes.map((note) => {
+        note.note = md.render(note.note).body
+        return note
+    })
+}
 
 class Note {
     static add(fields, done) {
@@ -23,7 +31,7 @@ class Note {
         } else {
             sql += ' AND user_id IS NULL'
         }
-        pool.query(sql, params, { as_array: true }, f)
+        pool.query(sql, params, { as_array: true }, notes => { f(markdown_formatted(notes)) })
     }
 
     static get_mine(user_id, field_name, field_value, f) {

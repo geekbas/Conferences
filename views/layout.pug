@@ -13,7 +13,7 @@ html(lang='en')
           div(class='navbar-nav mr-auto')
             a(href='/conf', class={'nav-item':true, 'nav-link':true, active: navconf}) Conferences
             if user
-              a(href='/date', class={'nav-item':true, 'nav-link':true, active: navdate}) Dates
+              a(href='/date', class={'nav-item':true, 'nav-link':true, active: navdate}) By date
               a(href='/region', class={'nav-item': true, 'nav-link': true, active: navregion}) By region
           if user
             if user.is_admin
