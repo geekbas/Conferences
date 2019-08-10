@@ -4,7 +4,7 @@ const table_name = 'submissions'
 
 class Submission {
     static add(fields, done) {
-        pool.add(table_name, [ 'track_id', 'user_id', 'title' ], fields, done)
+        pool.add(table_name, [ 'track_id', 'user_id', 'title', 'url' ], fields, done)
     }
 
     static update(id, values, done) {

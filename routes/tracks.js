@@ -6,6 +6,8 @@ const Track = require(path.join('..', 'modules', 'track'))
 const User = require(path.join('..', 'modules', 'user'))
 const Submission = require(path.join('..', 'modules', 'submission'))
 
+const helpers = require('./helpers')
+
 router.param('track_id',
     (req, res, next, track_id) => {
         Track.get_by_id(track_id, (track) => {
@@ -19,14 +21,6 @@ router.param('track_id',
 )
 
 router.use('/:track_id/submission', require('./submissions'));
-
-function require_user(req, res, next, return_path) {
-    console.log('require_user, user is', req.user)
-    if (!req.user) {
-        return res.redirect(return_path)
-    }
-    next()
-}
 
 function can_edit(req, res, next) {
     const obj = req.session.track
@@ -48,7 +42,7 @@ function can_delete(req, res, next) {
 
 // noinspection JSUnresolvedFunction
 router.post('/',
-    (req, res, next) => { require_user(req, res, next, req.headers.referer) },
+    (req, res, next) => { helpers.require_user(req, res, next, req.headers.referer) },
     (req, res) => {
         console.log('tracks.post with body', req.body, 'and params', req.params)
         if (!req.body.empty) {
@@ -58,7 +52,6 @@ router.post('/',
                 instance_id: instance_id,
                 name: req.body.name,
                 added_by_user_id: user_id,
-                private_for_user_id: user_id
             }, (id) => {
                 res.redirect(req.session.viewdata.ci_path + '/track/' + id + '/edit')
             })

@@ -23,14 +23,6 @@ router.param('instance_id',
 
 router.use('/:instance_id/track', require('./tracks'));
 
-function require_user(req, res, next, return_path) {
-    console.log('require_user, user is', req.user)
-    if (!req.user) {
-        return res.redirect(return_path)
-    }
-    next()
-}
-
 function can_edit(req, res, next) {
     const ci = req.session.instance
     if (!User.can_edit(ci, req.user)) {
@@ -121,7 +113,7 @@ router.delete('/:instance_id',
 
 // noinspection JSUnresolvedFunction
 router.post('/',
-    (req, res, next) => { require_user(req, res, next, req.headers.referer) },
+    (req, res, next) => { helpers.require_user(req, res, next, req.headers.referer) },
     (req, res) => {
         console.log('post with params', req.body)
         if (!req.body.empty) {
@@ -131,7 +123,6 @@ router.post('/',
                 conf_id: conf_id,
                 year: req.body.year,
                 added_by_user_id: user_id,
-                private_for_user_id: user_id
             }, (id) => {
                 res.redirect(req.session.viewdata.c_path + '/instance/' + id + '/edit');
             })
@@ -151,7 +142,7 @@ router.put('/:instance_id',
 )
 
 router.put('/:instance_id/note',
-    (req, res, next) => { require_user(req, res, next, req.headers.referer) },
+    (req, res, next) => { helpers.require_user(req, res, next, req.headers.referer) },
     (req, res) => {
         console.log('post note with params', req.body)
         if (req.body.note_id) {

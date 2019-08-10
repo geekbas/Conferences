@@ -18,11 +18,20 @@ function add_paths(entries, f = null) {
     return a
 }
 
+function require_user(req, res, next, return_path) {
+    console.log('require_user, user is', req.user)
+    if (!req.user) {
+        return res.redirect(return_path)
+    }
+    next()
+}
+
 function string_sort(values, field = 'when') {
     return values.sort((a, b) => { return ('' + a[field]).localeCompare('' + b[field]) })
 }
 
 module.exports = {
     add_paths,
+    require_user,
     string_sort,
 }

@@ -3,7 +3,6 @@ const router = express.Router({mergeParams: true});
 const path = require('path');
 
 const Track = require(path.join('..', 'modules', 'track'))
-const User = require(path.join('..', 'modules', 'user'))
 const Submission = require(path.join('..', 'modules', 'submission'))
 const helpers = require('./helpers')
 
@@ -63,6 +62,22 @@ router.get('/:submission_id/edit',
     (req, res, next) => { require_same_user(req, res, next, req.session.viewdata.track_path) },
     (req, res) => {
         get_one(req, (items) => res.render('submission/edit', items))
+    }
+)
+
+router.post('/',
+    (req, res, next) => { helpers.require_user(req, res, next, req.headers.referer) },
+    (req, res) => {
+        console.log('submission.post with body', req.body, 'and params', req.params)
+        if (req.body.empty) { return res.redirect(req.headers.referer) }
+        Submission.add({
+            track_id: req.params.track_id,
+            user_id: req.user.id,
+            title: req.body.title,
+            url: req.body.url,
+        }, (id) => {
+            res.redirect(req.session.viewdata.track_path)
+        })
     }
 )
 

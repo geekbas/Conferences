@@ -22,12 +22,14 @@ block content
                     th(scope='row') URL
                     td
                         a(href=submission.url, target='_blank') #{submission.url}
-                tr
-                    th(scope='row') Submission
-                    td #{track.submission}
-                tr
-                    th(scope='row') Notification
-                    td #{track.notification}
+                if (track.submission)
+                    tr
+                        th(scope='row') Submission
+                        td #{track.submission}
+                if (track.notification)
+                    tr
+                        th(scope='row') Notification
+                        td #{track.notification}
 
     p
         a(href=submission_path + '/edit')

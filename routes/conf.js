@@ -7,10 +7,12 @@ const Instance = require(path.join('..', 'modules', 'instance'))
 const Following = require(path.join('..', 'modules', 'follow'))
 const User = require(path.join('..', 'modules', 'user'))
 
+const helpers = require('./helpers')
+
 router.param('conf_id',
     (req, res, next, conf_id) => {
         Conf.get_by_id(conf_id,(c) => {
-            console.log('loaded', c)
+            console.log('loaded conf', c)
             req.session.conf = c
             req.session.viewdata.conf = c
             req.session.viewdata.c_path = '/conf/' + c.id
@@ -20,14 +22,6 @@ router.param('conf_id',
 )
 
 router.use('/:conf_id/instance', require('./instances'));
-
-function require_user(req, res, next, return_path) {
-    console.log('require_user, user is', req.user)
-    if (!req.user) {
-        return res.redirect(return_path)
-    }
-    next()
-}
 
 function can_edit_conf(req, res, next) {
     const c = req.session.conf
@@ -120,7 +114,7 @@ router.delete('/:conf_id',
 
 // noinspection JSUnresolvedFunction
 router.post('/',
-    (req, res, next) => { require_user(req, res, next, req.headers.referer) },
+    (req, res, next) => { helpers.require_user(req, res, next, req.headers.referer) },
     (req, res) => {
         console.log('new conf with params', req.body)
         if (!req.body.empty) {
@@ -129,7 +123,6 @@ router.post('/',
                 acronym: req.body.acronym,
                 name: req.body.name,
                 added_by_user_id: user_id,
-                private_for_user_id: user_id
             }, (conf_id) => {
                 console.log('router got conf_id', conf_id)
                 Following.follow(

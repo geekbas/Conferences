@@ -74,7 +74,18 @@ block content
                 tr
                     th(scope='col') Title
                     th(scope='col') URL
+                    th(scope='col')
             tbody
+                tr
+                    form(method='POST', action=track_path + '/submission')
+                        td
+                            div(class='input-group input-group-sm')
+                                input#submission_name(type='text', name='title')
+                        td
+                            div(class='input-group input-group-sm')
+                                input#submission_url(type='text', name='url')
+                        td
+                            button(class='btn btn-sm', type='submit') New
                 each entry in submissions
                     tr
                         td
