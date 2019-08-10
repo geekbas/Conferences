@@ -29,7 +29,7 @@ router.get('/',
                 let regions = get_sub_list(countries, instance, 'country')
                 let nearby_cities = get_sub_list(regions, instance, 'region')
                 let cities = get_sub_list(nearby_cities, instance, 'nearby_city')
-                let city = get_sub_list(cities, instance, 'city', () => { return new Array() })
+                let city = get_sub_list(cities, instance, 'city', () => { return [] })
                 city.push(instance)
 //                console.log('city:', city)
             })
