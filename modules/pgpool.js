@@ -69,6 +69,7 @@ function del(table_name, id, f) {
 }
 
 function get_by_id(table_name, id, options, f) {
+    if (!(id)) return f(null)
     return query(
         'SELECT * FROM ' + table_name + ' WHERE id=$1 LIMIT 1',
         [ id ],
@@ -109,7 +110,6 @@ function update(table_name, id, field_names, values, f) {
         }
     })
     sql += ' WHERE id=$1 RETURNING id'
-    console.log('final sql:', sql)
     return query(sql, params,{ single: true },(res) => { f(id) })
 }
 

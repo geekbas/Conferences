@@ -47,18 +47,21 @@ function get_one(req, done) {
     Track.get_all(ci.id, (tracks, dates) => {
 //        console.log('tracks', tracks)
 //        console.log('dates', dates)
-        done(
-            Object.assign(req.session.viewdata, {
-                instance: ci,
-                tracks: tracks,
-                dates: helpers.string_sort(dates.concat(req.session.instance_dates)),
-                perms: {
-                    can_edit: User.can_edit(ci, req.user),
-                    can_delete: User.can_delete(ci, req.user)
-                },
-                user: req.user
-            })
-        )
+        const parent = Instance.get_with_conf(ci.parent_id, (parent) => {
+            done(
+                Object.assign(req.session.viewdata, {
+                    instance: ci,
+                    tracks: tracks,
+                    dates: helpers.string_sort(dates.concat(req.session.instance_dates)),
+                    perms: {
+                        can_edit: User.can_edit(ci, req.user),
+                        can_delete: User.can_delete(ci, req.user)
+                    },
+                    parent: helpers.add_paths([ parent ])[0],
+                    user: req.user
+                })
+            )
+        })
     })
 }
 
@@ -69,10 +72,14 @@ router.get('/:instance_id', (req, res) => {
             req.user ? req.user.id : null,
             'instance_id', req.session.instance.id,
             (private_notes, public_notes) => {
-                res.render('instance/show', Object.assign(fields, {
-                    private_notes,
-                    public_notes,
-                }))
+                Instance.get_children_to(req.session.instance.id, (children) => {
+//                    console.log('got children', children)
+                    res.render('instance/show', Object.assign(fields, {
+                        private_notes,
+                        public_notes,
+                        children: helpers.add_paths(children),
+                    }))
+                })
             }
         )
     })
@@ -88,13 +95,17 @@ router.get('/:instance_id/edit',
                 'instance_id',
                 req.session.instance.id,
                 (private_note, public_note) => {
-                    res.render(
-                        'instance/edit',
-                        Object.assign(fields, {
-                            private_note,
-                            public_note,
-                        })
-                    )
+                    Instance.get_potential_parents(req.session.instance, (parents) => {
+//                        console.log('got potential parents', parents)
+                        res.render(
+                            'instance/edit',
+                            Object.assign(fields, {
+                                private_note,
+                                public_note,
+                                parents,
+                            })
+                        )
+                    })
                 }
             )
         })

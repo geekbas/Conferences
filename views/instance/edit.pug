@@ -25,6 +25,15 @@ block content
                 input#conf_end(class='form-control col-sm-10', type='date', name='conf_end',
                     value=instance.conf_end)
 
+            if (parents.length > 0)
+                div(class='form-group row')
+                    label(for='parent_id', class="col-sm-2 col-form-label") Colocated with:
+                    select#parent_id(name='parent_id')
+                        option(value='0') No parent
+                        each parent in parents
+                            option(value=parent.id, selected=(instance.parent_id === parent.id))
+                                | #{parent.conf_name}, #{parent.year}
+
             div(class='form-group row')
                 label(for='venue', class="col-sm-2 col-form-label") Venue:
                 input#venue(class='form-control col-sm-10', type='text', name='venue',

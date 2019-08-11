@@ -1,5 +1,24 @@
 extends ../layout
 
+mixin linked_conf_and_instance(i)
+    a(href=i.c_path)
+        | #{i.conf_name}
+    | &nbsp;
+    a(href=i.ci_path)
+        | '#{i.year}
+
+mixin show_venue(i)
+    if (i.venue)
+        | #{i.venue} in&nbsp;
+    | #{i.city}
+    if (i.nearby_city)
+        | &nbsp;(near #{i.nearby_city})
+    if (i.country)
+        | ,&nbsp;
+        if (i.region)
+            | #{i.region},&nbsp;
+        | #{i.country}
+
 block content
     h2
         a(href=c_path)
@@ -13,26 +32,33 @@ block content
                 th(scope='row') URL
                 td
                     a(href=instance.url, target='_blank') #{instance.url}
-            tr
-                th(scope='row') Venue
-                td
-                    if (instance.venue)
-                        | #{instance.venue} in&nbsp;
-                    | #{instance.city}
-                    if (instance.nearby_city)
-                        | &nbsp;(near #{instance.nearby_city})
-                    if (instance.country)
-                        | ,&nbsp;
-                        if (instance.region)
-                            | #{instance.region},&nbsp;
-                        | #{instance.country}
+
+            if (parent)
+                tr
+                    th(scope='row') Colocated with
+                    td
+                        +linked_conf_and_instance(parent)
+                        | &nbsp;in&nbsp;
+                        +show_venue(parent)
+            else
+                tr
+                    th(scope='row') Venue
+                    td
+                        +show_venue(instance)
+
+    if (children.length > 0)
+        h3 Colocated with
+        ul
+            each child in children
+                li
+                    +linked_conf_and_instance(child)
 
     h3 Call For Papers
     table(class='table table-sm')
         tbody
             if (user)
                 tr
-                    td(scope='row')
+                    td
                         form(method='POST', action=ci_path + '/track')
                             div(class='input-group input-group-sm')
                                 label(class="input-group-text", for='instance_name') Name:
@@ -56,7 +82,7 @@ block content
                     form(method='POST', action='/date')
                         input(type='hidden', name='conf_id', value=conf.id)
                         input(type='hidden', name='instance_id', value=instance.id)
-                        td(scope='row')
+                        td
                             input#date_when(type='date', name='datevalue')
                         td
                             input#date_what(type='text', name='what')
