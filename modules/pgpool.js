@@ -94,7 +94,7 @@ function add(table_name, field_names, values, f) {
         }
     })
     sql += ') ' + sql_values + ') RETURNING id'
-    return query(sql, params,{ single: true }, f)
+    return query(sql, params,{ single: true }, (res) => { f(res.id) } )
 }
 
 function update(table_name, id, field_names, values, f) {
