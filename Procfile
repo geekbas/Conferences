@@ -1,2 +1,2 @@
-release: echo running the procfile
+release: db-migrate up
 
