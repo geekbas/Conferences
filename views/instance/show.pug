@@ -72,16 +72,7 @@ block content
                         | #{entry.what}
                     td &nbsp;
 
-    h3 Notes
-    h4 Public
-    each note in public_notes
-        p !{note.note}
-        hr
-
-    h4 Private
-    each note in private_notes
-        p !{note.note}
-        hr
+    include ../note/list.pug
 
     if (user)
         div(class="input-group mb-3")

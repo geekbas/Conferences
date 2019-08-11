@@ -1,0 +1,13 @@
+if ((public_notes.length > 0) || (private_notes.length > 0))
+    h3 Notes
+    if (public_notes.length > 0)
+        h4 Public
+        each note in public_notes
+            p !{note.note}
+            hr
+
+    if (private_notes.length > 0)
+        h4 Private
+        each note in private_notes
+            p !{note.note}
+            hr

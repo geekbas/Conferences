@@ -16,7 +16,11 @@ block content
             tr
                 th(scope='row') URL
                 td
-                    a(href=track.url, target='_blank') #{track.url}
+                    if (track.url)
+                        a(href=track.url, target='_blank') #{track.url}
+                    else if (instance.url)
+                        | Instance:&nbsp;
+                        a(href=instance.url, target='_blank') #{instance.url}
             tr
                 th(scope='row') Page limit
                 td
@@ -59,16 +63,7 @@ block content
                     td Camera ready
                     td &nbsp;
 
-    h3 Notes
-    h4 Public
-    each note in public_notes
-        p !{note.note}
-        hr
-
-    h4 Private
-    each note in private_notes
-        p !{note.note}
-        hr
+    include ../note/list.pug
 
     div(class="input-group mb-3")
         if perms.can_edit
