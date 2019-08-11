@@ -8,6 +8,10 @@ Items further down on the list may depend on items higher up.
 
 ### Usable for others
 
+* Topics
+  * On conferences
+  * On instances
+  * On CFP alternatives
 * Confirmation popups for deletions
 * Database references
 * Find a better product name?
@@ -29,10 +33,6 @@ Items further down on the list may depend on items higher up.
 * Cities as first level citizens
   * Public notes (restaurants, sights, etc)
   * Private notes
-* Topics
-  * On conferences
-  * On instances
-  * On CFP alternatives
 
 ### Later
 
