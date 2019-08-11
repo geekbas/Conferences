@@ -1,5 +1,5 @@
 div(class='form-group row')
-    label(for='public_note', class="col-sm-2 col-form-label") Public note:
+    label(for='public_note', class="col-sm-2 col-form-label") Public note (Markdown&nbsp;ok):
     textarea#public_note(class='form-control col-sm-10', rows='5', cols='40', name='note')
         if (public_note)
             | #{public_note.note}
