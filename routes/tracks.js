@@ -82,7 +82,9 @@ router.get('/:track_id', (req, res) => {
             req.user ? req.user.id : null,
             'track_id', req.session.track.id,
             (notes) => {
-                res.render('track/show', Object.assign(items, {notes}))
+                res.render('track/show', Object.assign(items, {
+                    notes
+                }))
             }
         )
     })
