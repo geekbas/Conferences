@@ -81,9 +81,10 @@ router.get('/:track_id', (req, res) => {
         Note.get(
             req.user ? req.user.id : null,
             'track_id', req.session.track.id,
-            (notes) => {
+            (private_notes, public_notes) => {
                 res.render('track/show', Object.assign(items, {
-                    notes
+                    private_notes,
+                    public_notes,
                 }))
             }
         )

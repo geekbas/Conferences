@@ -74,16 +74,14 @@ block content
 
     h3 Notes
     h4 Public
-    each note in notes
-        if (!note.private)
-            p !{note.note}
-            hr
+    each note in public_notes
+        p !{note.note}
+        hr
 
     h4 Private
-    each note in notes
-        if (note.private)
-            p !{note.note}
-            hr
+    each note in private_notes
+        p !{note.note}
+        hr
 
     if (user)
         div(class="input-group mb-3")

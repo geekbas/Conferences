@@ -68,8 +68,11 @@ router.get('/:instance_id', (req, res) => {
         Note.get(
             req.user ? req.user.id : null,
             'instance_id', req.session.instance.id,
-            (notes) => {
-                res.render('instance/show', Object.assign(fields, { notes }))
+            (private_notes, public_notes) => {
+                res.render('instance/show', Object.assign(fields, {
+                    private_notes,
+                    public_notes,
+                }))
             }
         )
     })

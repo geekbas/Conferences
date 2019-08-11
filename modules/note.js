@@ -32,7 +32,10 @@ class Note {
             sql += ' AND (user_id IS NULL'
         }
         sql += ' OR private=false)'
-        pool.query(sql, params, { as_array: true }, notes => { f(markdown_formatted(notes)) })
+        pool.query(sql, params, { as_array: true }, (notes) => {
+            notes = markdown_formatted(notes)
+            f(notes.filter((note) => note.private), notes.filter((note) => !note.private))
+        })
     }
 
     static get_mine(user_id, field_name, field_value, f) {
