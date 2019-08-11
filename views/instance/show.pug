@@ -21,10 +21,11 @@ block content
                     | #{instance.city}
                     if (instance.nearby_city)
                         | &nbsp;(near #{instance.nearby_city})
-                    | ,&nbsp;
-                    if (instance.region)
-                        | #{instance.region},&nbsp;
-                    | #{instance.country}
+                    if (instance.country)
+                        | ,&nbsp;
+                        if (instance.region)
+                            | #{instance.region},&nbsp;
+                        | #{instance.country}
 
     h3 Call For Papers
     table(class='table table-sm')
