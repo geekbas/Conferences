@@ -1,6 +1,5 @@
 
 const session = require('express-session')
-const FirestoreStore = require('firestore-store')(session);
 const FileStore = require('session-file-store')(session);
 
 const passport = require('passport')
@@ -17,7 +16,6 @@ const do_auth = function(app) {
         resave: true,
         rolling: true,
         saveUninitialized: true
-//        ,store: new FirestoreStore({ database: require(path.join(__dirname, 'modules', 'firestore'))})
         ,store: new FileStore({})
 //        ,cookie: {//secure: true -- only if https}
     }))
