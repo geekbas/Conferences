@@ -8,6 +8,7 @@ Items further down on the list may depend on items higher up.
 
 ### Usable for others
 
+* Conference ratings
 * Confirmation popups for deletions
 * Database references
 * Find a better product name?
@@ -19,6 +20,7 @@ Items further down on the list may depend on items higher up.
 
 ### Good To Have
 
+* Journals?
 * Topics
   * columns
     * user_id
