@@ -1,0 +1,34 @@
+extends layout
+
+block content
+    h2 About
+
+    p.
+        This is a system for keeping track of academic conferences and workshops.
+        Even within a limited research field, there is often a large number of conferences to select from.
+        Sometimes the periods between submission and notification overlap, making it non-obvious where and when to submit a paper.
+        It is of course also not possible to attend more than one conference at a time, which could affect where to submit and where to attend.
+
+    h3 Use cases
+
+    p When not logged in, all public information about the conferences are available.
+
+    p When logged in, you can do much more.
+
+    ul
+        li Track a conference or workshop. This makes all dates related to these conferences available in a sorted list. It also limits the list of conferences shown in the <a href="/conf">conference list</a>.
+        li Find a fitting venue for new papers, and see where they could be resubmitted if rejected.
+        li Register a paper as submitted to a CFP.
+
+    p It is possible to for any logged in user to register information in the system, but for now only a moderator can delete it.
+
+    h3 Model
+
+    p The main concept is a conference, which has instances one or more years. Each conference instance is optionally connected to one or more workshop instances. The connection is on instance level and not on the conference level, as the same workshop may be connected to different conferences over the years (e.g.&nbsp;
+        if (conf_debs)
+            a(href=conf_debs.c_path)
+                | DEBS
+        else
+            a(href='https://debs.org/debs-conferences', target='_blank')
+                | DEBS
+        | ). For each instance there is a Call For Papers (CFP), with one or more alternatives (typically research and industry), with different deadlines, page limits and other requirements. Conference instance and CFPs have two user specific freeform note fields. The public note is visible to everybody, and the private note is visible only to the user who created it.

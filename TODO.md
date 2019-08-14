@@ -8,6 +8,8 @@ Items further down on the list may depend on items higher up.
 
 ### Usable for others
 
+* About page
+* Placeholders
 * Conference ratings
   * according to which list?
   * sort how?

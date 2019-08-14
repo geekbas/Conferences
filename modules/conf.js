@@ -30,6 +30,14 @@ class Conf {
         pool.query(sql, params, options, f)
     }
 
+    static get_by_acronym(acronym, done) {
+        pool.query(
+            'SELECT c.id as conf_id, c.* from ' + table_name + ' c WHERE acronym=$1',
+            [ acronym ],
+            { single: true },
+            done)
+    }
+
     // generics
 
     static del(id, f) {
