@@ -51,7 +51,7 @@ router.get('/', (req, res) => {
         options.followed_by = req.user.id
     Conf.get_all(options, (confs) => {
 //        console.log('got full conf list', confs)
-        res.render('index', {
+        res.render('conf/index', {
             title: 'Conferences',
             confs: confs,
             navsection: 'confs',
