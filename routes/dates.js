@@ -30,6 +30,7 @@ router.get('/', (req, res) => {
                     }).filter((e) => { return e.when >= moment().format('YYYY-MM-DD') })
 
                     res.render('dates', Object.assign(req.session.viewdata, {
+                        navsection: 'dates',
                         user: req.user,
                         dates: helpers.string_sort(dates)
                     }))

@@ -10,6 +10,7 @@ const helpers = require('./helpers')
 router.get('/', function(req, res) {
   Conf.get_by_acronym('DEBS', (conf) => {
     res.render('about', {
+      navsection: 'about',
       user: req.user,
       conf_debs: helpers.add_paths([ conf ])[0],
     })

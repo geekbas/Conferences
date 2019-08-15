@@ -11,18 +11,17 @@ html(lang='en')
       nav(class='navbar navbar-expand-lg bg-light navbar-light')
         div#navbarNavDropdown(class="collapse navbar-collapse")
           div(class='navbar-nav mr-auto')
-            a(href='/', class={'nav-item': true, 'nav-link': true}) About
-            a(href='/conf', class={'nav-item':true, 'nav-link':true, active: navconf}) Conferences
+            a(href='/', class={'nav-item': true, 'nav-link': true, active: (navsection === 'about')}) About
+            a(href='/conf', class={'nav-item':true, 'nav-link':true, active: (navsection === 'confs')}) Conferences
             if user
-              a(href='/date', class={'nav-item':true, 'nav-link':true, active: navdate}) By date
-              a(href='/region', class={'nav-item': true, 'nav-link': true, active: navregion}) By region
+              a(href='/date', class={'nav-item':true, 'nav-link':true, active: (navsection === 'dates')}) By date
+              a(href='/region', class={'nav-item': true, 'nav-link': true, active: (navsection === 'regions')}) By region
           if user
-            if user.is_admin
-              a(href='/user/list')
-                span(class='nav-item navbar-text nav-link') Users
-            a(href='/user')
-              span(class='nav-item navbar-text nav-link') #{user.given_name} #{user.family_name}
-            a(href='/auth/logout', class='nav-item nav-link') Logout
+            div(class='navbar-nav')
+              if user.is_admin
+                a(href='/user/list', class={'nav-item': true, 'nav-link': true, active: (navsection === 'users')}) Users
+              a(href='/user', class={'nav-item': true, 'navbar-text': true, 'nav-link': true, active: (navsection === 'profile')}) #{user.given_name} #{user.family_name}
+              a(href='/auth/logout', class='nav-item nav-link') Logout
           else
             div(class='nav-item dropdown')
               a#authDropdown(href='#' role='button' class='nav-item nav-link dropdown-toggle' data-toggle='dropdown' aria-haspopup="true" aria-expanded="false") Login
@@ -30,6 +29,7 @@ html(lang='en')
                 a(href='/auth/google', class='dropdown-item')
                   img(src='/images/btn_google_signin_light_normal_web.png')
                 // span(class='dropdown-item') Twitter
+                // span(class='dropdown-item') Mastodon
 
       block content
 

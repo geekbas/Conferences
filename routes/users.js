@@ -20,6 +20,7 @@ router.get('/',
                 Track.find_upcoming(req.user.id, null, (tracks) => {
                     const upcoming = helpers.add_paths(tracks)
                     res.render('profile', {
+                        navsection: 'profile',
                         user: req.user,
                         confs,
                         submissions: papers,
@@ -36,6 +37,7 @@ router.get('/list',
     (req, res) => {
         User.find_all((users) => {
             res.render('users', {
+                navsection: 'users',
                 user: req.user,
                 users,
             })

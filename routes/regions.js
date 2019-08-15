@@ -54,6 +54,7 @@ router.get('/',
             countries = compress_map(countries)
 //            console.log('compressed countries:', countries)
             res.render('region/by_region', {
+                navsection: 'regions',
                 user: req.user,
                 countries,
             })

@@ -14,6 +14,7 @@ router.param('conf_id',
         Conf.get_by_id(conf_id,(c) => {
             console.log('loaded conf', c)
             req.session.conf = c
+            req.session.viewdata.navsection = 'confs'
             req.session.viewdata.conf = c
             req.session.viewdata.c_path = '/conf/' + c.id
             next()
@@ -52,7 +53,7 @@ router.get('/', (req, res) => {
         res.render('index', {
             title: 'Conferences',
             confs: confs,
-            navconf: true,
+            navsection: 'confs',
             show_all: !!req.session.show_all,
             user: req.user
         })
@@ -72,7 +73,6 @@ router.get('/:conf_id', (req, res) => {
                     title: 'Conference',
                     instances: list,
                     following: follows,
-                    navconf: true,
                     perms: {
                         can_edit: User.can_edit(c, req.user),
                         can_delete: User.can_delete(c, req.user)
@@ -93,7 +93,6 @@ router.get('/:conf_id/edit',
         res.render('conf/edit',
             Object.assign(req.session.viewdata, {
                 title: 'Conference',
-                navconf: true,
                 user: req.user}
             )
         )
