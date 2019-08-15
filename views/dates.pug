@@ -3,27 +3,30 @@ extends layout
 block content
     h2 Upcoming events
 
-    if (dates.length > 0)
-        table(class='table table-sm table-striped')
-            thead
-                tr
-                    th(scope='col') Date
-                    th(scope='col') Conference
-                    th(scope='col') Year/Instance
-                    th(scope='col') What
-            tbody
-            each date in dates
-                tr
-                    th(scope='row') #{date.when}
-                    td
-                        a(href=date.c_path) #{date.conf.name}
-                        | &nbsp;(#{date.conf.acronym})
-                    td
-                        a(href=date.ci_path) #{date.instance_year}
-                    td
-                        if (date.track_id)
-                            a(href=date.track_path) #{date.track_name}
-                            | ,&nbsp;
-                        | #{date.what}
+    if (user)
+        if (dates.length > 0)
+            table(class='table table-sm table-striped')
+                thead
+                    tr
+                        th(scope='col') Date
+                        th(scope='col') Conference
+                        th(scope='col') Year/Instance
+                        th(scope='col') What
+                tbody
+                each date in dates
+                    tr
+                        th(scope='row') #{date.when}
+                        td
+                            a(href=date.c_path) #{date.conf.name}
+                            | &nbsp;(#{date.conf.acronym})
+                        td
+                            a(href=date.ci_path) #{date.instance_year}
+                        td
+                            if (date.track_id)
+                                a(href=date.track_path) #{date.track_name}
+                                | ,&nbsp;
+                            | #{date.what}
+        else
+            include user/no_conferences_followed
     else
-        include user/no_conferences_followed
+        p When logged in, you can select which conferences you want to follow. The conference dates, CFP deadlines etc, will then appear here.

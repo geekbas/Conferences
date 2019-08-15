@@ -34,8 +34,11 @@ function compress_map(map) {
 
 router.get('/',
     (req, res, next) => {
-        if (!req.user) { return res.redirect('/') }
-        next()
+        if (!req.user) {
+            return res.render('region/by_region', Object.assign(req.session.viewdata, {
+                navsection: 'regions',
+            }))
+        }
     },
     (req, res) => {
         Instance.get_all_by_region(req.user.id, (instances) => {

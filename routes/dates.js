@@ -10,7 +10,11 @@ const moment = require('moment')
 
 // noinspection JSUnresolvedFunction
 router.get('/', (req, res) => {
-    if (!req.user) return res.redirect('/')
+    if (!req.user) {
+        return res.render('dates', Object.assign(req.session.viewdata, {
+            navsection: 'dates',
+        }))
+    }
     Conf.get_all({ followed_by: req.user.id }, (confs) => {
 //        console.log('dates/get confs', confs)
         let conf_ids = []

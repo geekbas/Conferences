@@ -15,29 +15,32 @@ mixin show_instances(list)
 block content
     h2 Conference instances by region
 
-    if (countries.size > 0)
-        ul
-            each country in Array.from(countries.entries())
-                li #{country[0]}
-                ul
-                    if (country[1] instanceof Map)
-                        each region in Array.from(country[1].entries())
-                            li #{region[0]}
-                            ul
-                                if (region[1] instanceof Map)
-                                    each nearby_city in Array.from(region[1].entries())
-                                        li #{nearby_city[0]}
-                                        ul
-                                            if (nearby_city[1] instanceof Map)
-                                                each city in Array.from(nearby_city[1].entries())
-                                                    li #{city[0]}
-                                                    ul
-                                                        +show_instances(city[1])
-                                            else
-                                                +show_instances(nearby_city[1])
-                                else
-                                    +show_instances(region[1])
-                    else
-                        +show_instances(country[1])
+    if (user)
+        if (countries.size > 0)
+            ul
+                each country in Array.from(countries.entries())
+                    li #{country[0]}
+                    ul
+                        if (country[1] instanceof Map)
+                            each region in Array.from(country[1].entries())
+                                li #{region[0]}
+                                ul
+                                    if (region[1] instanceof Map)
+                                        each nearby_city in Array.from(region[1].entries())
+                                            li #{nearby_city[0]}
+                                            ul
+                                                if (nearby_city[1] instanceof Map)
+                                                    each city in Array.from(nearby_city[1].entries())
+                                                        li #{city[0]}
+                                                        ul
+                                                            +show_instances(city[1])
+                                                else
+                                                    +show_instances(nearby_city[1])
+                                    else
+                                        +show_instances(region[1])
+                        else
+                            +show_instances(country[1])
+        else
+            include ../user/no_conferences_followed
     else
-        include ../user/no_conferences_followed
+        p When logged in, you can select which conferences you want to follow. The venues for each instance of those conference will then appear here.

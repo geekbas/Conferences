@@ -13,9 +13,8 @@ html(lang='en')
           div(class='navbar-nav mr-auto')
             a(href='/', class={'nav-item': true, 'nav-link': true, active: (navsection === 'about')}) About
             a(href='/conf', class={'nav-item':true, 'nav-link':true, active: (navsection === 'confs')}) Conferences
-            if user
-              a(href='/date', class={'nav-item':true, 'nav-link':true, active: (navsection === 'dates')}) By date
-              a(href='/region', class={'nav-item': true, 'nav-link': true, active: (navsection === 'regions')}) By region
+            a(href='/date', class={'nav-item':true, 'nav-link':true, active: (navsection === 'dates')}) By date
+            a(href='/region', class={'nav-item': true, 'nav-link': true, active: (navsection === 'regions')}) By region
           if user
             div(class='navbar-nav')
               if user.is_admin
