@@ -46,7 +46,8 @@ function can_delete_conf(req, res, next) {
 // noinspection JSUnresolvedFunction
 router.get('/', (req, res) => {
     let options = { as_array: true }
-    if (!req.session.show_all && req.user)
+    const show_all = req.session.show_all || req.query.show_all
+    if (!show_all && req.user)
         options.followed_by = req.user.id
     Conf.get_all(options, (confs) => {
 //        console.log('got full conf list', confs)
@@ -54,7 +55,7 @@ router.get('/', (req, res) => {
             title: 'Conferences',
             confs: confs,
             navsection: 'confs',
-            show_all: !!req.session.show_all,
+            show_all: !!show_all,
             user: req.user
         })
     })

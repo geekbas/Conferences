@@ -7,62 +7,75 @@ block content
     p Name: #{user.given_name} #{user.family_name}
 
     h3 Followed conferences
-    ul
-        each fc in confs
-            li
-                a(href='/conf/' + fc.id)
-                    | #{fc.name} (#{fc.acronym})
+    if (confs.length > 0)
+        ul
+            each fc in confs
+                li
+                    a(href='/conf/' + fc.id)
+                        | #{fc.name} (#{fc.acronym})
+    else
+        p You are currently not following any conferences. Maybe there is one of interest in the
+            |
+            |
+            a(href='/conf?show_all=1') conference list?
 
-    h3 Upcoming CFP
-    table(class='table table-sm')
-        thead
-            tr
-                th(scope='col') Conference
-                th(scope='col') Instance
-                th(scope='col') Track
-                th(scope='col') Submission
-        tbody
-            each entry in upcoming
-                tr
-                    td
-                        a(href=entry.c_path)
-                            | #{entry.conf_name} (#{entry.acronym})
-                    td
-                        a(href=entry.ci_path)
-                            | #{entry.instance_year}
-                        if (entry.city)
-                            | &nbsp;(#{entry.city}, #{entry.country})
-                    td
-                        a(href=entry.track_path)
-                            | #{entry.track_name}
-                    td #{entry.submission}
+    if (confs.length > 0)
+        h3 Upcoming CFP
+        if (upcoming.length > 0)
+            table(class='table table-sm')
+                thead
+                    tr
+                        th(scope='col') Conference
+                        th(scope='col') Instance
+                        th(scope='col') Track
+                        th(scope='col') Submission
+                tbody
+                    each entry in upcoming
+                        tr
+                            td
+                                a(href=entry.c_path)
+                                    | #{entry.conf_name} (#{entry.acronym})
+                            td
+                                a(href=entry.ci_path)
+                                    | #{entry.instance_year}
+                                if (entry.city)
+                                    | &nbsp;(#{entry.city}, #{entry.country})
+                            td
+                                a(href=entry.track_path)
+                                    | #{entry.track_name}
+                            td #{entry.submission}
+        else
+            p There are no upcoming Call For Papers for your tracked conferences.
 
     h3 Submissions
-    table(class='table table-sm')
-        thead
+    if (submissions.length > 0)
+        table(class='table table-sm')
+            thead
             tr
-                th(scope='col') Title
-                th(scope='col') URL
-                th(scope='col') Conference
-                th(scope='col') Year
-                th(scope='col') Track
-                th(scope='col') Submission
-        tbody
-            each entry in submissions
-                tr
-                    td
-                        a(href=entry.submission_path)
-                            | #{entry.title}
-                    td
-                        if (entry.url)
-                            a(href=entry.url, target='_blank') #{entry.url}
-                    td
-                        a(href=entry.c_path)
-                            | #{entry.conf_name}
-                    td
-                        a(href=entry.ci_path)
-                            | #{entry.instance_year}
-                    td
-                        a(href=entry.track_path)
-                            | #{entry.track_name}
-                    td #{entry.submission}
+                    th(scope='col') Title
+                    th(scope='col') URL
+                    th(scope='col') Conference
+                    th(scope='col') Year
+                    th(scope='col') Track
+                    th(scope='col') Submission
+            tbody
+                each entry in submissions
+                    tr
+                        td
+                            a(href=entry.submission_path)
+                                | #{entry.title}
+                        td
+                            if (entry.url)
+                                a(href=entry.url, target='_blank') #{entry.url}
+                        td
+                            a(href=entry.c_path)
+                                | #{entry.conf_name}
+                        td
+                            a(href=entry.ci_path)
+                                | #{entry.instance_year}
+                        td
+                            a(href=entry.track_path)
+                                | #{entry.track_name}
+                        td #{entry.submission}
+    else
+        p To add a submission to keep track of, please add it on the page for the corresponding Call For Papers.
