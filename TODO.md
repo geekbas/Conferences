@@ -8,22 +8,22 @@ Items further down on the list may depend on items higher up.
 
 ### Usable for others
 
-* About page
-* Placeholders
-* Conference ratings
-  * according to which list?
-  * sort how?
+* Breadcrumbs
+* Placeholders?
 * Confirmation popups for deletions
 * Database references
 * Find a better product name?
   * "Submission planner"
-* Twitter-auth?
 * Mastodon-auth?
   * http://www.passportjs.org/packages/passport-mastodon/
 * Mobile friendly
 
 ### Good To Have
 
+* Twitter-auth?
+* Conference ratings
+  * according to which list?
+  * sort how?
 * Journals?
 * Topics
   * columns
@@ -44,7 +44,6 @@ Items further down on the list may depend on items higher up.
 
 ### Later
 
-* Breadcrumbs
 * Dates
   * gruppera på år och månad?
 * Co-authors
@@ -62,6 +61,8 @@ Items further down on the list may depend on items higher up.
 * Submissions
   * If submitted to a particular CFP:
     * Which ones get blocked out?
+* Track conference or workshop topics.
+* Track committee members.
 
 ## Without particular order
 
