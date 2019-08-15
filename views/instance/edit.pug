@@ -65,11 +65,11 @@ block content
 
     p
     form(method='post', action=ci_path + '/note' + '?_method=PUT')
-        include ../note/edit_private.pug
+        include ../note/edit_private
         div(class='form-group row')
             button(class='btn btn-sm btn-primary mr-3', type='submit') Update
     p
     form(method='post', action=ci_path + '/note' + '?_method=PUT')
-        include ../note/edit_public.pug
+        include ../note/edit_public
         div(class='form-group row')
             button(class='btn btn-sm btn-primary mr-3', type='submit') Update

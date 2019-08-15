@@ -1,4 +1,4 @@
-extends layout
+extends ../layout
 
 block content
     h2 Profile
@@ -14,10 +14,7 @@ block content
                     a(href='/conf/' + fc.id)
                         | #{fc.name} (#{fc.acronym})
     else
-        p You are currently not following any conferences. Maybe there is one of interest in the
-            |
-            |
-            a(href='/conf?show_all=1') conference list?
+        include no_conferences_followed
 
     if (confs.length > 0)
         h3 Upcoming CFP
