@@ -6,8 +6,10 @@ const table_name = 'follows'
 class Following {
 
     static follow(user, conf_id, done) {
-        if (user) return done(null)
-        pool.add(table_name, [ 'user_id', 'conf_id' ], [ user.id, conf_id ], done)
+        if (!user) return done(null)
+        pool.add(table_name, [ 'user_id', 'conf_id' ],
+            { user_id: user.id, conf_id },
+            done)
     }
 
     static follows_conf(user_id, conf_id, done) {
