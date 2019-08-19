@@ -42,3 +42,8 @@ For deployment at Heroku, use "heroku config:set".
 * GOOGLE_AUTH_CLIENT_ID
 * GOOGLE_AUTH_CLIENT_SECRET
 * DATABASE_URL: The Postgres database, e.g. postgres://conf@localhost:5432/confs
+
+##
+
+Making a local copy of the heroku database:
+PGUSER=conf heroku pg:pull DATABASE_URL confs
