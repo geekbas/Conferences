@@ -39,6 +39,7 @@ router.get('/',
                 navsection: 'regions',
             }))
         }
+        next()
     },
     (req, res) => {
         Instance.get_all_by_region(req.user.id, (instances) => {
