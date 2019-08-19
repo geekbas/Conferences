@@ -12,12 +12,15 @@ Items further down on the list may depend on items higher up.
 * Database references
 * Find a better product name?
   * "Submission planner"
-* Mastodon-auth?
-  * http://www.passportjs.org/packages/passport-mastodon/
-* Mobile friendly
 
 ### Good To Have
 
+* Sort conferences on acronym or name
+* Event filter
+  * conference start/end
+  * submissions
+* Mastodon-auth?
+  * http://www.passportjs.org/packages/passport-mastodon/
 * Twitter-auth?
 * Conference ratings
   * according to which list?
@@ -33,6 +36,7 @@ Items further down on the list may depend on items higher up.
   * On CFP alternatives
   * On submissions
 * Block users?
+* Mobile friendly
 * Audit Log
 * Conference list
   * Show next date
