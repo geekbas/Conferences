@@ -8,7 +8,12 @@ class Submission {
     }
 
     static update(id, values, done) {
-        pool.update(table_name, id, [ 'title', 'url', 'track_id' ], values, done)
+        pool.update(
+            table_name,
+            id,
+            [ 'title', 'url', 'track_id', 'final_state', 'tmp_state' ],
+            values,
+            done)
     }
 
     static get_all(user_id, track_id, f) {

@@ -7,8 +7,8 @@ block content
     p
     | For&nbsp;
     a(href=c_path)
-        | #{conf.name},
-    | &nbsp;
+        | #{conf.name}
+    | ,&nbsp;
     a(href=ci_path)
         | #{instance.year}
     | ,&nbsp;
@@ -22,7 +22,21 @@ block content
                 input#title(class='form-control col-sm-10', type='text', name='title', value=submission.title)
             div(class='form-group row')
                 label(for='url', class="col-sm-2 col-form-label") URL:
-                input#url(class='form-control col-sm-10', type='url', name='url', value=submission.url)
+                input#url(class='form-control col-sm-10', type='url', name='url',
+                    placeholder='https://www.overleaf.com/...',
+                    value=submission.url)
+
+            div(class='form-group row')
+                label(for='tmp_state', class="col-sm-2 col-form-label") Temporary state:
+                input#tmp_state(class='form-control col-sm-10', type='text', name='tmp_state',
+                    placeholder='being written, done, etc',
+                    value=submission.tmp_state)
+            div(class='form-group row')
+                label(for='final_state', class="col-sm-2 col-form-label") Final state:
+                select#final_state(name='final_state')
+                    option(value='0', selected=(submission.final_state === 0)) TBD
+                    option(value='-1', selected=(submission.final_state === -1)) Rejected
+                    option(value='1', selected=(submission.final_state === 1)) Accepted
 
             div(class='form-group row')
                 div(class='button')

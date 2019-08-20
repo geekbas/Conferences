@@ -96,7 +96,10 @@ router.put('/:submission_id/track_id',
     (req, res) => {
         const track_id = req.body.track_id
         console.log('change track to', track_id)
-        const updates = { track_id }
+        const updates = {
+            track_id,
+            final_state: 0,
+        }
         Submission.update(req.params.submission_id, updates, (id) => {
             res.redirect(
                 '/conf/' + req.body.conf_id +

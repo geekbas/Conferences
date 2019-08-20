@@ -8,7 +8,6 @@ Items further down on the list may depend on items higher up.
 
 ### Usable for others
 
-* Submission state: in-progress, submitted, accepted, rejected
 * Confirmation popups for deletions
 * Database references
 * Find a better product name?

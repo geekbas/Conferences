@@ -30,6 +30,17 @@ block content
                     tr
                         th(scope='row') Notification
                         td #{track.notification}
+                if (submission.tmp_state)
+                    tr
+                        th(scope='row') Temporary state:
+                        td #{submission.tmp_state}
+                if (submission.final_state)
+                    tr
+                        th(scope='row') Final state:
+                        td
+                            case submission.final_state
+                                when -1: div Rejected
+                                when 1: div Accepted
 
     p
         a(href=submission_path + '/edit')
