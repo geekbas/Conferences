@@ -19,7 +19,7 @@ block content
         form(method='post', action=submission_path + '?_method=PUT')
             div(class='form-group row')
                 label(for='title', class="col-sm-2 col-form-label") Title:
-                input#name(class='form-control col-sm-10', type='text', name='title', value=submission.title)
+                input#title(class='form-control col-sm-10', type='text', name='title', value=submission.title)
             div(class='form-group row')
                 label(for='url', class="col-sm-2 col-form-label") URL:
                 input#url(class='form-control col-sm-10', type='url', name='url', value=submission.url)
