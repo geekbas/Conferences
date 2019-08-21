@@ -21,6 +21,11 @@ Items further down on the list may depend on items higher up.
   * submissions
 * Mastodon-auth?
   * http://www.passportjs.org/packages/passport-mastodon/
+* Links to interesting papers
+  * On instances
+  * Also showed on the conference main page
+  * Filter: only mine
+  * Special page with all mine
 * Twitter-auth?
 * Conference ratings
   * according to which list?
