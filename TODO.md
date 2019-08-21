@@ -9,7 +9,7 @@ Items further down on the list may depend on items higher up.
 ### Usable for others
 
 * Confirmation popups for deletions
-* Database references
+* Database references in postgres
 * Find a better product name?
   * "Submission planner"
 
