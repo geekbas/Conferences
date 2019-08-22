@@ -7,7 +7,7 @@ block content
         form(method='post', action='/conf/' + conf.id + '/instance/' + instance.id + '/?_method=PUT')
             div(class='form-group row')
                 label(for='year', class="col-sm-2 col-form-label") Year:
-                input#year(class='form-control col-sm-10', type='number', min="2000", max="2020", name='year',
+                input#year(class='form-control col-sm-10', type='number', min="2015", max="2024", name='year',
                     value=instance.year)
 
             div(class='form-group row')
