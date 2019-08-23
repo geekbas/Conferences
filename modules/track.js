@@ -58,7 +58,7 @@ class Track {
             ' INNER JOIN instances i ON t.instance_id=i.id' +
             ' WHERE i.id=ANY($1)',
             [ instance_ids ],
-            { as_array: true, date_fields },
+            { as_array: true, date_fields: [ 'submission' ] },
             (res) => {
                 let dates = []
                 res.forEach((entry) => {

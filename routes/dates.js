@@ -32,7 +32,7 @@ router.get('/', (req, res) => {
                     const dates = helpers.add_paths(cidates.concat(tdates), (e) => {
                         return { conf: confs.get(e.conf_id) }
                     }).filter((e) => { return e.when >= moment().format('YYYY-MM-DD') })
-
+//                    console.log('date list', dates)
                     res.render('dates', Object.assign(req.session.viewdata, {
                         navsection: 'dates',
                         user: req.user,

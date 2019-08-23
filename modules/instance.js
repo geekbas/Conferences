@@ -44,7 +44,7 @@ class Instance {
         sql +=' ORDER BY year DESC'
         pool.query(sql,
             [ id_or_ids ],
-            { as_array: true, date_fields },
+            { as_array: true, date_fields: [ 'conf_start' ] },
             (res) => {
                 let dates = []
                 res.forEach((entry) => {
