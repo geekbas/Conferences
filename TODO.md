@@ -12,6 +12,7 @@ Items further down on the list may depend on items higher up.
 * Database references in postgres
 * Find a better product name?
   * "Submission planner"
+* Scale on theory -- practice, for both conferences, instances and tracks
 
 ### Good To Have
 
