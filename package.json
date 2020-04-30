@@ -22,7 +22,7 @@
     "firebase-admin": "8.10.0",
     "firestore-store": "2.0.1",
     "http-errors": "~1.6.3",
-    "jquery": "^3.4.1",
+    "jquery": "^3.5.0",
     "jstransformer-markdown-it": "2.1.0",
     "kind-of": "6.0.3",
     "level": "^5.0.1",
