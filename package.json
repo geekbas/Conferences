@@ -9,7 +9,7 @@
   "dependencies": {
     "acorn": "6.4.1",
     "async": "3.1.0",
-    "bl": "^3.0.0",
+    "bl": "^3.0.1",
     "bootstrap": "4.4.1",
     "clean-css": "4.2.3",
     "cookie-parser": "1.4.5",
