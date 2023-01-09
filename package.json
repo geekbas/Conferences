@@ -19,7 +19,7 @@
     "debug": "~2.6.9",
     "express": "~4.16.1",
     "express-session": "1.17.0",
-    "firebase-admin": "8.10.0",
+    "firebase-admin": "11.4.1",
     "firestore-store": "2.0.1",
     "http-errors": "~1.6.3",
     "jquery": "^3.5.0",
